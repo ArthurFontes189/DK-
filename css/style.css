@@ -338,8 +338,12 @@
     .hero-section {
       background-color: #141518;
       background-image: 
-        linear-gradient(180deg, rgba(16, 17, 20, 0.68) 0%, rgba(16, 17, 20, 0.84) 100%),
-        url('../assets/hero-bg.jpg');
+        linear-gradient(180deg, rgba(16, 17, 20, 0.65) 0%, rgba(16, 17, 20, 0.82) 100%),
+        url('../assets/hero-bg.jpg'),
+        url('../assets/hero-bg.jpeg'),
+        url('../assets/hero-bg.png'),
+        url('../assets/hero-bg.webp'),
+        url('../hero-bg.jpg');
       background-position: center center;
       background-size: cover;
       background-repeat: no-repeat;
@@ -876,6 +880,32 @@
       border-radius: var(--radius-sm);
       margin-bottom: 10px;
       box-shadow: var(--shadow-subtle);
+    }
+
+
+    /* Botão X vermelho para exclusão de solicitações */
+    .btn-delete-lead {
+      background: #fef2f2;
+      color: #ef4444;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .btn-delete-lead:hover {
+      background: #dc2626;
+      color: #ffffff;
+      border-color: #dc2626;
+      transform: scale(1.08);
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
     }
 
 

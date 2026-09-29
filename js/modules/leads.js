@@ -111,7 +111,15 @@ function renderLeads(leads) {
             ${lead.telefone}
           </a>
         </div>
-        <span class="badge ${badgeClass}">${lead.status}</span>
+        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+          <span class="badge ${badgeClass}">${lead.status}</span>
+          <button type="button" class="btn-delete-lead" onclick="deleteLead('${lead.id}')" title="Excluir solicitação" aria-label="Excluir solicitação">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div class="lead-meta">
@@ -121,7 +129,7 @@ function renderLeads(leads) {
 
       <div style="margin-bottom: 12px;">
         <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Status do Atendimento:</label>
-        <select class="form-control" style="padding: 7px 10px; font-size: 13px;" onchange="updateLeadStatus(${lead.id}, this.value)">
+        <select class="form-control" style="padding: 7px 10px; font-size: 13px;" onchange="updateLeadStatus('${lead.id}', this.value)">
           <option value="Pendente de Contato" ${lead.status === "Pendente de Contato" ? "selected" : ""}>⏳ Pendente de Contato</option>
           <option value="Em Negociação" ${lead.status === "Em Negociação" ? "selected" : ""}>💬 Em Negociação</option>
           <option value="Fechado" ${lead.status === "Fechado" ? "selected" : ""}>✅ Fechado</option>
@@ -131,7 +139,7 @@ function renderLeads(leads) {
 
       <div class="lead-actions">
         <a href="${waLink}" target="_blank" class="btn btn-whatsapp btn-sm" style="flex: 1;">Chamar WhatsApp</a>
-        <button class="btn btn-primary btn-sm" style="flex: 1.2;" onclick="createServiceFromLead(${lead.id})" title="Fecha o serviço, registra o cliente com CPF e remove da lista de orçamentos">
+        <button class="btn btn-primary btn-sm" style="flex: 1.2;" onclick="createServiceFromLead('${lead.id}')" title="Fecha o serviço, registra o cliente com CPF e remove da lista de orçamentos">
           🔨 Criar Ficha do Cliente
         </button>
       </div>
@@ -159,3 +167,32 @@ async function updateLeadStatus(id, newStatus) {
     }
   }
 }
+
+
+// Exclui permanentemente uma solicitação/lead com confirmação prévia
+async function deleteLead(id) {
+  const lead = db.leads.find(l => l.id == id);
+  const leadNome = lead ? lead.nome : "esta solicitação";
+  
+  const confirmado = confirm(`Deseja realmente excluir a solicitação de "${leadNome}"?\n\nEsta ação removerá o pedido permanentemente.`);
+  if (!confirmado) return;
+
+  // 1. Remover do banco local / cache
+  db.leads = db.leads.filter(l => l.id != id);
+  saveCacheDB("leads", db.leads);
+  renderLeads(db.leads);
+  showToast("Solicitação excluída com sucesso!");
+
+  // 2. Remover do Supabase se estiver conectado
+  if (sbClient) {
+    try {
+      const { error } = await sbClient.from("leads").delete().eq("id", id);
+      if (error) {
+        console.error("Erro ao excluir solicitação no Supabase:", error);
+      }
+    } catch (err) {
+      console.error("Exceção ao excluir no Supabase:", err);
+    }
+  }
+}
+window.deleteLead = deleteLead;
