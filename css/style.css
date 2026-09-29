@@ -336,9 +336,15 @@
        HERO BANNER PREMIUM
        ======================================================= */
     .hero-section {
-      background: linear-gradient(145deg, #131417 0%, #1e1f26 40%, #2b251f 100%);
+      background-color: #141518;
+      background-image: 
+        linear-gradient(180deg, rgba(16, 17, 20, 0.68) 0%, rgba(16, 17, 20, 0.84) 100%),
+        url('../assets/hero-bg.jpg');
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
       color: #ffffff;
-      padding: 70px 0 65px;
+      padding: 75px 0 70px;
       border-radius: 0 0 var(--radius-lg) var(--radius-lg);
       margin-bottom: 50px;
       position: relative;
