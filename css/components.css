@@ -1,0 +1,100 @@
+/* ==========================================================================
+   COMPONENTES: BOTÕES, BADGES, INPUTS, TOAST E MODAIS
+   ========================================================================== */
+.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 24px;
+      border-radius: var(--radius);
+      font-size: 14.5px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      letter-spacing: -0.01em;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--wood-gold) 0%, var(--wood-primary) 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(163, 97, 37, 0.25);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 6px 20px rgba(163, 97, 37, 0.35);
+      filter: brightness(1.04);
+    }
+    .btn-whatsapp {
+      background: #25d366;
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.28);
+    }
+    .btn-whatsapp:hover {
+      background: #20bd5a;
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.38);
+    }
+    .btn-outline {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--shadow-subtle);
+    }
+    .btn-outline:hover {
+      background: #fbf9f6;
+      border-color: var(--wood-gold);
+      color: var(--wood-primary);
+    }
+    .btn-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
+    .btn-sm { padding: 8px 14px; font-size: 13px; border-radius: var(--radius-sm); }
+
+/* Modais */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(18, 19, 22, 0.68);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: #ffffff;
+      width: 100%;
+      max-width: 580px;
+      border-radius: var(--radius);
+      padding: 26px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.22);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .modal-title { font-size: 18.5px; font-weight: 700; letter-spacing: -0.02em; }
+    .close-modal { background: none; border: none; font-size: 26px; color: var(--text-muted); cursor: pointer; }
+
+    .toast {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #18191c;
+      color: #fff;
+      padding: 12px 26px;
+      border-radius: 30px;
+      font-size: 13.5px;
+      font-weight: 600;
+      z-index: 200;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    }

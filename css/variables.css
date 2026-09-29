@@ -1,0 +1,39 @@
+/* ==========================================================================
+   DESIGN TOKENS E PALETA DE CORES (EXTRAÍDA DA LOGO DK CONSTRUTORA & SERVIÇOS)
+   ========================================================================== */
+:root {
+  /* Tons Principais de Madeira da Logo */
+  --wood-primary: #7a431d;        /* Marrom nobre rústico dos veios e letras DK */
+  --wood-gold: #b36e3c;           /* Caramelo tostado dos realces da madeira */
+  --wood-dark: #4e2710;           /* Sombra profunda de mogno e caibros */
+  --wood-light: #d89b6e;          /* Tom claro de iluminação da madeira */
+  
+  /* Fundos e Texturas (Alinhados com o linho claro da logo) */
+  --wood-cream: #fcfaf7;          /* Linho suave / Off-white limpo */
+  --wood-sand: #f3ece2;           /* Areia nobre suave */
+  --bg-page: #fbf9f5;             /* Fundo da área de navegação suave */
+  --card-bg: #ffffff;             /* Superfície dos cards */
+
+  /* Tons Escuros e Tipografia */
+  --dark-obsidian: #141518;       /* Fundo da seção Hero e Topo (Preto Carvão da Logo) */
+  --dark-surface: #1e2025;        /* Superfície dos cards do catálogo e hero */
+  --text-main: #141518;           /* Preto carvão elegante da tipografia da marca */
+  --text-muted: #5e6673;          /* Cinza médio para descrições */
+  
+  /* Bordas Suaves */
+  --border-soft: #e8dfd5;         /* Linha suave inspirada na fibra da madeira */
+  --border-strong: #d3c2b1;       /* Destaque para inputs e divisores */
+  
+  /* Estados e Badges */
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #b91c1c;
+  --info: #0369a1;
+
+  /* Formas e Sombras */
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --shadow-subtle: 0 4px 20px -2px rgba(122, 67, 29, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  --shadow-premium: 0 12px 36px -4px rgba(122, 67, 29, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+}

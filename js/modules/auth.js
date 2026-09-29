@@ -1,0 +1,80 @@
+// ============================================================================
+// MÓDULO DE AUTENTICAÇÃO E NAVEGAÇÃO ENTRE SITE E PAINEL MARCENEIRO
+// ============================================================================
+
+let isAdminLoggedIn = localStorage.getItem("marcenaria_admin_logged") === "true";
+
+function updateAdminButton() {
+  const btnText = document.getElementById("adminBtnText");
+  if (btnText) {
+    btnText.textContent = isAdminLoggedIn ? "Painel Ativo" : "Painel Marceneiro";
+  }
+}
+
+function handleAdminAccessClick() {
+  if (isAdminLoggedIn) {
+    goToAdminPanel();
+  } else {
+    openModal("loginModal");
+  }
+}
+
+function handleAdminLogin(e) {
+  e.preventDefault();
+  const user = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
+
+  if (user === "admin" && pass === "1234") {
+    isAdminLoggedIn = true;
+    localStorage.setItem("marcenaria_admin_logged", "true");
+    closeModal("loginModal");
+    updateAdminButton();
+    showToast("Login realizado com sucesso!");
+    goToAdminPanel();
+  } else {
+    alert("Usuário ou senha incorretos. Padrão: admin / 1234");
+  }
+}
+
+function adminLogout() {
+  isAdminLoggedIn = false;
+  localStorage.removeItem("marcenaria_admin_logged");
+  updateAdminButton();
+  showToast("Você saiu do painel administrativo.");
+  goToClientSite();
+}
+
+function goToAdminPanel() {
+  document.getElementById("clientArea").style.display = "none";
+  document.getElementById("adminArea").style.display = "block";
+  fetchCloudData();
+  renderAdmin();
+  window.scrollTo(0, 0);
+}
+
+function goToClientSite() {
+  document.getElementById("adminArea").style.display = "none";
+  document.getElementById("clientArea").style.display = "block";
+  renderPublicCatalog();
+  window.scrollTo(0, 0);
+}
+
+function toggleMobileMenu() {
+  document.getElementById("mobileMenu").classList.toggle("open");
+}
+
+function switchAdminTab(tabName, el) {
+  document.querySelectorAll(".admin-nav-tab").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".admin-tab-content").forEach(s => s.style.display = "none");
+  
+  const tabBtn = el || document.getElementById("tabBtn-" + tabName);
+  if (tabBtn) tabBtn.classList.add("active");
+
+  if (tabName === "crm") document.getElementById("tabCRM").style.display = "block";
+  else if (tabName === "clientes") document.getElementById("tabClientes").style.display = "block";
+  else if (tabName === "servicos") document.getElementById("tabServicos").style.display = "block";
+  else if (tabName === "financeiro") document.getElementById("tabFinanceiro").style.display = "block";
+  else if (tabName === "portfolioAdmin") document.getElementById("tabPortfolioAdmin").style.display = "block";
+
+  renderAdmin();
+}

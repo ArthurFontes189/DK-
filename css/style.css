@@ -1,0 +1,11 @@
+/* ============================================================================
+   FOLHA DE ESTILOS PRINCIPAL (MASTER STYLESHEET)
+   DK Construtora & Serviços - Arquitetura Modular CSS
+   ============================================================================ */
+
+@import url('variables.css');
+@import url('base.css');
+@import url('components.css');
+@import url('site.css');
+@import url('admin.css');
+@import url('responsive.css');

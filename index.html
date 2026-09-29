@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DK Construtora & Serviços | Obras, Reformas e Marcenaria Sob Medida</title>
+  <meta name="description" content="DK Construtora & Serviços - Especialistas em reformas, obras completas, estruturas e marcenaria sob medida. Foco em economia, durabilidade e acabamento de qualidade.">
+  <meta name="theme-color" content="#c28340">
+  
+  <!-- PWA & Favicon -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Open Graph / Meta Compartilhamento -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="DK Construtora & Serviços | Obras, Reformas & Marcenaria">
+  <meta property="og:description" content="Soluções completas e sob medida para sua obra ou reforma com foco em economia e alta qualidade.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1540518614846-7ede433c4b4f?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Design System Modular CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Supabase JS Client v2 (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- ============================================== -->
+  <!-- 1. NAVBAR SUPERIOR -->
+  <!-- ============================================== -->
+  <nav class="top-navbar">
+    <div class="container navbar-inner">
+      <a href="#" class="brand" onclick="goToClientSite(); return false;">
+        <div class="brand-icon" style="width: 46px; height: 46px; border-radius: 12px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid var(--border-soft); display: flex; align-items: center; justify-content: center; padding: 4px; flex-shrink: 0;">
+          <img src="assets/logo-icon.svg" alt="DK Construtora & Serviços" style="width: 100%; height: 100%; object-fit: contain;">
+        </div>
+        <div class="brand-text">
+          <h1>DK Construtora & Serviços</h1>
+          <span>Obras, Reformas & Marcenaria</span>
+        </div>
+      </a>
+
+      <!-- Links Desktop -->
+      <ul class="nav-links">
+        <li><a href="#inicio" class="nav-link">Início</a></li>
+        <li><a href="#especialidades" class="nav-link">Especialidades</a></li>
+        <li><a href="#catalogo" class="nav-link">Nossos Trabalhos</a></li>
+        <li><a href="#solicitar" class="nav-link">Pedir Orçamento</a></li>
+      </ul>
+
+      <!-- Ações da Navbar -->
+      <div class="nav-actions">
+        <a href="#solicitar" class="btn btn-whatsapp btn-sm nav-wa-btn" title="Chamar no WhatsApp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
+          <span class="btn-text">WhatsApp</span>
+        </a>
+
+        <button class="btn-admin-access nav-admin-btn" id="adminAccessBtn" onclick="handleAdminAccessClick()" title="Painel Marceneiro">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span id="adminBtnText" class="btn-text">Painel Marceneiro</span>
+        </button>
+
+        <button class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Abrir Menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Dropdown Mobile -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#inicio" class="nav-link" onclick="toggleMobileMenu()">Início</a>
+      <a href="#especialidades" class="nav-link" onclick="toggleMobileMenu()">Especialidades</a>
+      <a href="#catalogo" class="nav-link" onclick="toggleMobileMenu()">Nossos Trabalhos</a>
+      <a href="#solicitar" class="nav-link" onclick="toggleMobileMenu()">Pedir Orçamento</a>
+      <hr style="border: 0; border-top: 1px solid var(--border-soft);">
+      <button class="btn btn-outline btn-sm" onclick="toggleMobileMenu(); handleAdminAccessClick();">
+        🔒 Acesso do Administrador
+      </button>
+    </div>
+  </nav>
+
+  <!-- ============================================== -->
+  <!-- 2. ÁREA DO CLIENTE (VISUAL SUAVE PREMIUM) -->
+  <!-- ============================================== -->
+  <main id="clientArea">
+    <!-- Hero Banner -->
+    <section id="inicio" class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <h2>Marcenaria Sob Medida & <span>Serviços em Madeira</span></h2>
+          <p>Projetos residenciais e comerciais sob medida com foco principal em marcenaria e serviços em madeira. Executamos móveis planejados, estruturas, adaptações e reformas com máxima economia, agilidade e acabamento de alto padrão.</p>
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <a href="#solicitar" class="btn btn-whatsapp" style="width: auto;">
+              Solicitar Orçamento no WhatsApp
+            </a>
+            <a href="#catalogo" class="btn btn-outline" style="width: auto; background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.2);">
+              Ver Vídeos & Fotos
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-card-side">
+          <h4>Diferenciais DK Construtora</h4>
+          <ul>
+            <li>✔️ Marcenaria sob medida e projetos personalizados em madeira</li>
+            <li>✔️ Foco constante em economia e melhor custo-benefício</li>
+            <li>✔️ Acabamento de qualidade com garantia e durabilidade</li>
+            <li>✔️ Atendimento técnico presencial com visita no local</li>
+          </ul>
+          <a href="#solicitar" class="btn btn-primary" style="width: 100%;">Solicitar Orçamento sem Compromisso</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- Especialidades -->
+      <section id="especialidades" style="scroll-margin-top: 90px; margin-bottom: 60px;">
+        <div class="section-header">
+          <span class="badge badge-gold" style="margin-bottom: 10px;">Especialidades</span>
+          <h3 class="section-title">O que Trabalhamos</h3>
+          
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"></path><path d="M3 9h18"></path><path d="M3 15h18"></path></svg>
+            </div>
+            <h3>Marcenaria Sob Medida</h3>
+            <p>Móveis, armários, bancadas, prateleiras e soluções planejadas aproveitando cada espaço com funcionalidade e economia.</p>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16"></path><path d="M6 20V4h12v16"></path><path d="M2 4h20"></path><path d="M8 8h8"></path><path d="M8 12h8"></path></svg>
+            </div>
+            <h3>Decks, Pergolados & Estruturas</h3>
+            <p>Construção e reforma de decks, pergolados, coberturas e quiosques com estrutura reforçada e resistente ao tempo.</p>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"></path><path d="M9 4v16"></path><path d="M15 4v16"></path></svg>
+            </div>
+            <h3>Painéis, Ripados & Divisórias</h3>
+            <p>Revestimentos decorativos para paredes e fachadas, divisórias de ambientes e acabamentos com excelente estética.</p>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            </div>
+            <h3>Reformas & Serviços Diversos</h3>
+            <p>Reparos, adaptações, instalações e serviços gerais sob medida para sua obra residencial ou comercial.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Catálogo de Trabalhos (Fotos & Vídeos Verticais) -->
+      <section id="catalogo" style="scroll-margin-top: 90px; margin-bottom: 60px;">
+        <div class="section-header">
+          <span class="badge badge-gold" style="margin-bottom: 10px;">Portfólio em Vídeo & Foto</span>
+          <h3 class="section-title">Nossos Trabalhos</h3>
+          
+        </div>
+
+        <div class="portfolio-grid-vertical" id="portfolioCatalog">
+          <!-- Renderizado via JavaScript -->
+        </div>
+      </section>
+
+      <!-- Formulário de Orçamento (Limpo e Direto) -->
+      <section id="solicitar" class="quote-section" style="scroll-margin-top: 90px;">
+        <div class="quote-grid">
+          <div class="quote-info">
+            <span class="badge badge-gold" style="margin-bottom: 12px;">Contato Direto</span>
+            <h3>Solicite seu Orçamento</h3>
+            <p>Preencha os campos abaixo. Entraremos em contato via WhatsApp para conversar sobre seu espaço e combinar uma visita técnica.</p>
+            <ul class="quote-perks">
+              <li>📍 Atendimento em Brasília e Entorno</li>
+              <li>📐 Avaliação de desníveis e medição presencial</li>
+              <li>⚡ Contato rápido com o responsável técnico</li>
+            </ul>
+          </div>
+
+          <div class="quote-form-wrap">
+            <form id="leadForm" onsubmit="handleLeadSubmit(event)">
+              <div class="form-group">
+                <label for="leadNome">Seu Nome *</label>
+                <input type="text" id="leadNome" class="form-control" placeholder="Ex: Roberto Silva" required>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                <div class="form-group">
+                  <label for="leadTel">Telefone / WhatsApp *</label>
+                  <input type="tel" id="leadTel" class="form-control" placeholder="(61) 90000-0000" required>
+                </div>
+                <div class="form-group">
+                  <label for="leadBairro">Bairro / Cidade</label>
+                  <input type="text" id="leadBairro" class="form-control" placeholder="Ex: Lago Sul">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="leadTipo">Serviço de Interesse</label>
+                <select id="leadTipo" class="form-control">
+                  <option value="Marcenaria Sob Medida">Marcenaria Sob Medida / Móveis</option>
+                  <option value="Decks e Pergolados">Decks, Pergolados e Estruturas</option>
+                  <option value="Painéis Ripados e Revestimentos">Painéis Ripados e Revestimentos</option>
+                  <option value="Reforma ou Serviço Geral em Madeira">Reforma ou Serviço Geral em Madeira</option>
+                  <option value="Outro Projeto Personalizado">Outro Projeto Personalizado</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-whatsapp" style="width: 100%; margin-top: 10px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
+                Enviar e Iniciar Conversa no WhatsApp
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div class="container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+        <div style="display: inline-flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <img src="assets/logo-icon.svg" alt="DK" style="width: 38px; height: 38px; object-fit: contain;">
+          <span style="font-weight: 800; font-size: 19px; color: var(--text-main); letter-spacing: -0.02em;">DK Construtora & Serviços</span>
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 4px;">Marcenaria Sob Medida & Soluções em Madeira</p>
+        <p style="margin-top: 6px; font-size: 12.5px; color: #94a3b8;">
+          Projetos residenciais e comerciais com foco em economia inteligente, durabilidade e qualidade.
+        </p>
+      </div>
+    </footer>
+
+    <a href="#solicitar" class="whatsapp-float" title="Solicitar Orçamento">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/>
+      </svg>
+    </a>
+  </main>
+
+  <!-- ============================================== -->
+  <!-- 3. ÁREA ADMINISTRATIVA COMPLETA -->
+  <!-- ============================================== -->
+  <section id="adminArea" class="admin-container">
+    <div class="container">
+      
+      <!-- Topo do Painel -->
+      <div class="admin-header-bar">
+        <div class="admin-title-wrap">
+          <div class="brand-icon" style="background: rgba(255,255,255,0.1); color: var(--wood-gold); border: none;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+          </div>
+          <div>
+            <h2>Painel de Gestão da Marcenaria</h2>
+            <div style="font-size: 12px; color: #94a3b8;">Sessão Ativa: Administrador</div>
+          </div>
+        </div>
+
+        <div class="admin-header-actions">
+          <span id="syncIndicator" style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #4ade80; background: rgba(34, 197, 94, 0.15); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(34, 197, 94, 0.3);">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block;"></span>
+            Sincronizado
+          </span>
+          <button class="btn btn-outline btn-sm" onclick="fetchCloudData(true)" title="Recarregar dados do banco" style="color: #fff; background: transparent; border-color: rgba(255,255,255,0.25); padding: 7px 11px;">
+            🔄
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="goToClientSite()" style="color: #fff; background: transparent; border-color: rgba(255,255,255,0.25);">
+            👁️ Site
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="adminLogout()">
+            🚪 Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- Abas de Navegação -->
+      <div class="admin-tabs-nav">
+        <button class="admin-nav-tab active" id="tabBtn-crm" onclick="switchAdminTab('crm', this)">
+          <span>📋 Solicitações</span>
+          <span class="tab-badge" id="pendingCount">0</span>
+        </button>
+        <button class="admin-nav-tab" id="tabBtn-clientes" onclick="switchAdminTab('clientes', this)">
+          <span>👥 Clientes</span>
+        </button>
+        <button class="admin-nav-tab" id="tabBtn-servicos" onclick="switchAdminTab('servicos', this)">
+          <span>🔨 Fichas de Serviços</span>
+        </button>
+        <button class="admin-nav-tab" id="tabBtn-financeiro" onclick="switchAdminTab('financeiro', this)">
+          <span>💰 Fluxo de Caixa</span>
+        </button>
+        <button class="admin-nav-tab" id="tabBtn-portfolioAdmin" onclick="switchAdminTab('portfolioAdmin', this)">
+          <span>🖼️ Gerenciar Vídeos/Fotos</span>
+        </button>
+      </div>
+
+      <!-- PAINEL 1: CRM & SOLICITAÇÕES (COM FILTROS POR STATUS) -->
+      <div id="tabCRM" class="admin-tab-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 700;">Solicitações de Orçamento</h3>
+            <span style="font-size: 13px; color: var(--text-muted);" id="leadsTotalTxt">Carregando contatos...</span>
+          </div>
+
+          <!-- Filtros de Status -->
+          <div class="lead-status-filters" id="leadFiltersBar">
+            <button class="filter-btn active" onclick="filterLeads('Todos', this)">Todos</button>
+            <button class="filter-btn" onclick="filterLeads('Pendente de Contato', this)">⏳ Pendentes</button>
+            <button class="filter-btn" onclick="filterLeads('Em Negociação', this)">💬 Em Negociação</button>
+            <button class="filter-btn" onclick="filterLeads('Fechado', this)">✅ Fechados</button>
+            <button class="filter-btn" onclick="filterLeads('Perdido', this)">❌ Não Fechou</button>
+          </div>
+        </div>
+
+        <div class="leads-grid" id="leadsList"></div>
+      </div>
+
+      <!-- PAINEL 2: GESTÃO DE CLIENTES CADASTRADOS -->
+      <div id="tabClientes" class="admin-tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 700;">Base de Clientes Cadastrados</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Clientes oficiais registrados para vínculo de serviços e pagamentos.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openNewClientModal()">+ Cadastrar Novo Cliente</button>
+        </div>
+
+        <div class="clients-grid" id="clientsList"></div>
+      </div>
+
+      <!-- PAINEL 3: FICHAS DE SERVIÇOS (COM FILTROS E AÇÕES RÁPIDAS) -->
+      <div id="tabServicos" class="admin-tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 700;">Fichas de Serviços Fechados</h3>
+            <span style="font-size: 13px; color: var(--text-muted);" id="servicesTotalTxt">Carregando serviços...</span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openNewServiceModal()">+ Nova Ficha de Serviço</button>
+        </div>
+
+        <!-- Filtros de Status dos Serviços -->
+        <div class="lead-status-filters" id="serviceFiltersBar" style="margin-bottom: 20px;">
+          <button class="filter-btn active" onclick="filterServices('Todos', this)">Todos</button>
+          <button class="filter-btn" onclick="filterServices('A Iniciar', this)">⏳ A Iniciar</button>
+          <button class="filter-btn" onclick="filterServices('Em Produção / Oficina', this)">🔨 Em Produção</button>
+          <button class="filter-btn" onclick="filterServices('Em Montagem / Obra', this)">🚚 Em Montagem</button>
+          <button class="filter-btn" onclick="filterServices('Concluído', this)">✅ Concluídos</button>
+        </div>
+
+        <div class="services-admin-grid" id="servicesList"></div>
+      </div>
+
+      <!-- PAINEL 4: FLUXO DE CAIXA -->
+      <div id="tabFinanceiro" class="admin-tab-content" style="display: none;">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-title">Saldo Atual em Caixa</div>
+            <div class="kpi-value kpi-balance" id="saldoTotal">R$ 0,00</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Total Recebido (Entradas)</div>
+            <div class="kpi-value kpi-income" id="entradasTotal">R$ 0,00</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-title">Total de Despesas (Saídas)</div>
+            <div class="kpi-value kpi-expense" id="saidasTotal">R$ 0,00</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-bottom: 22px;">
+          <button class="btn btn-primary btn-sm" onclick="openNewTxModal('Entrada')">+ Registrar Recebimento de Cliente</button>
+          <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fecaca;" onclick="openNewTxModal('Saída')">- Registrar Despesa / Compra</button>
+        </div>
+
+        <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 14px;">Extrato de Movimentações</h4>
+        <div id="transactionsList"></div>
+      </div>
+
+      <!-- PAINEL 5: GERENCIAR PORTFÓLIO -->
+      <div id="tabPortfolioAdmin" class="admin-tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 700;">Catálogo de Mídias (Vídeos e Fotos)</h3>
+            <p style="font-size: 13px; color: var(--text-muted);">Adicione vídeos ou fotos verticais de projetos finalizados.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openNewPhotoModal()">+ Adicionar Nova Mídia</button>
+        </div>
+        <div id="adminPortfolioList"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- MODAIS DO SISTEMA -->
+  <!-- ============================================== -->
+
+    <!-- MODAL: LOGIN ADMIN -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+      <div class="modal-header" style="justify-content: center; position: relative;">
+        <h4 class="modal-title">Acesso Administrativo</h4>
+        <button class="close-modal" style="position: absolute; right: 0;" onclick="closeModal('loginModal')">&times;</button>
+      </div>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 20px;">
+        Digite suas credenciais para gerenciar clientes, fichas e o caixa da marcenaria.
+      </p>
+      <form onsubmit="handleAdminLogin(event)">
+        <div class="form-group" style="text-align: left;">
+          <label for="loginUser">Usuário</label>
+          <input type="text" id="loginUser" class="form-control" value="admin" required>
+        </div>
+        <div class="form-group" style="text-align: left;">
+          <label for="loginPass">Senha</label>
+          <input type="password" id="loginPass" class="form-control" placeholder="Senha (padrão: 1234)" required>
+        </div>
+        <div style="font-size: 11.5px; color: #94a3b8; margin-bottom: 18px; text-align: left;">
+          * Senha padrão de acesso: <strong>1234</strong>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar no Painel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CADASTRAR / EDITAR CLIENTE -->
+  <div class="modal-overlay" id="clientModal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h4 class="modal-title" id="clientModalTitle">Cadastrar Novo Cliente</h4>
+        <button class="close-modal" onclick="closeModal('clientModal')">&times;</button>
+      </div>
+      <form id="clientForm" onsubmit="handleSaveClient(event)">
+        <input type="hidden" id="cliId">
+
+        <div class="form-group">
+          <label for="cliNome">Nome Completo do Cliente *</label>
+          <input type="text" id="cliNome" class="form-control" required placeholder="Ex: Marcelo Guimarães">
+        </div>
+
+        <div class="form-group">
+          <label for="cliTelefone">Telefone / WhatsApp *</label>
+          <input type="tel" id="cliTelefone" class="form-control" required placeholder="(61) 98888-7777">
+        </div>
+
+        <div class="form-group">
+          <label for="cliEndereco">Endereço da Obra / Bairro</label>
+          <input type="text" id="cliEndereco" class="form-control" placeholder="Ex: SHIS QI 15, Lago Sul">
+        </div>
+
+        <div class="form-group">
+          <label for="cliObs">Observações / Preferências</label>
+          <textarea id="cliObs" class="form-control" style="min-height: 70px;" placeholder="Ex: Cliente prefere atendimento à tarde; deck para piscina com deck molhado."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Salvar Cadastro do Cliente</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: FICHA DE SERVIÇO (CADASTRA CLIENTE AUTOMÁTICO NA 1ª FICHA + CPF) -->
+  <div class="modal-overlay" id="serviceModal">
+    <div class="modal-content" style="max-width: 620px;">
+      <div class="modal-header">
+        <h4 class="modal-title" id="serviceModalTitle">Ficha do Serviço e Cadastro</h4>
+        <button class="close-modal" onclick="closeModal('serviceModal')">&times;</button>
+      </div>
+      <form id="serviceForm" onsubmit="handleSaveService(event)">
+        <input type="hidden" id="srvId">
+        <input type="hidden" id="srvLeadId">
+
+        <!-- BLOCO DO CLIENTE COM CPF -->
+        <div style="background: #fbf9f6; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+          <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 8px; color: var(--wood-primary); display: flex; align-items: center; justify-content: space-between;">
+            <span>👤 Identificação do Cliente</span>
+            <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">Registra cliente automaticamente</span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label for="srvClienteSelect">Este cliente já possui cadastro?</label>
+            <select id="srvClienteSelect" class="form-control" onchange="handleSelectClientInService(this.value)">
+              <option value="">+ Não, é um Novo Cliente (cadastrar com esta ficha)</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px;">
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label for="srvCliente">Nome do Cliente *</label>
+              <input type="text" id="srvCliente" class="form-control" required placeholder="Ex: Carlos Nogueira">
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label for="srvCpf">CPF (Padrão de Validação) *</label>
+              <input type="text" id="srvCpf" class="form-control" placeholder="000.000.000-00" oninput="this.value = maskCPF(this.value)">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 10px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="srvTelefone">Telefone / WhatsApp *</label>
+              <input type="tel" id="srvTelefone" class="form-control" required placeholder="(61) 99999-9999">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="srvEndereco">Endereço da Obra / Bairro</label>
+              <input type="text" id="srvEndereco" class="form-control" placeholder="Ex: Lago Sul, SHIS QI 15">
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOCO DO SERVIÇO -->
+        <div class="form-group">
+          <label for="srvDescricao">Descrição do Serviço Acordado *</label>
+          <textarea id="srvDescricao" class="form-control" required style="min-height: 70px;" placeholder="Ex: Deck suspenso em Cumaru 5x3m com estrutura em vigas tratadas."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="srvMateriais">Materiais e Acabamentos Combinados *</label>
+          <input type="text" id="srvMateriais" class="form-control" required placeholder="Ex: Madeira Cumaru Rajado, Stain castanho fosco, parafusos inox">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="srvValorTotal">Valor Fechado (R$) *</label>
+            <input type="number" step="0.01" id="srvValorTotal" class="form-control" required placeholder="8500.00">
+          </div>
+          <div class="form-group">
+            <label for="srvValorEntrada">Entrada Paga (R$)</label>
+            <input type="number" step="0.01" id="srvValorEntrada" class="form-control" placeholder="4250.00">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="srvFormaPag">Forma de Pagamento Combinada</label>
+          <input type="text" id="srvFormaPag" class="form-control" placeholder="Ex: 50% Pix na assinatura + 50% na conclusão">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="srvResponsavel">Marceneiro Responsável</label>
+            <input type="text" id="srvResponsavel" class="form-control" placeholder="Ex: André Marceneiro">
+          </div>
+          <div class="form-group">
+            <label for="srvDataEntrega">Previsão de Conclusão</label>
+            <input type="date" id="srvDataEntrega" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="srvStatus">Status da Obra</label>
+          <select id="srvStatus" class="form-control">
+            <option value="A Iniciar">A Iniciar</option>
+            <option value="Em Produção / Oficina">Em Produção / Oficina</option>
+            <option value="Em Montagem / Obra">Em Montagem / Obra</option>
+            <option value="Concluído">Concluído</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">
+          Salvar Ficha & Registrar Cliente
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVA MOVIMENTAÇÃO DE CAIXA (COM VÍNCULO DE CLIENTE) -->
+  <div class="modal-overlay" id="txModal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h4 class="modal-title" id="txModalTitle">Registrar Movimentação</h4>
+        <button class="close-modal" onclick="closeModal('txModal')">&times;</button>
+      </div>
+      <form id="txForm" onsubmit="handleSaveTx(event)">
+        <input type="hidden" id="txTipo">
+
+        <div class="form-group" id="txClientGroup">
+          <label for="txClienteId">Vincular ao Cliente (Opcional):</label>
+          <select id="txClienteId" class="form-control">
+            <option value="">-- Sem vínculo específico (Avulso) --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="txDescricao">Descrição do Lançamento *</label>
+          <input type="text" id="txDescricao" class="form-control" required placeholder="Ex: Entrada 50% Deck piscina / Compra de vigas">
+        </div>
+
+        <div class="form-group">
+          <label for="txValor">Valor (R$) *</label>
+          <input type="number" step="0.01" id="txValor" class="form-control" required placeholder="0.00">
+        </div>
+
+        <div class="form-group">
+          <label for="txCategoria">Categoria</label>
+          <select id="txCategoria" class="form-control">
+            <option value="Recebimento de Cliente">Recebimento de Cliente</option>
+            <option value="Madeiras & Insumos">Madeiras & Insumos</option>
+            <option value="Vernizes, Lixas & Parafusos">Vernizes, Lixas & Parafusos</option>
+            <option value="Frete & Transporte">Frete & Transporte</option>
+            <option value="Manutenção & Ferramentas">Manutenção & Ferramentas</option>
+            <option value="Custos Oficina">Custos Oficina / Despesas</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="txData">Data do Lançamento</label>
+          <input type="date" id="txData" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">Lançar no Caixa</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADICIONAR MÍDIA VERTICAL (FOTO OU VÍDEO) -->
+  <div class="modal-overlay" id="photoModal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h4 class="modal-title">Adicionar Vídeo ou Foto Vertical</h4>
+        <button class="close-modal" onclick="closeModal('photoModal')">&times;</button>
+      </div>
+      <form id="photoForm" onsubmit="handleSaveMedia(event)">
+        <div class="form-group">
+          <label for="mediaTipo">Tipo de Mídia *</label>
+          <select id="mediaTipo" class="form-control" onchange="toggleMediaInputType(this.value)">
+            <option value="foto">Foto Vertical</option>
+            <option value="video">Vídeo Vertical (MP4)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="photoTitulo">Título do Projeto *</label>
+          <input type="text" id="photoTitulo" class="form-control" required placeholder="Ex: Deck Suspenso em Cumaru com Iluminação">
+        </div>
+
+        <div class="form-group">
+          <label for="photoCategoria">Categoria *</label>
+          <select id="photoCategoria" class="form-control">
+            <option value="Decks de Madeira">Decks de Madeira</option>
+            <option value="Pergolados & Coberturas">Pergolados & Coberturas</option>
+            <option value="Painéis Ripados">Painéis Ripados</option>
+            <option value="Estruturas Sob Medida">Estruturas Sob Medida</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="photoDesc">Descrição do Trabalho</label>
+          <input type="text" id="photoDesc" class="form-control" placeholder="Ex: Projeto finalizado com acabamento acetinado de alta durabilidade.">
+        </div>
+
+        <div class="form-group">
+          <label for="mediaUrlInput">URL da Mídia (ou escolha um arquivo abaixo) *</label>
+          <input type="url" id="mediaUrlInput" class="form-control" placeholder="https://exemplo.com/video.mp4 ou link da imagem">
+        </div>
+
+        <div class="form-group">
+          <label for="mediaFileInput">Ou selecione do dispositivo (câmera / galeria):</label>
+          <input type="file" id="mediaFileInput" accept="image/*,video/*" class="form-control" onchange="previewMediaFile(this)">
+          <input type="hidden" id="mediaBase64">
+          <div id="mediaPreviewContainer" style="margin-top: 12px; display: none; text-align: center;">
+            <div id="mediaPreviewSlot"></div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">Publicar no Catálogo</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toastMessage">Operação realizada com sucesso!</div>
+
+  <!-- ============================================== -->
+  <!-- JAVASCRIPT: LÓGICA E DADOS LOCAIS -->
+  <!-- ============================================== -->
+  <!-- ====================================================================== -->
+  <!-- ARQUITETURA MODULAR JAVASCRIPT (ENTERPRISE CLEAN ARCHITECTURE)         -->
+  <!-- ====================================================================== -->
+  
+  <!-- 1. Configurações Globais & Credenciais Supabase -->
+  <script src="js/config.js"></script>
+
+  <!-- 2. Serviços de Persistência e Rede -->
+  <script src="js/services/storage.js"></script>
+  <script src="js/services/api.js"></script>
+
+  <!-- 3. Componentes de Interface do Usuário (UI) -->
+  <script src="js/ui/toast.js"></script>
+  <script src="js/ui/modals.js"></script>
+
+  <!-- 4. Módulos de Regras de Negócio e Domínio -->
+  <script src="js/modules/auth.js"></script>
+  <script src="js/modules/leads.js"></script>
+  <script src="js/modules/clients.js"></script>
+  <script src="js/modules/services.js"></script>
+  <script src="js/modules/finance.js"></script>
+  <script src="js/modules/portfolio.js"></script>
+
+  <!-- 5. Bootstrap e Orquestrador da Aplicação -->
+  <script src="js/app.js"></script>
+</body>
+</html>

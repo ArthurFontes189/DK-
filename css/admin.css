@@ -1,0 +1,224 @@
+/* ==========================================================================
+   PAINEL DE GESTÃO DO MARCENEIRO (CRM, CLIENTES, FICHAS E CAIXA)
+   ========================================================================== */
+/* =======================================================
+       ÁREA ADMINISTRATIVA
+       ======================================================= */
+    .admin-container {
+      display: none;
+      padding: 30px 0 70px;
+    }
+    .admin-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--dark-obsidian);
+      color: #ffffff;
+      padding: 18px 26px;
+      border-radius: var(--radius);
+      margin-bottom: 26px;
+      box-shadow: var(--shadow-premium);
+    }
+    .admin-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .admin-title-wrap h2 {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .admin-title-wrap span {
+      background: var(--wood-primary);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-tabs-nav {
+      display: flex;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      padding: 6px;
+      margin-bottom: 26px;
+      overflow-x: auto;
+    }
+    .admin-nav-tab {
+      flex: 1;
+      min-width: 140px;
+      padding: 11px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .admin-nav-tab.active {
+      background: var(--wood-primary);
+      color: #ffffff;
+    }
+    .admin-nav-tab .tab-badge {
+      background: var(--danger);
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+
+    /* Filtros de Leads por Status */
+    .lead-status-filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 18px;
+      padding-bottom: 4px;
+    }
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      background: var(--dark-obsidian);
+      color: #ffffff;
+      border-color: var(--dark-obsidian);
+    }
+
+    /* Grids Administrativos */
+    .leads-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .lead-card {
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-subtle);
+    }
+    .lead-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .lead-name { font-size: 16.5px; font-weight: 700; }
+    .lead-phone {
+      font-size: 13.5px;
+      color: var(--wood-primary);
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .lead-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .lead-actions {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid #f1f3f5;
+      padding-top: 14px;
+    }
+
+    /* Tabela / Cards de Clientes Cadastrados */
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .client-card {
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-subtle);
+    }
+    .client-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    /* Fichas de Serviços */
+    .services-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .service-sheet-card {
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      border-left: 5px solid var(--wood-primary);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-subtle);
+    }
+    .sheet-row { margin-bottom: 12px; }
+    .sheet-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 3px; }
+    .sheet-val { font-size: 14px; font-weight: 500; }
+
+    /* Caixa */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+    .kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      padding: 22px;
+      text-align: center;
+      box-shadow: var(--shadow-subtle);
+    }
+    .kpi-title { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.03em; }
+    .kpi-value { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+    .kpi-balance { color: var(--wood-primary); }
+    .kpi-income { color: var(--success); }
+    .kpi-expense { color: var(--danger); }
+
+    .tx-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1px solid var(--border-soft);
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      box-shadow: var(--shadow-subtle);
+    }
