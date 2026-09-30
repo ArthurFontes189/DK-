@@ -5,14 +5,12 @@
 
 // Renderiza todas as abas e métricas do Painel Administrativo
 function renderAdmin() {
-  renderLeads(db.leads);
-  renderClients(db.clients, db.services, db.transactions);
-  renderServices(db.services);
-  if (typeof renderEmployees === "function") {
-    renderEmployees(db.employees);
-  }
-  renderFinanceiro(db.transactions);
-  renderAdminPortfolio(db.portfolio);
+  if (typeof renderLeads === "function") renderLeads(db.leads);
+  if (typeof renderClients === "function") renderClients(db.clients, db.services, db.transactions);
+  if (typeof renderServices === "function") renderServices(db.services);
+  if (typeof renderEmployees === "function") renderEmployees(db.employees);
+  if (typeof renderFinanceiro === "function") renderFinanceiro(db.transactions);
+  if (typeof renderAdminPortfolio === "function") renderAdminPortfolio(db.portfolio);
 }
 
 // Inicialização automática quando a página carregar
@@ -22,4 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSupabase();
   updateAdminButton();
   renderPublicCatalog();
+  renderAdmin();
 });
+
+window.renderAdmin = renderAdmin;

@@ -18,7 +18,7 @@
   <meta property="og:image" content="https://images.unsplash.com/photo-1540518614846-7ede433c4b4f?auto=format&fit=crop&w=1200&q=80">
 
   <!-- Design System Modular CSS -->
-  <link rel="stylesheet" href="css/style.css?v=20260930_obras">
+  <link rel="stylesheet" href="css/style.css?v=20260930_v5_direct_form">
 
   <!-- Supabase JS Client v2 (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -356,28 +356,103 @@
         </div>
 
         <div class="services-admin-grid" id="servicesList"></div>
-      
+      </div>
+
       <!-- PAINEL 4: GESTÃO DE FUNCIONÁRIOS, COLABORADORES E DIARISTAS -->
       <div id="tabFuncionarios" class="admin-tab-content" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
           <div>
-            <h3 style="font-size: 18px; font-weight: 700; color: #0f172a;">Equipe & Gestão de Funcionários</h3>
-            <span style="font-size: 13px; color: var(--text-muted);" id="employeesTotalTxt">Carregando equipe...</span>
+            <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">Equipe & Gestão de Funcionários</h3>
+            <span style="font-size: 13.5px; color: var(--text-muted);" id="employeesTotalTxt">Carregando equipe...</span>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="openNewEmployeeModal()">+ Cadastrar Novo Funcionário</button>
+          <button type="button" class="btn btn-primary" onclick="toggleEmployeeForm()" style="font-weight: 700; padding: 11px 22px; font-size: 13.5px; box-shadow: 0 4px 12px rgba(180, 83, 9, 0.28); display: inline-flex; align-items: center; gap: 6px;">
+            <span>➕ Cadastrar Novo Funcionário</span>
+          </button>
         </div>
 
-        <!-- Filtros de Status dos Funcionários -->
-        <div class="lead-status-filters" id="employeeFiltersBar" style="margin-bottom: 20px;">
-          <button class="filter-btn active" onclick="filterEmployees('Todos', this)">Todos</button>
-          <button class="filter-btn" onclick="filterEmployees('Ativo', this)">Ativos</button>
-          <button class="filter-btn" onclick="filterEmployees('Inativo', this)">Inativos</button>
+        <!-- CARD FORMULÁRIO DE CADASTRO DIRETO NO PAINEL -->
+        <div class="employee-create-card" id="employeeDirectCard" style="background: #ffffff; border: 1px solid var(--border-soft); border-left: 5px solid var(--wood-primary); border-radius: var(--radius); padding: 24px; margin-bottom: 28px; box-shadow: var(--shadow-subtle);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-soft); padding-bottom: 12px;">
+            <div>
+              <h4 style="font-size: 16.5px; font-weight: 700; color: #0f172a; margin: 0;">➕ Novo Cadastro de Funcionário / Diarista</h4>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin: 2px 0 0 0;">Preencha os dados abaixo para cadastrar o profissional na sua base de colaboradores.</p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" onclick="toggleEmployeeForm()" style="font-size: 11.5px; padding: 4px 10px;">Ocultar Formulário</button>
+          </div>
+
+          <form id="directEmployeeForm" onsubmit="handleDirectEmployeeSubmit(event)">
+            <div class="form-row">
+              <div class="form-group" style="flex: 1.4;">
+                <label class="form-label" style="font-weight: 700;">Nome Completo do Funcionário *</label>
+                <input type="text" class="form-control" id="directEmpNome" required placeholder="Ex: Carlos Eduardo de Oliveira">
+              </div>
+              <div class="form-group" style="flex: 1.1;">
+                <label class="form-label" style="font-weight: 700;">Cargo / Especialidade *</label>
+                <input type="text" list="cargosListDirect" class="form-control" id="directEmpCargo" required placeholder="Ex: Marceneiro Líder">
+                <datalist id="cargosListDirect">
+                  <option value="Marceneiro Líder">
+                  <option value="Marceneiro de Bancada">
+                  <option value="Montador de Móveis">
+                  <option value="Ajudante Geral">
+                  <option value="Pintor / Laqueador">
+                  <option value="Gesseiro">
+                  <option value="Eletricista">
+                  <option value="Serralheiro">
+                  <option value="Acabador">
+                </datalist>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label class="form-label" style="font-weight: 700;">Valor da Diária Padrão (R$) *</label>
+                <input type="number" step="0.01" class="form-control" id="directEmpDiaria" required placeholder="Ex: 220.00">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group" style="flex: 1;">
+                <label class="form-label" style="font-weight: 700;">Telefone / WhatsApp *</label>
+                <input type="tel" class="form-control" id="directEmpTelefone" required placeholder="(61) 99999-9999">
+              </div>
+              <div class="form-group" style="flex: 1.4;">
+                <label class="form-label" style="font-weight: 700; color: #b45309;">🔑 Chave PIX (para pagamento de diárias) *</label>
+                <input type="text" class="form-control" id="directEmpPix" required placeholder="CPF, Celular, E-mail ou Chave Aleatória" style="border-color: #fde68a;">
+              </div>
+              <div class="form-group" style="flex: 0.8;">
+                <label class="form-label" style="font-weight: 700;">Status</label>
+                <select class="form-control" id="directEmpStatus">
+                  <option value="Ativo" selected>Ativo</option>
+                  <option value="Inativo">Inativo</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" style="background: #fbf9f6; border: 1px dashed var(--border-soft); border-radius: 8px; padding: 12px 16px; margin: 12px 0 20px 0;">
+              <label class="form-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span>📄 Anexo do Contrato de Trabalho / Prestação de Serviço</span>
+                <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">PDF ou Foto da folha assinada</span>
+              </label>
+              <input type="file" id="directEmpContratoFile" class="form-control" accept="image/*,.pdf" style="padding: 6px; background: #fff;">
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+              <button type="submit" class="btn btn-primary" style="padding: 12px 28px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 14px rgba(180, 83, 9, 0.3);">
+                ✓ Salvar Funcionário no Sistema
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Filtros e Listagem da Equipe -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+          <h4 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;">Colaboradores Cadastrados</h4>
+          <div class="lead-status-filters" id="employeeFiltersBar">
+            <button type="button" class="filter-btn active" onclick="filterEmployees('Todos', this)">Todos</button>
+            <button type="button" class="filter-btn" onclick="filterEmployees('Ativo', this)">Ativos</button>
+            <button type="button" class="filter-btn" onclick="filterEmployees('Inativo', this)">Inativos</button>
+          </div>
         </div>
 
         <div class="employees-grid" id="employeesList"></div>
       </div>
-
-</div>
 
       <!-- PAINEL 4: FLUXO DE CAIXA -->
       <div id="tabFinanceiro" class="admin-tab-content" style="display: none;">
@@ -740,8 +815,8 @@
             <input type="tel" class="form-control" id="empTelefone" required placeholder="(61) 99999-9999">
           </div>
           <div class="form-group">
-            <label class="form-label">Chave PIX para Diárias</label>
-            <input type="text" class="form-control" id="empPix" placeholder="CPF, Celular ou Chave Aleatória">
+            <label class="form-label">🔑 Chave PIX (para pagamento de diárias) *</label>
+            <input type="text" class="form-control" id="empPix" required placeholder="CPF, Celular, E-mail ou Aleatória">
           </div>
         </div>
 
@@ -954,26 +1029,26 @@
   <!-- ====================================================================== -->
   
   <!-- 1. Configurações Globais & Credenciais Supabase -->
-  <script src="js/config.js?v=20260929"></script>
+  <script src="js/config.js?v=20260930_v5_direct_form"></script>
 
   <!-- 2. Serviços de Persistência e Rede -->
-  <script src="js/services/storage.js?v=20260930_obras"></script>
-  <script src="js/services/api.js?v=20260930_obras"></script>
+  <script src="js/services/storage.js?v=20260930_v5_direct_form"></script>
+  <script src="js/services/api.js?v=20260930_v5_direct_form"></script>
 
   <!-- 3. Componentes de Interface do Usuário (UI) -->
-  <script src="js/ui/toast.js?v=20260929_clean_notify"></script>
-  <script src="js/ui/modals.js?v=20260929_clean_notify"></script>
+  <script src="js/ui/toast.js?v=20260930_v5_direct_form"></script>
+  <script src="js/ui/modals.js?v=20260930_v5_direct_form"></script>
 
   <!-- 4. Módulos de Regras de Negócio e Domínio -->
-  <script src="js/modules/auth.js?v=20260930_obras"></script>
-  <script src="js/modules/leads.js?v=20260929_clean_notify"></script>
-  <script src="js/modules/clients.js?v=20260930_obras"></script>
-  <script src="js/modules/employees.js?v=20260930_obras"></script>
-  <script src="js/modules/services.js?v=20260930_obras"></script>
-  <script src="js/modules/finance.js?v=20260929_clean_notify"></script>
-  <script src="js/modules/portfolio.js?v=20260929_clean_notify"></script>
+  <script src="js/modules/auth.js?v=20260930_v5_direct_form"></script>
+  <script src="js/modules/leads.js?v=20260930_v5_direct_form"></script>
+  <script src="js/modules/clients.js?v=20260930_v5_direct_form"></script>
+  <script src="js/modules/employees.js?v=20260930_v5_direct_form"></script>
+  <script src="js/modules/services.js?v=20260930_v5_direct_form"></script>
+  <script src="js/modules/finance.js?v=20260930_v5_direct_form"></script>
+  <script src="js/modules/portfolio.js?v=20260930_v5_direct_form"></script>
 
   <!-- 5. Bootstrap e Orquestrador da Aplicação -->
-  <script src="js/app.js?v=20260930_obras"></script>
+  <script src="js/app.js?v=20260930_v5_direct_form"></script>
 </body>
 </html>
