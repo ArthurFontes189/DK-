@@ -8,6 +8,9 @@ function renderAdmin() {
   renderLeads(db.leads);
   renderClients(db.clients, db.services, db.transactions);
   renderServices(db.services);
+  if (typeof renderEmployees === "function") {
+    renderEmployees(db.employees);
+  }
   renderFinanceiro(db.transactions);
   renderAdminPortfolio(db.portfolio);
 }

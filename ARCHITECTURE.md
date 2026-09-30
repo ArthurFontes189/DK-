@@ -92,3 +92,27 @@ Quando o marceneiro clica em **"Criar Ficha do Cliente"** em um orçamento:
 3. Associa a nova ficha de serviço ao `client_id`.
 4. Remove o lead da fila de pendências para evitar retrabalho.
 5. Se houver sinal pago de entrada, gera automaticamente o lançamento positivo no Fluxo de Caixa.
+
+---
+
+## 7. Módulo de Gerenciamento de Obras & Caixa Centralizado (Versão 2026.09)
+
+O módulo de Obras foi expandido para atender à gestão integral de canteiro, oficina e lucratividade individual por projeto:
+
+1. **Gestão de Funcionários & Diaristas (`employees.js`):**
+   - Cadastro corporativo de colaboradores (nome, cargo, telefone, chave PIX, valor da diária padrão e anexo de contrato de trabalho/termo de prestação).
+   - Suporte a upload e visualização direta de contratos em PDF ou imagem.
+
+2. **Alocação de Equipe por Obra:**
+   - Vinculação de profissionais em cada obra com quantidade de dias trabalhados e valor da diária acordado.
+   - Cálculo automático do custo de mão de obra (`diaria * dias`).
+   - Controle de status de pagamento (Pendente / Quitado) com anexo de contrato de trabalho específico do projeto.
+
+3. **Caixa Centralizado da Obra (DRE por Projeto):**
+   - **Receitas:** Valor total contratado, entrada/sinal e saldo pendente do cliente.
+   - **Gastos de Insumos:** Registro de compras de materiais (madeiras, MDF, ferragens, tintas, fretes) com categorização e fornecedor.
+   - **Gastos de Diárias:** Totalização automática da equipe alocada.
+   - **Lucro Líquido Previsto & Margem (%):** Apuração em tempo real da rentabilidade exata de cada obra.
+
+4. **Hub de Inspeção 360° da Obra (`#obraInspectModal`):**
+   - Painel expandido acessível pelo card da obra com visão unificada de equipe, insumos, balanço financeiro e contratos.

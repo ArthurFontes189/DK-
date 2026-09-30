@@ -132,7 +132,8 @@ async function handleSaveTx(e) {
 }
 
 async function deleteTx(txId) {
-  if (!confirm("Deseja apagar este lançamento do caixa?")) return;
+  const confirmado = await customConfirm("Deseja realmente apagar este lançamento do caixa?", "Excluir Lançamento", { danger: true, confirmText: "Sim, Apagar" });
+  if (!confirmado) return;
   db.transactions = db.transactions.filter(t => t.id != txId);
   saveCacheDB("transactions", db.transactions);
   renderFinanceiro(db.transactions);

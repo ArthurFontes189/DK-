@@ -250,7 +250,8 @@ async function handleSaveMedia(e) {
 }
 
 async function deletePortfolioItem(id) {
-  if (!confirm("Deseja remover esta mídia do catálogo?")) return;
+  const confirmado = await customConfirm("Deseja realmente remover esta mídia do catálogo público?", "Remover Mídia", { danger: true, confirmText: "Sim, Remover" });
+  if (!confirmado) return;
   db.portfolio = db.portfolio.filter(p => p.id != id);
   saveCacheDB("portfolio", db.portfolio);
   showToast("Mídia removida.");

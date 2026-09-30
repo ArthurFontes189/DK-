@@ -174,7 +174,7 @@ async function deleteLead(id) {
   const lead = db.leads.find(l => l.id == id);
   const leadNome = lead ? lead.nome : "esta solicitação";
   
-  const confirmado = confirm(`Deseja realmente excluir a solicitação de "${leadNome}"?\n\nEsta ação removerá o pedido permanentemente.`);
+  const confirmado = await customConfirm(`Deseja realmente excluir a solicitação de "${leadNome}"?\nEsta ação removerá o pedido permanentemente.`, "Excluir Solicitação", { danger: true, confirmText: "Sim, Excluir" });
   if (!confirmado) return;
 
   // 1. Remover do banco local / cache

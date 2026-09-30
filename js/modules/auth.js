@@ -73,6 +73,7 @@ function switchAdminTab(tabName, el) {
   if (tabName === "crm") document.getElementById("tabCRM").style.display = "block";
   else if (tabName === "clientes") document.getElementById("tabClientes").style.display = "block";
   else if (tabName === "servicos") document.getElementById("tabServicos").style.display = "block";
+  else if (tabName === "funcionarios") document.getElementById("tabFuncionarios").style.display = "block";
   else if (tabName === "financeiro") document.getElementById("tabFinanceiro").style.display = "block";
   else if (tabName === "portfolioAdmin") document.getElementById("tabPortfolioAdmin").style.display = "block";
 

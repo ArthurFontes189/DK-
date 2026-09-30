@@ -178,7 +178,8 @@ async function handleSaveClient(e) {
 }
 
 async function deleteClient(cliId) {
-  if (!confirm("Tem certeza que deseja excluir este cliente?")) return;
+  const confirmado = await customConfirm("Tem certeza que deseja excluir este cliente?\nOs dados vinculados a ele serão afetados.", "Excluir Cliente", { danger: true, confirmText: "Sim, Excluir" });
+  if (!confirmado) return;
   db.clients = db.clients.filter(c => c.id != cliId);
   saveCacheDB("clients", db.clients);
   showToast("Cliente excluído.");

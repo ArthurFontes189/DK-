@@ -151,3 +151,34 @@ END $$;
 
 -- Recarrega o cache do PostgREST imediatamente
 NOTIFY pgrst, 'reload schema';
+
+-- 6. TABELA EMPLOYEES (Gestão de funcionários, diaristas e contratos de trabalho)
+CREATE TABLE IF NOT EXISTS public.employees (
+    id BIGSERIAL PRIMARY KEY,
+    nome TEXT NOT NULL,
+    cargo TEXT,
+    telefone TEXT,
+    chave_pix TEXT,
+    diaria_padrao NUMERIC DEFAULT 0,
+    status TEXT DEFAULT 'Ativo',
+    contrato_nome TEXT,
+    contrato_url TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS nome TEXT;
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS cargo TEXT;
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS telefone TEXT;
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS chave_pix TEXT;
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS diaria_padrao NUMERIC DEFAULT 0;
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'Ativo';
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS contrato_nome TEXT;
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS contrato_url TEXT;
+ALTER TABLE public.employees ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
+
+-- 7. COLUNAS PARA EQUIPE E INSUMOS NA TABELA SERVICES (OBRAS)
+ALTER TABLE public.services ADD COLUMN IF NOT EXISTS workers JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE public.services ADD COLUMN IF NOT EXISTS expenses JSONB DEFAULT '[]'::jsonb;
+
+-- Desativar RLS na tabela employees para garantir acesso fluido
+ALTER TABLE public.employees DISABLE ROW LEVEL SECURITY;
+GRANT ALL ON TABLE public.employees TO anon, authenticated, service_role;

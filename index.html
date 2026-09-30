@@ -18,7 +18,7 @@
   <meta property="og:image" content="https://images.unsplash.com/photo-1540518614846-7ede433c4b4f?auto=format&fit=crop&w=1200&q=80">
 
   <!-- Design System Modular CSS -->
-  <link rel="stylesheet" href="css/style.css?v=20260929_del_v3">
+  <link rel="stylesheet" href="css/style.css?v=20260930_obras">
 
   <!-- Supabase JS Client v2 (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -289,7 +289,10 @@
           <span>👥 Clientes</span>
         </button>
         <button class="admin-nav-tab" id="tabBtn-servicos" onclick="switchAdminTab('servicos', this)">
-          <span>🔨 Fichas de Serviços</span>
+          <span>🏗️ Gerenciamento de Obras</span>
+        </button>
+        <button class="admin-nav-tab" id="tabBtn-funcionarios" onclick="switchAdminTab('funcionarios', this)">
+          <span>👷 Funcionários</span>
         </button>
         <button class="admin-nav-tab" id="tabBtn-financeiro" onclick="switchAdminTab('financeiro', this)">
           <span>💰 Fluxo de Caixa</span>
@@ -333,14 +336,14 @@
         <div class="clients-grid" id="clientsList"></div>
       </div>
 
-      <!-- PAINEL 3: FICHAS DE SERVIÇOS (COM FILTROS E AÇÕES RÁPIDAS) -->
+      <!-- PAINEL 3: GERENCIAMENTO DE OBRAS (PRODUÇÃO, EQUIPE & CAIXA CENTRALIZADO) -->
       <div id="tabServicos" class="admin-tab-content" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
           <div>
-            <h3 style="font-size: 18px; font-weight: 700;">Fichas de Serviços Fechados</h3>
-            <span style="font-size: 13px; color: var(--text-muted);" id="servicesTotalTxt">Carregando serviços...</span>
+            <h3 style="font-size: 18px; font-weight: 700;">Gerenciamento de Obras & Produção</h3>
+            <span style="font-size: 13px; color: var(--text-muted);" id="servicesTotalTxt">Carregando obras...</span>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="openNewServiceModal()">+ Nova Ficha de Serviço</button>
+          <button class="btn btn-primary btn-sm" onclick="openNewServiceModal()">+ Nova Obra / Ficha de Produção</button>
         </div>
 
         <!-- Filtros de Status dos Serviços -->
@@ -353,7 +356,28 @@
         </div>
 
         <div class="services-admin-grid" id="servicesList"></div>
+      
+      <!-- PAINEL 4: GESTÃO DE FUNCIONÁRIOS, COLABORADORES E DIARISTAS -->
+      <div id="tabFuncionarios" class="admin-tab-content" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 style="font-size: 18px; font-weight: 700; color: #0f172a;">Equipe & Gestão de Funcionários</h3>
+            <span style="font-size: 13px; color: var(--text-muted);" id="employeesTotalTxt">Carregando equipe...</span>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openNewEmployeeModal()">+ Cadastrar Novo Funcionário</button>
+        </div>
+
+        <!-- Filtros de Status dos Funcionários -->
+        <div class="lead-status-filters" id="employeeFiltersBar" style="margin-bottom: 20px;">
+          <button class="filter-btn active" onclick="filterEmployees('Todos', this)">Todos</button>
+          <button class="filter-btn" onclick="filterEmployees('Ativo', this)">Ativos</button>
+          <button class="filter-btn" onclick="filterEmployees('Inativo', this)">Inativos</button>
+        </div>
+
+        <div class="employees-grid" id="employeesList"></div>
       </div>
+
+</div>
 
       <!-- PAINEL 4: FLUXO DE CAIXA -->
       <div id="tabFinanceiro" class="admin-tab-content" style="display: none;">
@@ -669,7 +693,258 @@
     </div>
   </div>
 
-  <div class="toast" id="toastMessage">Operação realizada com sucesso!</div>
+  <!-- ============================================== -->
+  <!-- MODAL: CADASTRAR / EDITAR FUNCIONÁRIO         -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="employeeModal">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header">
+        <h4 class="modal-title" id="employeeModalTitle">Cadastrar Novo Funcionário</h4>
+        <button type="button" class="close-modal" onclick="closeModal('employeeModal')">&times;</button>
+      </div>
+      <form id="employeeForm" onsubmit="handleEmployeeSubmit(event)">
+        <input type="hidden" id="empId">
+        <input type="hidden" id="empExistingContratoData">
+        <input type="hidden" id="empExistingContratoNome">
+
+        <div class="form-group">
+          <label class="form-label">Nome Completo *</label>
+          <input type="text" class="form-control" id="empNome" required placeholder="Ex: Carlos Eduardo da Silva">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1.2;">
+            <label class="form-label">Cargo / Especialidade *</label>
+            <input type="text" list="cargosList" class="form-control" id="empCargo" required placeholder="Ex: Marceneiro Líder">
+            <datalist id="cargosList">
+              <option value="Marceneiro Líder">
+              <option value="Marceneiro de Bancada">
+              <option value="Montador de Móveis">
+              <option value="Ajudante Geral">
+              <option value="Pintor / Laqueador">
+              <option value="Gesseiro">
+              <option value="Eletricista">
+              <option value="Serralheiro">
+              <option value="Acabador">
+            </datalist>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Valor Padrão da Diária (R$) *</label>
+            <input type="number" step="0.01" class="form-control" id="empDiaria" required placeholder="Ex: 220.00">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Telefone / WhatsApp *</label>
+            <input type="tel" class="form-control" id="empTelefone" required placeholder="(61) 99999-9999">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Chave PIX para Diárias</label>
+            <input type="text" class="form-control" id="empPix" placeholder="CPF, Celular ou Chave Aleatória">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Status do Colaborador</label>
+          <select class="form-control" id="empStatus">
+            <option value="Ativo" selected>Ativo (disponível para escalas)</option>
+            <option value="Inativo">Inativo / Afastado</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="background: #f8fafc; border: 1px dashed var(--border-soft); border-radius: 8px; padding: 14px;">
+          <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>📄 Anexo do Contrato de Trabalho / Prestação</span>
+            <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">PDF ou Foto</span>
+          </label>
+          <input type="file" id="empContratoFile" class="form-control" accept="image/*,.pdf" style="padding: 6px;">
+          <div id="empContratoPreview" style="margin-top: 8px;"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 24px;">
+          <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('employeeModal')">Cancelar</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1.5;">Salvar Funcionário</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: HUB DE INSPEÇÃO 360° DA OBRA           -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="obraInspectModal">
+    <div class="modal-content obra-inspect-card">
+      <div class="modal-header" style="align-items: flex-start; margin-bottom: 8px;">
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <h3 class="modal-title" id="inspectObraTitle" style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0;">Obra #SRV</h3>
+            <select class="form-control" id="inspectObraStatusSelect" style="width: auto; padding: 4px 10px; font-size: 12px; font-weight: 700; height: auto;">
+              <option value="A Iniciar">⏳ A Iniciar</option>
+              <option value="Em Produção / Oficina">🔨 Em Produção</option>
+              <option value="Em Montagem / Obra">🚚 Em Montagem</option>
+              <option value="Concluído">✅ Concluído</option>
+            </select>
+          </div>
+          <div id="inspectObraSub" style="font-size: 13px; color: #64748b; margin-top: 4px;"></div>
+        </div>
+        <button type="button" class="close-modal" onclick="closeModal('obraInspectModal')">&times;</button>
+      </div>
+
+      <!-- Barra de KPIs Financeiros em Tempo Real da Obra -->
+      <div class="obra-kpis-grid" id="inspectObraKpis"></div>
+
+      <!-- Abas Internas da Obra -->
+      <div class="obra-tabs-nav">
+        <button type="button" class="obra-tab-btn active" onclick="switchObraTab('equipe', this)">
+          <span>👷 Equipe & Diárias da Obra</span>
+        </button>
+        <button type="button" class="obra-tab-btn" onclick="switchObraTab('caixa', this)">
+          <span>💰 Caixa Centralizado da Obra</span>
+        </button>
+        <button type="button" class="obra-tab-btn" onclick="switchObraTab('detalhes', this)">
+          <span>📋 Detalhes & Projeto</span>
+        </button>
+      </div>
+
+      <!-- Conteúdo Dinâmico da Aba Selecionada -->
+      <div id="inspectObraTabContent"></div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: ALOCAR FUNCIONÁRIO NA OBRA ESPECÍFICA  -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="workerModal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h4 class="modal-title" id="workerModalTitle">Alocar Colaborador na Obra</h4>
+        <button type="button" class="close-modal" onclick="closeModal('workerModal')">&times;</button>
+      </div>
+      <form id="workerForm" onsubmit="handleSaveWorker(event)">
+        <input type="hidden" id="workerSrvId">
+        <input type="hidden" id="workerId">
+        <input type="hidden" id="workerExistingContratoData">
+        <input type="hidden" id="workerExistingContratoNome">
+
+        <div class="form-group">
+          <label class="form-label">Selecionar da Base de Funcionários:</label>
+          <select class="form-control" id="workerEmployeeSelect" onchange="handleWorkerSelectChange(this.value)">
+            <option value="">-- Selecione da Base (ou digite abaixo) --</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1.2;">
+            <label class="form-label">Nome do Colaborador *</label>
+            <input type="text" class="form-control" id="workerNome" required placeholder="Nome do profissional">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Função nesta Obra *</label>
+            <input type="text" class="form-control" id="workerCargo" required placeholder="Ex: Montador">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Valor da Diária (R$) *</label>
+            <input type="number" step="0.01" class="form-control" id="workerDiaria" required placeholder="Ex: 200.00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Quantidade de Dias *</label>
+            <input type="number" step="0.5" min="0.5" class="form-control" id="workerDias" required value="1" placeholder="Ex: 3">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Status do Pagamento da Diária</label>
+          <select class="form-control" id="workerStatusPagamento">
+            <option value="Pendente" selected>⏳ Pendente de Pagamento</option>
+            <option value="Pago">✓ Quitado / Pago</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="background: #f8fafc; border: 1px dashed var(--border-soft); border-radius: 8px; padding: 12px;">
+          <label class="form-label" style="display: flex; justify-content: space-between;">
+            <span>Contrato de Trabalho desta Obra</span>
+            <span style="font-size: 11px; color: var(--text-muted);">PDF ou Foto</span>
+          </label>
+          <input type="file" id="workerContratoFile" class="form-control" accept="image/*,.pdf" style="padding: 6px;">
+          <div id="workerContratoPreview" style="margin-top: 6px;"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('workerModal')">Cancelar</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1.5;">Salvar Alocação</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: LANÇAR GASTO DE INSUMO NA OBRA         -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="expenseModal">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <h4 class="modal-title" id="expenseModalTitle">Lançar Compra de Insumo na Obra</h4>
+        <button type="button" class="close-modal" onclick="closeModal('expenseModal')">&times;</button>
+      </div>
+      <form id="expenseForm" onsubmit="handleSaveExpense(event)">
+        <input type="hidden" id="expenseSrvId">
+
+        <div class="form-group">
+          <label class="form-label">Descrição do Insumo / Material *</label>
+          <input type="text" class="form-control" id="expenseDescricao" required placeholder="Ex: 3 Chapas MDF Louro Freijó 18mm">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="flex: 1.2;">
+            <label class="form-label">Categoria do Material *</label>
+            <select class="form-control" id="expenseCategoria">
+              <option value="Madeiras e MDF" selected>Madeiras e MDF</option>
+              <option value="Ferragens">Ferragens (Corrediças/Dobradiças)</option>
+              <option value="Tintas e Vernizes">Tintas, Vernizes e Seladoras</option>
+              <option value="Fitas de Borda e Colas">Fitas de Borda e Colas</option>
+              <option value="Frete e Transporte">Frete e Transporte</option>
+              <option value="Acessórios e Elétrica">Acessórios, Puxadores e LED</option>
+              <option value="Outros Insumos">Outros Insumos</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Valor (R$) *</label>
+            <input type="number" step="0.01" class="form-control" id="expenseValor" required placeholder="0.00">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Fornecedor / Loja</label>
+            <input type="text" class="form-control" id="expenseFornecedor" placeholder="Ex: Gasômetro / Leo Madeiras">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data da Compra</label>
+            <input type="text" class="form-control" id="expenseData" placeholder="DD/MM/AAAA">
+          </div>
+        </div>
+
+        <div class="form-group" style="background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px 14px; margin-top: 8px;">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #334155; cursor: pointer; margin: 0;">
+            <input type="checkbox" id="expenseLancarCaixaGeral" checked style="width: 16px; height: 16px; accent-color: var(--wood-primary);">
+            <span>Lançar também como saída no Caixa Geral da marcenaria</span>
+          </label>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('expenseModal')">Cancelar</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1.5;">Adicionar Gasto à Obra</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <!-- ============================================== -->
   <!-- JAVASCRIPT: LÓGICA E DADOS LOCAIS -->
@@ -682,22 +957,23 @@
   <script src="js/config.js?v=20260929"></script>
 
   <!-- 2. Serviços de Persistência e Rede -->
-  <script src="js/services/storage.js?v=20260929"></script>
-  <script src="js/services/api.js?v=20260929"></script>
+  <script src="js/services/storage.js?v=20260930_obras"></script>
+  <script src="js/services/api.js?v=20260930_obras"></script>
 
   <!-- 3. Componentes de Interface do Usuário (UI) -->
-  <script src="js/ui/toast.js?v=20260929"></script>
-  <script src="js/ui/modals.js?v=20260929"></script>
+  <script src="js/ui/toast.js?v=20260929_clean_notify"></script>
+  <script src="js/ui/modals.js?v=20260929_clean_notify"></script>
 
   <!-- 4. Módulos de Regras de Negócio e Domínio -->
-  <script src="js/modules/auth.js?v=20260929"></script>
-  <script src="js/modules/leads.js?v=20260929_del_v3"></script>
-  <script src="js/modules/clients.js?v=20260929"></script>
-  <script src="js/modules/services.js?v=20260929"></script>
-  <script src="js/modules/finance.js?v=20260929"></script>
-  <script src="js/modules/portfolio.js?v=20260929"></script>
+  <script src="js/modules/auth.js?v=20260930_obras"></script>
+  <script src="js/modules/leads.js?v=20260929_clean_notify"></script>
+  <script src="js/modules/clients.js?v=20260930_obras"></script>
+  <script src="js/modules/employees.js?v=20260930_obras"></script>
+  <script src="js/modules/services.js?v=20260930_obras"></script>
+  <script src="js/modules/finance.js?v=20260929_clean_notify"></script>
+  <script src="js/modules/portfolio.js?v=20260929_clean_notify"></script>
 
   <!-- 5. Bootstrap e Orquestrador da Aplicação -->
-  <script src="js/app.js?v=20260929"></script>
+  <script src="js/app.js?v=20260930_obras"></script>
 </body>
 </html>

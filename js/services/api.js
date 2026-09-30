@@ -66,6 +66,11 @@ async function fetchCloudData(showFeedback = false) {
   if (showFeedback) showToast("Buscando dados atualizados do banco...");
 
   try {
+    let eRes = { data: null };
+    try {
+      eRes = await sbClient.from("employees").select("*").order("id", { ascending: false });
+    } catch(e) {}
+
     const [pRes, lRes, cRes, sRes, tRes] = await Promise.all([
       sbClient.from("portfolio").select("*").order("id", { ascending: false }),
       sbClient.from("leads").select("*").order("id", { ascending: false }),
@@ -147,6 +152,22 @@ async function fetchCloudData(showFeedback = false) {
         data: item.data
       }));
       saveCacheDB("transactions", db.transactions);
+    }
+
+    if (eRes && eRes.data) {
+      db.employees = eRes.data.map(item => ({
+        id: item.id,
+        nome: item.nome,
+        cargo: item.cargo,
+        telefone: item.telefone,
+        chavePix: item.chave_pix,
+        diariaPadrao: parseFloat(item.diaria_padrao) || 0,
+        status: item.status || "Ativo",
+        contratoNome: item.contrato_nome,
+        contratoData: item.contrato_url || "",
+        dataCadastro: item.created_at ? new Date(item.created_at).toLocaleDateString("pt-BR") : ""
+      }));
+      saveCacheDB("employees", db.employees);
     }
 
     renderPublicCatalog();
