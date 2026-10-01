@@ -81,7 +81,7 @@ function switchAdminTab(tabName, el) {
     if (typeof renderServices === "function") renderServices(db.services);
   } else if (tabName === "funcionarios") {
     document.getElementById("tabFuncionarios").style.display = "block";
-    if (typeof renderEmployees === "function") renderEmployees(db.employees);
+    if (typeof loadEmployeesFromDb === "function") loadEmployeesFromDb(); else if (typeof renderEmployees === "function") renderEmployees(db.employees);
   } else if (tabName === "financeiro") {
     document.getElementById("tabFinanceiro").style.display = "block";
     if (typeof renderFinanceiro === "function") renderFinanceiro(db.transactions);

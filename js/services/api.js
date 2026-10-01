@@ -66,17 +66,13 @@ async function fetchCloudData(showFeedback = false) {
   if (showFeedback) showToast("Buscando dados atualizados do banco...");
 
   try {
-    let eRes = { data: null };
-    try {
-      eRes = await sbClient.from("employees").select("*").order("id", { ascending: false });
-    } catch(e) {}
-
-    const [pRes, lRes, cRes, sRes, tRes] = await Promise.all([
+    const [pRes, lRes, cRes, sRes, tRes, eRes] = await Promise.all([
       sbClient.from("portfolio").select("*").order("id", { ascending: false }),
       sbClient.from("leads").select("*").order("id", { ascending: false }),
       sbClient.from("clients").select("*").order("id", { ascending: false }),
       sbClient.from("services").select("*").order("id", { ascending: false }),
-      sbClient.from("transactions").select("*").order("id", { ascending: false })
+      sbClient.from("transactions").select("*").order("id", { ascending: false }),
+      sbClient.from("employees").select("*").order("id", { ascending: false }).catch(err => ({ data: [] }))
     ]);
 
     if (pRes.data) {
