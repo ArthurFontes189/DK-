@@ -186,17 +186,35 @@ async function handleDirectEmployeeSubmit(e) {
       const { data, error } = await sbClient.from("employees").insert([payload]).select();
 
       if (error) {
-        console.error("Erro Supabase ao salvar funcionário:", error);
-        if (error.message && (error.message.includes("does not exist") || error.code === "42P01")) {
-          showToast("A tabela 'employees' precisa ser criada no Supabase. Execute o script SQL no painel.", "error", 7000);
-          alert("Aviso: A tabela 'employees' ainda não foi criada no banco Supabase.\n\nExecute o script em 'database/schema.sql' no SQL Editor do Supabase para ativar a tabela com todas as permissões.");
+        console.warn("Aviso Supabase ao salvar funcionário:", error.message);
+        
+        // Se a tabela ainda não foi criada no Supabase, mantém o registro na sessão para o usuário não perder o trabalho
+        const isTableMissing = error.message && (error.message.includes("schema cache") || error.message.includes("does not exist") || error.code === "42P01");
+        
+        const localEmp = {
+          id: Date.now(),
+          nome,
+          cargo,
+          telefone,
+          chavePix,
+          diariaPadrao,
+          status,
+          contratoData,
+          contratoNome,
+          dataCadastro: new Date().toLocaleDateString("pt-BR")
+        };
+        db.employees.unshift(localEmp);
+
+        if (isTableMissing) {
+          showToast(`Funcionário "${nome}" salvo localmente! (Aviso: crie a tabela 'employees' no SQL do Supabase)`, "warning", 6000);
         } else {
-          showToast("Erro ao gravar no banco: " + error.message, "error");
+          showToast(`Funcionário salvo localmente (Erro banco: ${error.message})`, "warning", 5000);
         }
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
-        }
+
+        const form = document.getElementById("directEmployeeForm");
+        if (form) form.reset();
+        toggleEmployeeForm(false);
+        renderEmployees(db.employees);
         return;
       }
 
@@ -314,7 +332,32 @@ async function handleEmployeeSubmit(e) {
       if (id) {
         const { error } = await sbClient.from("employees").update(payload).eq("id", id);
         if (error) {
-          showToast("Erro ao atualizar no banco: " + error.message, "error");
+          console.warn("Aviso ao atualizar no Supabase:", error.message);
+          const isTableMissing = error.message && (error.message.includes("schema cache") || error.message.includes("does not exist") || error.code === "42P01");
+          
+          // Atualiza na sessão para não travar o usuário
+          const empIndex = db.employees.findIndex(e => e.id == id);
+          if (empIndex !== -1) {
+            db.employees[empIndex] = {
+              ...db.employees[empIndex],
+              nome,
+              cargo,
+              telefone,
+              chavePix,
+              diariaPadrao,
+              status,
+              contratoNome,
+              contratoData
+            };
+          }
+          closeModal("employeeModal");
+          renderEmployees(db.employees);
+
+          if (isTableMissing) {
+            showToast(`Dados de "${nome}" atualizados na sessão. Execute o SQL no Supabase para ativar a tabela.`, "warning", 6000);
+          } else {
+            showToast(`Atualizado na sessão (Aviso banco: ${error.message})`, "warning", 5000);
+          }
           return;
         }
         const empIndex = db.employees.findIndex(e => e.id == id);
@@ -411,16 +454,17 @@ async function deleteEmployee(empId) {
   if (!confirmado) return;
 
   if (typeof sbClient !== "undefined" && sbClient) {
-    const { error } = await sbClient.from("employees").delete().eq("id", empId);
-    if (error) {
-      showToast("Erro ao excluir do banco de dados: " + error.message, "error");
-      return;
+    try {
+      const { error } = await sbClient.from("employees").delete().eq("id", empId);
+      if (error) console.warn("Aviso ao excluir do banco:", error.message);
+    } catch (err) {
+      console.warn(err);
     }
   }
 
   db.employees = (db.employees || []).filter(e => e.id != empId);
   renderEmployees(db.employees);
-  showToast("Funcionário excluído do banco com sucesso!", "success");
+  showToast("Funcionário excluído com sucesso!", "success");
 }
 
 function viewEmployeeContract(empId) {

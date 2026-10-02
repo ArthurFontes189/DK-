@@ -1,39 +1,58 @@
 /* ==========================================================================
-   DESIGN TOKENS E PALETA DE CORES (EXTRAÍDA DA LOGO DK REVESTIMENTOS)
+   DK REVESTIMENTOS - DESIGN TOKENS & IDENTIDADE VISUAL DE ALTO PADRÃO
+   Estética de Ateliê de Marcenaria Fina & Revestimentos Arquitetônicos
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 :root {
-  /* Tons Principais de Madeira da Logo */
-  --wood-primary: #7a431d;        /* Marrom nobre rústico dos veios e letras DK */
-  --wood-gold: #b36e3c;           /* Caramelo tostado dos realces da madeira */
-  --wood-dark: #4e2710;           /* Sombra profunda de mogno e caibros */
-  --wood-light: #d89b6e;          /* Tom claro de iluminação da madeira */
-  
-  /* Fundos e Texturas (Alinhados com o linho claro da logo) */
-  --wood-cream: #fcfaf7;          /* Linho suave / Off-white limpo */
-  --wood-sand: #f3ece2;           /* Areia nobre suave */
-  --bg-page: #fbf9f5;             /* Fundo da área de navegação suave */
-  --card-bg: #ffffff;             /* Superfície dos cards */
+  /* Tipografia Arquitetônica */
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  /* Tons Escuros e Tipografia */
-  --dark-obsidian: #141518;       /* Fundo da seção Hero e Topo (Preto Carvão da Logo) */
-  --dark-surface: #1e2025;        /* Superfície dos cards do catálogo e hero */
-  --text-main: #141518;           /* Preto carvão elegante da tipografia da marca */
-  --text-muted: #5e6673;          /* Cinza médio para descrições */
+  /* Paleta Nobre: Carvalho, Louro Freijó & Dourado Acetinado */
+  --wood-primary: #8a4f26;         /* Carvalho / Terracota Nobre */
+  --wood-gold: #c59b6d;            /* Champanhe Dourado Acetinado */
+  --wood-dark: #3a1f0f;            /* Sombra profunda de madeira nobre */
+  --wood-light: #e8d5c0;           /* Iluminação suave da fibra de madeira */
+  --wood-hover: #9c5c30;           /* Realce de interação */
+
+  /* Tons de Fundo e Superfícies */
+  --bg-page: #f9f8f5;              /* Linho suave arquitetônico / Off-white acolhedor */
+  --card-bg: #ffffff;              /* Branco puro para superfícies de destaque */
+  --dark-obsidian: #0e0f13;        /* Preto Ébano refinado para hero e seções imersivas */
+  --dark-surface: #16181e;         /* Superfície escura de cards arquitetônicos */
+  --dark-surface-elevated: #1e2129;/* Camada elevada escura com profundidade */
   
-  /* Bordas Suaves */
-  --border-soft: #e8dfd5;         /* Linha suave inspirada na fibra da madeira */
-  --border-strong: #d3c2b1;       /* Destaque para inputs e divisores */
-  
-  /* Estados e Badges */
+  /* Textos e Contraste */
+  --text-main: #0f1217;            /* Carvão profundo para leitura confortável e nítida */
+  --text-muted: #5e6673;           /* Cinza neutro equilibrado para legendas e notas */
+  --text-light: #f8fafc;           /* Branco gelo para áreas escuras */
+  --text-light-muted: #94a3b8;     /* Cinza claro para áreas escuras */
+
+  /* Bordas e Delimitadores Sutis */
+  --border-soft: #e5ded4;          /* Linha de contraste fino (sem visual pesado) */
+  --border-strong: #cfc4b5;        /* Borda de inputs e caixas focadas */
+  --border-dark: rgba(255, 255, 255, 0.08); /* Borda translúcida em modo escuro */
+
+  /* Estados e Indicadores */
   --success: #15803d;
+  --success-bg: #f0fdf4;
   --warning: #b45309;
+  --warning-bg: #fffbeb;
   --danger: #b91c1c;
+  --danger-bg: #fef2f2;
   --info: #0369a1;
+  --info-bg: #f0f9ff;
 
-  /* Formas e Sombras */
+  /* Formas, Raios e Sombras Orgânicas */
+  --radius-xs: 4px;
   --radius-sm: 8px;
   --radius: 14px;
-  --radius-lg: 22px;
-  --shadow-subtle: 0 4px 20px -2px rgba(122, 67, 29, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
-  --shadow-premium: 0 12px 36px -4px rgba(122, 67, 29, 0.12), 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+
+  /* Sombras Profissionais e Suaves */
+  --shadow-subtle: 0 4px 20px -2px rgba(15, 18, 23, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 10px 30px -4px rgba(15, 18, 23, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+  --shadow-elevated: 0 20px 40px -6px rgba(15, 18, 23, 0.14), 0 6px 14px -3px rgba(0, 0, 0, 0.06);
+  --shadow-dark: 0 18px 45px rgba(0, 0, 0, 0.45);
 }

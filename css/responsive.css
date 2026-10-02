@@ -1,75 +1,135 @@
 /* ==========================================================================
-   REGRAS DE RESPONSIVIDADE E ADAPTAÇÃO MOBILE
+   DK REVESTIMENTOS - ADAPTAÇÃO RESPONSIVA MODERNA (TABLET & MOBILE)
    ========================================================================== */
-/* =======================================================
-       RESPONSIVIDADE (PC & MOBILE)
-       ======================================================= */
-    @media (max-width: 992px) {
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-      .portfolio-grid-vertical { grid-template-columns: repeat(2, 1fr); }
-      .hero-grid { grid-template-columns: 1fr; gap: 32px; }
-      .quote-grid { grid-template-columns: 1fr; gap: 32px; }
-      .media-container-vertical { height: 380px; }
-    }
 
-    @media (max-width: 768px) {
-      .container { padding: 0 16px; }
-      .navbar-inner { height: 62px; gap: 8px; }
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .portfolio-projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .quote-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .method-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
-      /* Ajuste da Logo para nunca quebrar ou desalinhado */
-      .brand { gap: 10px; }
-      .brand-icon { width: 52px; height: 52px; border-radius: 10px; }
-      .brand-icon svg { width: 100% !important; height: 100% !important; display: block; }
-      .brand-text h1 { font-size: 16px; line-height: 1.1; }
-      .brand-text span { font-size: 9.5px; letter-spacing: 0.04em; }
+@media (max-width: 768px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 
-      /* Esconder texto dos botões no celular para virar ícones elegantes e alinhados */
-      .nav-links { display: none; }
-      .nav-actions { gap: 8px; }
-      
-      .nav-wa-btn {
-        width: 38px;
-        height: 38px;
-        padding: 0;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .nav-wa-btn .btn-text { display: none; }
-      
-      .nav-admin-btn {
-        width: 38px;
-        height: 38px;
-        padding: 0;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .nav-admin-btn .btn-text { display: none; }
+  .navbar-inner {
+    height: 70px;
+  }
 
-      .menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        padding: 0;
-      }
+  .nav-links {
+    display: none;
+  }
 
-      .mobile-menu { top: 62px; padding: 20px 16px; }
+  .menu-toggle {
+    display: flex;
+  }
 
-      .services-grid { grid-template-columns: 1fr; }
-      .portfolio-grid-vertical { grid-template-columns: 1fr; }
-      .media-container-vertical { height: 460px; }
-      .leads-grid { grid-template-columns: 1fr; }
-      .clients-grid { grid-template-columns: 1fr; }
-      .services-admin-grid { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: 1fr; }
-      .quote-section { padding: 24px 16px; }
-      .hero-section { padding: 36px 0 30px; }
-      .hero-content h2 { font-size: 26px; }
-      .admin-header-bar { flex-direction: column; gap: 12px; align-items: flex-start; }
-      .admin-header-actions { width: 100%; justify-content: space-between; }
-    }
+  .nav-wa-btn span {
+    display: none;
+  }
+  .nav-wa-btn {
+    padding: 9px 12px;
+  }
+
+  .nav-admin-btn #adminBtnText {
+    display: none;
+  }
+  .nav-admin-btn {
+    padding: 9px 12px;
+  }
+
+  .hero-section {
+    padding: 50px 0 45px;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 40px;
+  }
+
+  .hero-content h2 {
+    font-size: 30px;
+    line-height: 1.2;
+  }
+
+  .hero-content p {
+    font-size: 14.5px;
+  }
+
+  .hero-card-side {
+    padding: 24px 20px;
+  }
+
+  .hero-trust-bar {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 36px;
+  }
+
+  .section-title {
+    font-size: 26px;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-projects-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .method-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .method-section {
+    padding: 40px 16px;
+    margin-bottom: 45px;
+  }
+
+  .quote-section {
+    padding: 32px 18px;
+    margin-bottom: 45px;
+    border-radius: var(--radius);
+  }
+
+  .quote-form-wrap {
+    padding: 24px 18px;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .admin-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .admin-tabs-nav {
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .obra-inspect-card {
+    padding: 18px !important;
+  }
+}
