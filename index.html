@@ -14,7 +14,7 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="DK Revestimentos | Marcenaria e Soluções Sob Medida">
-  <meta property="og:description" content="Ambientes sob medida, executados para durar. Marcenaria fina e revestimentos arquitetônicos em Brasília e Entorno.">
+  <meta property="og:description" content="Ambientes sob medida, executados para durar. Marcenaria e revestimentos em Brasília e Entorno.">
   <meta property="og:type" content="website">
 
   <!-- Google Fonts Preconnect -->
@@ -23,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS Standalone Otimizado -->
-  <link rel="stylesheet" href="css/style.css?v=20261002_editorial_v1">
+  <link rel="stylesheet" href="css/style.css?v=20261002_final_polish">
 </head>
 <body>
 
@@ -65,8 +65,8 @@
         <li><a href="#inicio" class="nav-link">Início</a></li>
         <li><a href="#projetos" class="nav-link">Projetos</a></li>
         <li><a href="#solucoes" class="nav-link">Soluções</a></li>
-        <li><a href="#a-dk" class="nav-link">A DK</a></li>
-        <li><a href="#como-trabalhamos" class="nav-link">Como Trabalhamos</a></li>
+        <li><a href="#a-dk" class="nav-link" style="white-space: nowrap;">A&nbsp;DK</a></li>
+        <li><a href="#como-trabalhamos" class="nav-link" style="white-space: nowrap;">Como Trabalhamos</a></li>
         <li><a href="#contato" class="nav-link">Contato</a></li>
       </ul>
 
@@ -76,9 +76,8 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
           <span>Falar com um Especialista</span>
         </a>
-        <button type="button" class="nav-admin-btn" id="adminAccessBtn" onclick="handleAdminAccessClick()" title="Gestão Interna">
+        <button type="button" class="nav-admin-link" id="adminAccessBtn" onclick="handleAdminAccessClick()" title="Acesso Administrativo" aria-label="Acesso Administrativo">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-          <span id="adminBtnText">Gestão do Ateliê</span>
         </button>
         <button type="button" class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Abrir Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -95,9 +94,9 @@
       <a href="#como-trabalhamos" class="nav-link" onclick="toggleMobileMenu()">Como Trabalhamos</a>
       <a href="#contato" class="nav-link" onclick="toggleMobileMenu()">Contato</a>
       <hr style="border: 0; border-top: 1px solid var(--border-dark);">
-      <button type="button" class="btn btn-outline btn-sm" onclick="toggleMobileMenu(); handleAdminAccessClick();" style="width: 100%; color: #fff; border-color: rgba(255,255,255,0.2);">
-        Gestão do Ateliê
-      </button>
+      <a href="javascript:void(0)" onclick="toggleMobileMenu(); handleAdminAccessClick();" style="font-size: 11.5px; color: #64748b; text-align: center; display: block; padding: 6px 0;">
+        Acesso Administrativo
+      </a>
     </div>
   </nav>
 
@@ -106,7 +105,7 @@
   <!-- ============================================== -->
   <main id="clientArea">
     <!-- ============================================================ -->
-    <!-- 1. HERO / PRIMEIRA DOBRA EDITORIAL (IMPACTO VISUAL & DESEJO) -->
+    <!-- 1. HERO / PRIMEIRA DOBRA (IMPACTO VISUAL, FOTOGRAFIA & DESEJO) -->
     <!-- ============================================================ -->
     <section id="inicio" class="hero-section hero-editorial">
       <div class="container hero-editorial-inner">
@@ -128,13 +127,13 @@
           </a>
         </div>
 
-        <!-- Faixa de Credibilidade Minimalista -->
+        <!-- Barra de Credibilidade Minimalista (3 Pilares Concisos) -->
         <div class="hero-trust-strip">
           <div class="trust-item-clean">
             <div class="trust-bullet"></div>
             <div>
-              <div class="trust-title">Oficina Própria</div>
-              <div class="trust-desc">Fabricação direta e sem terceirizações</div>
+              <div class="trust-title">Oficina própria</div>
+              <div class="trust-desc">Fabricação direta e controle de execução</div>
             </div>
           </div>
 
@@ -142,23 +141,15 @@
             <div class="trust-bullet"></div>
             <div>
               <div class="trust-title">Pontualidade</div>
-              <div class="trust-desc">Cronograma e prazos cumpridos com rigor</div>
+              <div class="trust-desc">Cronogramas acompanhados com rigor</div>
             </div>
           </div>
 
           <div class="trust-item-clean">
             <div class="trust-bullet"></div>
             <div>
-              <div class="trust-title">Garantia Pós-Obra</div>
-              <div class="trust-desc">Acompanhamento e assistência direta do ateliê</div>
-            </div>
-          </div>
-
-          <div class="trust-item-clean">
-            <div class="trust-bullet"></div>
-            <div>
-              <div class="trust-title">Atendimento</div>
-              <div class="trust-desc">Brasília e Entorno</div>
+              <div class="trust-title">Pós-entrega</div>
+              <div class="trust-desc">Acompanhamento e suporte</div>
             </div>
           </div>
         </div>
@@ -166,7 +157,7 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- 2. PROJETOS / PORTFÓLIO (PROJETOS QUE GANHARAM FORMA)        -->
+    <!-- 2. PROJETOS (MOSTRAMOS RESULTADOS — CORAÇÃO DO SITE)         -->
     <!-- ============================================================ -->
     <section id="projetos" class="portfolio-section-editorial" style="scroll-margin-top: 100px;">
       <div id="catalogo"></div>
@@ -179,31 +170,17 @@
           </p>
         </div>
 
-        <!-- Filtros por Categoria -->
-        <div class="portfolio-filters-wrap">
-          <button type="button" class="portfolio-filter-btn active" onclick="filterPortfolio('Todos', this)">Todos os Projetos</button>
-          <button type="button" class="portfolio-filter-btn" onclick="filterPortfolio('Painéis & Revestimentos', this)">Painéis & Revestimentos</button>
-          <button type="button" class="portfolio-filter-btn" onclick="filterPortfolio('Salas & Livings', this)">Salas & Livings</button>
-          <button type="button" class="portfolio-filter-btn" onclick="filterPortfolio('Cozinhas & Gourmet', this)">Cozinhas & Gourmet</button>
-          <button type="button" class="portfolio-filter-btn" onclick="filterPortfolio('Dormitórios & Closets', this)">Dormitórios & Closets</button>
-          <button type="button" class="portfolio-filter-btn" onclick="filterPortfolio('Áreas Externas', this)">Áreas Externas</button>
-        </div>
+
 
         <!-- Grade Dinâmica de Projetos Reais -->
         <div class="portfolio-projects-grid" id="portfolioCatalog">
           <!-- Renderizado dinamicamente via portfolio.js -->
         </div>
-
-        <!-- Micro-CTA sutil pós-portfólio -->
-        <div style="text-align: center; margin-top: 42px;">
-          <p style="font-size: 14.5px; color: var(--text-muted); margin-bottom: 12px;">Deseja um projeto pensado exclusivamente para seu espaço?</p>
-          <a href="#contato" class="btn btn-outline btn-sm">Conversar com um especialista →</a>
-        </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- 3. SOLUÇÕES PENSADAS PARA CADA AMBIENTE                      -->
+    <!-- 3. SOLUÇÕES (MOSTRAMOS O QUE PODEMOS EXECUTAR)               -->
     <!-- ============================================================ -->
     <section id="solucoes" class="solutions-section" style="scroll-margin-top: 100px;">
       <div class="container">
@@ -216,39 +193,39 @@
         </div>
 
         <div class="solutions-grid">
-          <div class="solution-card">
+          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
             <div class="solution-number">01</div>
             <h3>Painéis & Revestimentos</h3>
             <p>Painéis ripados, revestimentos decorativos, portas mimetizadas e soluções integradas à arquitetura.</p>
-            <a href="#contato" class="solution-link">Conversar sobre este ambiente →</a>
+            <span class="solution-link">Conhecer solução →</span>
           </div>
 
-          <div class="solution-card">
+          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
             <div class="solution-number">02</div>
             <h3>Marcenaria Sob Medida</h3>
             <p>Mobiliário desenvolvido para aproveitar o espaço com precisão e criar ambientes únicos.</p>
-            <a href="#contato" class="solution-link">Conversar sobre este ambiente →</a>
+            <span class="solution-link">Conhecer solução →</span>
           </div>
 
-          <div class="solution-card">
+          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
             <div class="solution-number">03</div>
             <h3>Cozinhas, Closets & Suítes</h3>
             <p>Projetos personalizados com atenção especial à organização, funcionalidade e acabamento.</p>
-            <a href="#contato" class="solution-link">Conversar sobre este ambiente →</a>
+            <span class="solution-link">Conhecer solução →</span>
           </div>
 
-          <div class="solution-card">
+          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
             <div class="solution-number">04</div>
             <h3>Ambientes Externos</h3>
             <p>Decks, pergolados e soluções em madeira para áreas externas residenciais e corporativas.</p>
-            <a href="#contato" class="solution-link">Conversar sobre este ambiente →</a>
+            <span class="solution-link">Conhecer solução →</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- 4. A DK ("MAIS DO QUE FABRICAR. EXECUTAMOS O PROJETO.")       -->
+    <!-- 4. A DK (MOSTRAMOS POR QUE CONFIAR — MANIFESTO E PILARES)    -->
     <!-- ============================================================ -->
     <section id="a-dk" class="container" style="scroll-margin-top: 100px;">
       <div class="about-section">
@@ -258,34 +235,34 @@
           <p>
             Trabalhamos em conjunto com clientes, arquitetos e designers para transformar projetos em ambientes reais, respeitando medidas, materiais, detalhes e linguagem arquitetônica.
           </p>
-          <p style="color: #94a3b8; font-size: 15px;">
+          <p style="color: #94a3b8; font-size: 15.5px;">
             Nosso trabalho une marcenaria, revestimentos e execução para que o resultado final mantenha a intenção original do projeto.
           </p>
         </div>
 
         <div class="about-pillars-grid">
-          <div class="about-pillar-card">
+          <div class="about-pillar-column">
             <h4>Atendimento Próximo</h4>
-            <p>Diálogo constante do alinhamento inicial ao acompanhamento presencial na obra.</p>
+            <p>Diálogo constante e alinhamento próximo em cada fase da obra.</p>
           </div>
-          <div class="about-pillar-card">
+          <div class="about-pillar-column">
             <h4>Execução Cuidadosa</h4>
-            <p>Respeito integral ao espaço, às medidas e às diretrizes do projeto arquitetônico.</p>
+            <p>Respeito absoluto ao espaço e às diretrizes do projeto arquitetônico.</p>
           </div>
-          <div class="about-pillar-card">
+          <div class="about-pillar-column">
             <h4>Precisão nos Detalhes</h4>
-            <p>Encontros perfeitos, alinhamento milimétrico e encaixes discretos em cada união.</p>
+            <p>Encontros perfeitos, alinhamento fino e encaixes exatos em cada união.</p>
           </div>
-          <div class="about-pillar-card">
+          <div class="about-pillar-column">
             <h4>Compromisso com o Acabamento</h4>
-            <p>Seleção criteriosa de materiais e rigor estético em todas as superfícies visíveis.</p>
+            <p>Rigor estético e seleção criteriosa de materiais em todas as superfícies.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- 5. COMO TRABALHAMOS (PROCESSO)                               -->
+    <!-- 5. COMO TRABALHAMOS (MOSTRAMOS COMO EXECUTAMOS)              -->
     <!-- ============================================================ -->
     <section id="como-trabalhamos" class="process-section" style="scroll-margin-top: 100px;">
       <div class="container">
@@ -326,64 +303,7 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- 6. O PADRÃO DK DE EXECUÇÃO / PRECISÃO NOS DETALHES           -->
-    <!-- ============================================================ -->
-    <section id="padrao-dk" class="precision-section" style="scroll-margin-top: 100px;">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">O Padrão DK de Execução</span>
-          <h2 class="section-title">Precisão nos detalhes</h2>
-          <p class="section-desc">
-            Cada etapa é planejada para preservar a qualidade do projeto até a entrega final.
-          </p>
-        </div>
-
-        <div class="precision-grid">
-          <div class="precision-card">
-            <h4>Precisão</h4>
-            <p>Projeto e execução com atenção rigorosa às medidas, encontros e acabamentos.</p>
-          </div>
-
-          <div class="precision-card">
-            <h4>Materiais</h4>
-            <p>Seleção criteriosa de madeiras, lâminas, revestimentos e acabamentos.</p>
-          </div>
-
-          <div class="precision-card">
-            <h4>Execução</h4>
-            <p>Instalação cuidadosa, organizada e alinhada ao projeto.</p>
-          </div>
-
-          <div class="precision-card">
-            <h4>Pós-Entrega</h4>
-            <p>Acompanhamento e suporte mesmo após a conclusão do projeto.</p>
-          </div>
-        </div>
-
-        <!-- Faixa de Capacidade Técnica -->
-        <div class="capability-strip">
-          <div class="capability-item">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Usinagem com alinhamento milimétrico</span>
-          </div>
-          <div class="capability-item">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Ferragens com amortecimento suave</span>
-          </div>
-          <div class="capability-item">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Proteção de pisos e forros na montagem</span>
-          </div>
-          <div class="capability-item">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>Pós-obra limpo e organizado</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- 7. CTA FINAL / CONTATO ("VAMOS CONVERSAR SOBRE O SEU PROJETO?") -->
+    <!-- 6. CONTATO (CONVIDAMOS PARA INICIAR UMA CONVERSA)            -->
     <!-- ============================================================ -->
     <section id="contato" class="container" style="scroll-margin-top: 100px;">
       <div id="solicitar"></div>
@@ -458,7 +378,7 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- 8. RODAPÉ INSTITUCIONAL EDITORIAL                            -->
+    <!-- 7. RODAPÉ INSTITUCIONAL EDITORIAL                            -->
     <!-- ============================================================ -->
     <footer class="site-footer">
       <div class="container">
@@ -471,7 +391,7 @@
             <a href="#inicio">Início</a>
             <a href="#projetos">Projetos</a>
             <a href="#solucoes">Soluções</a>
-            <a href="#a-dk">A DK</a>
+            <a href="#a-dk">A&nbsp;DK</a>
             <a href="#como-trabalhamos">Como Trabalhamos</a>
             <a href="#contato">Contato</a>
           </div>
@@ -969,6 +889,16 @@
         <button class="close-modal" onclick="closeModal('photoModal')">&times;</button>
       </div>
       <form id="photoForm" onsubmit="handleSaveMedia(event)">
+        <div class="form-group">
+          <label for="photoTipoRegistro">Enquadramento do Projeto</label>
+          <select id="photoTipoRegistro" class="form-control">
+            <option value="ambiente_finalizado">Ambiente Finalizado (Destaque Principal)</option>
+            <option value="foto_ampla">Foto Ampla do Espaço</option>
+            <option value="detalhe_acabamento">Detalhe de Acabamento</option>
+            <option value="processo_fabricacao">Processo de Fabricação / Oficina</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label for="mediaTipo">Tipo de Mídia *</label>
           <select id="mediaTipo" class="form-control" onchange="toggleMediaInputType(this.value)">

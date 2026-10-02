@@ -22,7 +22,7 @@
   align-items: center;
   justify-content: space-between;
   height: 82px;
-  gap: 24px;
+  gap: 20px;
 }
 
 .brand {
@@ -35,8 +35,8 @@
 }
 
 .brand-icon {
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   background: #ffffff;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
@@ -54,29 +54,31 @@
 }
 
 .brand-text h1 {
-  font-size: 19.5px;
+  font-size: 19px;
   font-weight: 800;
   color: #ffffff;
   line-height: 1.15;
   letter-spacing: -0.03em;
   margin: 0;
+  white-space: nowrap;
 }
 
 .brand-text span {
-  font-size: 10.5px;
+  font-size: 10px;
   color: var(--wood-gold);
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   display: block;
   margin-top: 2px;
+  white-space: nowrap;
 }
 
 /* Links da Navbar Desktop */
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 28px;
+  gap: 26px;
   align-items: center;
 }
 
@@ -89,6 +91,7 @@
   padding: 8px 0;
   transition: color 0.2s ease;
   letter-spacing: 0.015em;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -113,14 +116,14 @@
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .nav-wa-btn {
   background: #15803d;
   color: #ffffff;
   border-radius: var(--radius-pill);
-  padding: 9px 22px;
+  padding: 9px 20px;
   font-size: 13px;
   font-weight: 700;
   display: inline-flex;
@@ -129,6 +132,7 @@
   box-shadow: 0 4px 14px rgba(21, 128, 61, 0.28);
   transition: all 0.22s ease;
   letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 .nav-wa-btn:hover {
   background: #166534;
@@ -137,24 +141,26 @@
   color: #ffffff;
 }
 
-.nav-admin-btn {
-  background: rgba(255, 255, 255, 0.04);
-  color: #94a3b8;
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-pill);
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 600;
+/* Acesso Administrativo Discreto (Não compete com o público) */
+.nav-admin-link {
+  background: transparent;
+  color: #64748b;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   transition: all 0.2s ease;
+  opacity: 0.6;
+  flex-shrink: 0;
 }
-.nav-admin-btn:hover {
-  background: rgba(255, 255, 255, 0.10);
+.nav-admin-link:hover {
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  opacity: 1;
 }
 
 .menu-toggle {
@@ -199,7 +205,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   color: #ffffff;
-  padding: 110px 0 75px;
+  padding: 110px 0 70px;
   border-radius: 0 0 32px 32px;
   margin-bottom: 90px;
   position: relative;
@@ -260,14 +266,14 @@
   margin-bottom: 20px;
 }
 
-/* Barra de Credibilidade Minimalista (Linhas sutis, sem poluição de cards) */
+/* Barra de Credibilidade Minimalista: 3 Itens Curtos & Precisos */
 .hero-trust-strip {
   margin-top: 75px;
   padding-top: 36px;
   border-top: 1px solid rgba(255, 255, 255, 0.10);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 26px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
   text-align: left;
 }
 
@@ -287,7 +293,7 @@
 }
 
 .trust-item-clean .trust-title {
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 2px;
@@ -295,7 +301,7 @@
 }
 
 .trust-item-clean .trust-desc {
-  font-size: 12.5px;
+  font-size: 13px;
   color: #94a3b8;
   line-height: 1.45;
 }
@@ -307,40 +313,13 @@
   padding: 10px 0 95px;
 }
 
-.portfolio-filters-wrap {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 48px;
-}
 
-.portfolio-filter-btn {
-  background: #ffffff;
-  border: 1px solid var(--border-soft);
-  color: #475569;
-  padding: 9px 22px;
-  border-radius: var(--radius-pill);
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-  letter-spacing: 0.01em;
-}
 
-.portfolio-filter-btn:hover {
-  background: #f8fafc;
-  color: var(--wood-primary);
-  border-color: var(--border-strong);
-}
 
-.portfolio-filter-btn.active {
-  background: var(--wood-primary);
-  color: #ffffff;
-  border-color: var(--wood-primary);
-  box-shadow: 0 4px 14px rgba(138, 79, 38, 0.26);
-}
+
+
+
+
 
 .portfolio-projects-grid {
   display: grid;
@@ -399,23 +378,7 @@
   opacity: 1;
 }
 
-.project-category-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: rgba(14, 15, 19, 0.82);
-  color: #ffffff;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 5px 12px;
-  border-radius: 6px;
-  z-index: 2;
-}
+
 
 .project-media-type-badge {
   position: absolute;
@@ -512,7 +475,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   4. SEÇÃO: SOLUÇÕES PENSADAS PARA CADA AMBIENTE (DESIGN EDITORIAL SEM POLUIÇÃO)
+   4. SEÇÃO: SOLUÇÕES PENSADAS PARA CADA AMBIENTE (CARDS SUTIS E ELEGANTES)
    -------------------------------------------------------------------------- */
 .solutions-section {
   padding: 20px 0 95px;
@@ -534,6 +497,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .solution-card::before {
@@ -592,19 +556,20 @@
   text-decoration: none;
   transition: gap 0.2s ease, color 0.2s ease;
 }
-.solution-link:hover {
+.solution-card:hover .solution-link {
   color: var(--wood-dark);
   gap: 9px;
 }
 
 /* --------------------------------------------------------------------------
    5. SEÇÃO: A DK ("MAIS DO QUE FABRICAR. EXECUTAMOS O PROJETO.")
+   Apresentação Editorial com Tipografia Nobre e Respiro (Sem visual de dashboard)
    -------------------------------------------------------------------------- */
 .about-section {
   background: linear-gradient(135deg, #15171d 0%, #0e0f13 100%);
   color: #ffffff;
   border-radius: var(--radius-lg);
-  padding: 75px 60px;
+  padding: 85px 65px;
   margin-bottom: 95px;
   border: 1px solid var(--border-dark);
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.30);
@@ -612,59 +577,55 @@
 
 .about-header-wrap {
   max-width: 820px;
-  margin-bottom: 48px;
+  margin-bottom: 50px;
 }
 
 .about-header-wrap h2 {
-  font-size: 40px;
+  font-size: 42px;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: -0.035em;
-  line-height: 1.22;
+  line-height: 1.2;
   margin-bottom: 20px;
 }
 
 .about-header-wrap p {
-  font-size: 16.5px;
+  font-size: 17px;
   color: #cbd5e1;
   line-height: 1.8;
   margin-bottom: 14px;
 }
 
+/* Faixa Tipográfica Arquitetônica dos 4 Pilares (Sem caixas fechadas) */
 .about-pillars-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 22px;
-  padding-top: 38px;
-  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  padding-top: 40px;
 }
 
-.about-pillar-card {
-  padding: 24px 22px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius);
-  transition: all 0.25s ease;
+.about-pillar-column {
+  border-top: 1px solid rgba(197, 155, 109, 0.35);
+  padding-top: 22px;
+  transition: border-color 0.25s ease;
 }
-.about-pillar-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(197, 155, 109, 0.35);
-  transform: translateY(-2px);
+.about-pillar-column:hover {
+  border-top-color: var(--wood-gold);
 }
 
-.about-pillar-card h4 {
+.about-pillar-column h4 {
   font-size: 13.5px;
   font-weight: 800;
   color: var(--wood-gold);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.about-pillar-card p {
-  font-size: 13.5px;
+.about-pillar-column p {
+  font-size: 14px;
   color: #94a3b8;
-  line-height: 1.6;
+  line-height: 1.65;
   margin: 0;
 }
 
@@ -722,78 +683,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   7. SEÇÃO: O PADRÃO DK DE EXECUÇÃO (DIFERENCIAIS / PRECISÃO)
-   -------------------------------------------------------------------------- */
-.precision-section {
-  padding: 20px 0 95px;
-}
-
-.precision-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  margin-bottom: 42px;
-}
-
-.precision-card {
-  background: #ffffff;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius);
-  padding: 32px 26px;
-  transition: all 0.25s ease;
-  box-shadow: var(--shadow-subtle);
-}
-.precision-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-card);
-}
-
-.precision-card h4 {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--wood-primary);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.precision-card p {
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.65;
-  margin: 0;
-}
-
-/* Faixa de Capacidade Técnica */
-.capability-strip {
-  background: #f3efe8;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius);
-  padding: 26px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.capability-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #1e293b;
-}
-
-.capability-item svg {
-  color: var(--wood-primary);
-  flex-shrink: 0;
-}
-
-/* --------------------------------------------------------------------------
-   8. SEÇÃO DE CONTATO / VAMOS CONVERSAR
+   7. SEÇÃO DE CONTATO / VAMOS CONVERSAR
    -------------------------------------------------------------------------- */
 .contact-section-editorial {
   background: linear-gradient(135deg, #16181e 0%, #0e0f13 100%);
@@ -857,7 +747,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   9. RODAPÉ INSTITUCIONAL EDITORIAL
+   8. RODAPÉ INSTITUCIONAL EDITORIAL
    -------------------------------------------------------------------------- */
 .site-footer {
   background: #0e0f13;

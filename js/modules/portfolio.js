@@ -1,22 +1,110 @@
 // ============================================================================
-// MÓDULO DE PORTFÓLIO & GALERIA REAL
+// MÓDULO DE PORTFÓLIO & GALERIA ARQUITETÔNICA
 // DK Revestimentos - Ateliê de Marcenaria & Revestimentos
 // Exclusivamente com projetos e mídias reais cadastradas pelo marceneiro
+// Priorização rigorosa: Ambientes Concluídos > Fotos Amplas > Detalhes > Processo > Vídeo
 // ============================================================================
 
-let currentPortfolioCategory = "Todos";
+// Calcula a pontuação de hierarquia visual para colocar resultados finais no topo
+function getProjectHierarchyScore(item) {
+  let score = 90;
+  const isVideo = isVideoMedia(item);
+  const text = ((item.titulo || '') + ' ' + (item.descricao || '') + ' ' + (item.categoria || '') + ' ' + (item.tipoRegistro || '')).toLowerCase();
 
-// Retorna apenas os projetos reais cadastrados pelo usuário no banco/armazenamento
+  // 5. Vídeos quando existirem
+  if (isVideo) {
+    return 20;
+  }
+
+  // 4. Processo / fabricação / oficina (depriorizado para o final da galeria)
+  if (
+    text.includes("processo") || 
+    text.includes("fabrica") || 
+    text.includes("oficina") || 
+    text.includes("usinagem") || 
+    text.includes("chapa") || 
+    text.includes("produção") || 
+    text.includes("producao") || 
+    text.includes("bruto") || 
+    text.includes("montagem em andamento")
+  ) {
+    return 40;
+  }
+
+  // 3. Detalhes construtivos e acabamento fino
+  if (
+    text.includes("detalhe") || 
+    text.includes("puxador") || 
+    text.includes("fechamento") || 
+    text.includes("gaveta") || 
+    text.includes("ripa") || 
+    text.includes("textura") || 
+    text.includes("encaixe")
+  ) {
+    return 60;
+  }
+
+  // 2. Fotos amplas do projeto
+  if (
+    text.includes("amplo") || 
+    text.includes("geral") || 
+    text.includes("integrado") || 
+    text.includes("visão") || 
+    text.includes("perspectiva")
+  ) {
+    return 80;
+  }
+
+  // 1. Ambientes finalizados e concluídos (prioridade absoluta para clientes exigentes)
+  if (
+    text.includes("finalizado") || 
+    text.includes("concluído") || 
+    text.includes("concluido") || 
+    text.includes("sala") || 
+    text.includes("living") || 
+    text.includes("cozinha") || 
+    text.includes("closet") || 
+    text.includes("dormitório") || 
+    text.includes("suite") || 
+    text.includes("suíte") || 
+    text.includes("varanda") || 
+    text.includes("painel") || 
+    text.includes("revestimento") || 
+    text.includes("apartamento") || 
+    text.includes("residencia") || 
+    text.includes("residência") || 
+    text.includes("ambiente")
+  ) {
+    return 100;
+  }
+
+  return score;
+}
+
+// Retorna projetos reais ordenados pela hierarquia de excelência visual
 function getAllPortfolioProjects() {
-  return (db.portfolio || []).map(item => ({
+  const items = (db.portfolio || []).map(item => ({
     id: item.id,
-    titulo: item.titulo || "Projeto Sob Medida",
+    titulo: item.titulo || "Ambiente Sob Medida",
     categoria: item.categoria || "Marcenaria Sob Medida",
     ambiente: item.categoria || "Ambiente Personalizado",
     descricao: item.descricao || "",
     midiaUrl: item.midiaUrl || "",
-    tipoMidia: isVideoMedia(item) ? "video" : "foto"
+    tipoMidia: isVideoMedia(item) ? "video" : "foto",
+    tipoRegistro: item.tipoRegistro || ""
   }));
+
+  // Ordena para que ambientes prontos e fotos amplas apareçam sempre primeiro
+  items.sort((a, b) => {
+    const scoreA = getProjectHierarchyScore(a);
+    const scoreB = getProjectHierarchyScore(b);
+    if (scoreB !== scoreA) {
+      return scoreB - scoreA;
+    }
+    return Number(b.id) - Number(a.id);
+  });
+
+  return items;
 }
 
 function isVideoMedia(item) {
@@ -34,20 +122,12 @@ function isVideoMedia(item) {
   );
 }
 
-// Filtra a galeria por categoria
+// Mantido para compatibilidade sem poluir o layout
 function filterPortfolio(categoria, btnEl) {
-  currentPortfolioCategory = categoria;
-  document.querySelectorAll(".portfolio-filter-btn").forEach(btn => btn.classList.remove("active"));
-  if (btnEl) {
-    btnEl.classList.add("active");
-  } else {
-    const allBtn = Array.from(document.querySelectorAll(".portfolio-filter-btn")).find(b => b.textContent.includes("Todos"));
-    if (allBtn) allBtn.classList.add("active");
-  }
   renderPublicCatalog();
 }
 
-// Renderiza a galeria pública de projetos reais
+// Renderiza o catálogo editorial de projetos reais (sem filtros ou badges poluentes)
 function renderPublicCatalog() {
   const container = document.getElementById("portfolioCatalog");
   if (!container) return;
@@ -58,7 +138,7 @@ function renderPublicCatalog() {
   // Caso ainda não haja nenhum projeto real cadastrado no sistema
   if (allProjects.length === 0) {
     container.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 55px 24px; background: #ffffff; border: 1px solid var(--border-soft); border-radius: var(--radius); box-shadow: var(--shadow-subtle);">
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 24px; background: #ffffff; border: 1px solid var(--border-soft); border-radius: var(--radius); box-shadow: var(--shadow-subtle);">
         <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(138, 79, 38, 0.08); color: var(--wood-primary); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2"></rect>
@@ -66,11 +146,11 @@ function renderPublicCatalog() {
             <polyline points="21 15 16 10 5 21"></polyline>
           </svg>
         </div>
-        <h3 style="font-size: 19px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Galeria de Projetos em Atualização</h3>
-        <p style="font-size: 14.5px; color: var(--text-muted); max-width: 520px; margin: 0 auto 20px auto; line-height: 1.6;">
-          Estamos organizando e publicando as fotos e vídeos das obras mais recentes da DK Revestimentos. Para conhecer trabalhos executados ou conversar sobre seu projeto, fale conosco pelo WhatsApp.
+        <h3 style="font-size: 19px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Catálogo de Obras em Atualização</h3>
+        <p style="font-size: 14.5px; color: var(--text-muted); max-width: 520px; margin: 0 auto 24px auto; line-height: 1.65;">
+          Estamos selecionando e publicando as fotografias das obras mais recentes da DK Revestimentos. Para receber fotos de projetos concluídos ou conversar sobre seu espaço, entre em contato direto.
         </p>
-        <a href="#contato" class="btn btn-whatsapp" style="font-weight: 700; padding: 12px 24px;">
+        <a href="#contato" class="btn btn-whatsapp" style="font-weight: 700; padding: 12px 26px;">
           Solicitar Fotos de Projetos no WhatsApp
         </a>
       </div>
@@ -78,27 +158,8 @@ function renderPublicCatalog() {
     return;
   }
 
-  // Filtragem dos projetos reais pela categoria selecionada
-  const filteredProjects = currentPortfolioCategory === "Todos"
-    ? allProjects
-    : allProjects.filter(p => p.categoria.toLowerCase() === currentPortfolioCategory.toLowerCase());
-
-  // Se a categoria selecionada não tiver itens no momento
-  if (filteredProjects.length === 0) {
-    container.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 45px 20px; color: var(--text-muted); background: #ffffff; border-radius: var(--radius); border: 1px solid var(--border-soft);">
-        <p style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Nenhum projeto encontrado na categoria "${currentPortfolioCategory}".</p>
-        <p style="font-size: 13.5px; margin-bottom: 16px;">Selecione outra categoria para visualizar nossos trabalhos.</p>
-        <button type="button" class="btn btn-outline btn-sm" onclick="filterPortfolio('Todos', null)">
-          Ver Todos os Projetos
-        </button>
-      </div>
-    `;
-    return;
-  }
-
-  // Renderiza cada projeto real
-  filteredProjects.forEach(item => {
+  // Renderiza cada projeto real com fotografia limpa (sem badge de filtro na imagem)
+  allProjects.forEach(item => {
     const isVideo = isVideoMedia(item);
     const card = document.createElement("div");
     card.className = "project-card";
@@ -119,11 +180,10 @@ function renderPublicCatalog() {
 
     card.innerHTML = `
       <div class="project-media-wrap" onclick="openProjectDetails('${item.id}')" style="cursor: pointer;">
-        <span class="project-category-badge">${item.categoria}</span>
         ${mediaTag}
         <div class="project-media-overlay">
-          <button type="button" class="btn btn-outline btn-sm" style="color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(0,0,0,0.4);">
-            Visualizar
+          <button type="button" class="btn btn-outline-light btn-sm" style="background: rgba(14, 15, 19, 0.7); border-color: rgba(255, 255, 255, 0.35); font-size: 12px;">
+            Inspecionar Projeto
           </button>
         </div>
       </div>
@@ -134,11 +194,11 @@ function renderPublicCatalog() {
 
         <div class="project-footer" style="margin-top: auto; padding-top: 14px;">
           <button type="button" class="btn-inspect-project" onclick="openProjectDetails('${item.id}')">
-            <span>Ver em Detalhes</span>
+            <span>Ver Detalhes do Projeto</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
-          <button type="button" class="btn btn-outline btn-sm" onclick="prefillBudget('${item.titulo}', '${item.categoria}')" style="font-size: 11.5px; padding: 5px 12px;">
-            Solicitar Projeto Similar
+          <button type="button" class="btn btn-outline btn-sm" onclick="prefillBudget('${item.titulo}', '${item.categoria}')" style="font-size: 12px; padding: 6px 14px;">
+            Consultar Semelhante
           </button>
         </div>
       </div>
@@ -178,7 +238,7 @@ function openProjectDetails(projectId) {
   
   if (specsEl) {
     specsEl.innerHTML = `
-      <div style="background: #f8fafc; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-soft);">
+      <div style="background: #f8fafc; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-soft);">
         <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block;">Categoria</span>
         <strong style="font-size: 13.5px; color: #0f172a;">${project.categoria}</strong>
       </div>
@@ -189,11 +249,11 @@ function openProjectDetails(projectId) {
     const isVideo = isVideoMedia(project);
     if (isVideo) {
       mediaContainer.innerHTML = `
-        <video src="${project.midiaUrl}" controls autoplay playsinline style="width: 100%; max-height: 480px; object-fit: contain; background: #000;"></video>
+        <video src="${project.midiaUrl}" controls autoplay playsinline style="width: 100%; max-height: 490px; object-fit: contain; background: #000;"></video>
       `;
     } else {
       mediaContainer.innerHTML = `
-        <img src="${project.midiaUrl}" alt="${project.titulo}" style="width: 100%; max-height: 480px; object-fit: contain; background: #000;">
+        <img src="${project.midiaUrl}" alt="${project.titulo}" style="width: 100%; max-height: 490px; object-fit: contain; background: #000;">
       `;
     }
   }
@@ -336,6 +396,8 @@ async function handleSaveMedia(e) {
   const cat = document.getElementById("photoCategoria").value;
   const desc = document.getElementById("photoDesc").value.trim();
   let tipo = document.getElementById("mediaTipo").value;
+  const tipoRegEl = document.getElementById("photoTipoRegistro");
+  const tipoRegistro = tipoRegEl ? tipoRegEl.value : "";
   
   const fileData = document.getElementById("mediaBase64").value;
   const urlData = document.getElementById("mediaUrlInput").value.trim();
@@ -380,7 +442,8 @@ async function handleSaveMedia(e) {
     titulo: titulo,
     categoria: cat,
     descricao: desc,
-    midiaUrl: finalMediaUrl
+    midiaUrl: finalMediaUrl,
+    tipoRegistro: tipoRegistro
   };
 
   if (typeof sbClient !== "undefined" && sbClient) {

@@ -4,17 +4,21 @@
 
 @media (max-width: 1024px) {
   .hero-editorial h2 {
-    font-size: 40px;
+    font-size: 42px;
   }
   .portfolio-projects-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .about-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
   .about-section {
-    padding: 50px 36px;
+    padding: 60px 40px;
   }
 }
 
@@ -43,18 +47,11 @@
     padding: 9px 12px;
   }
 
-  .nav-admin-btn #adminBtnText {
-    display: none;
-  }
-  .nav-admin-btn {
-    padding: 9px 12px;
-  }
-
   /* Hero Editorial Mobile */
   .hero-editorial {
-    padding: 65px 0 45px;
-    border-radius: 0 0 20px 20px;
-    margin-bottom: 55px;
+    padding: 70px 0 50px;
+    border-radius: 0 0 22px 22px;
+    margin-bottom: 60px;
   }
 
   .hero-editorial h2 {
@@ -66,7 +63,7 @@
   .hero-editorial p {
     font-size: 15px;
     line-height: 1.65;
-    margin-bottom: 26px;
+    margin-bottom: 28px;
   }
 
   .hero-editorial-actions {
@@ -80,40 +77,27 @@
   .hero-trust-strip {
     grid-template-columns: 1fr;
     gap: 18px;
-    margin-top: 45px;
+    margin-top: 48px;
     padding-top: 24px;
     text-align: left;
   }
 
   /* Títulos de Seção */
   .section-title {
-    font-size: 26px;
+    font-size: 27px;
     line-height: 1.25;
   }
   .section-desc {
     font-size: 14.5px;
   }
   .section-header {
-    margin-bottom: 32px;
+    margin-bottom: 34px;
   }
 
   /* Portfólio Mobile */
-  .portfolio-filters-wrap {
-    gap: 8px;
-    margin-bottom: 30px;
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    -webkit-overflow-scrolling: touch;
-  }
-  .portfolio-filter-btn {
-    white-space: nowrap;
-    padding: 7px 15px;
-    font-size: 12.5px;
-  }
   .portfolio-projects-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 26px;
   }
 
   /* Soluções */
@@ -122,49 +106,43 @@
     gap: 20px;
   }
   .solution-card {
-    padding: 26px 20px;
+    padding: 28px 22px;
   }
 
   /* A DK */
   .about-section {
-    padding: 40px 20px;
+    padding: 45px 22px;
     border-radius: var(--radius);
-    margin-bottom: 55px;
+    margin-bottom: 60px;
   }
   .about-header-wrap h2 {
-    font-size: 28px;
+    font-size: 29px;
   }
   .about-pillars-grid {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 20px;
   }
 
-  /* Como Trabalhamos & Padrão DK */
-  .process-grid, .precision-grid {
+  /* Como Trabalhamos */
+  .process-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
+    gap: 20px;
   }
-  .process-card, .precision-card {
-    padding: 24px 20px;
-  }
-  .capability-strip {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 20px 18px;
+  .process-card {
+    padding: 26px 22px;
   }
 
   /* Contato */
   .contact-section-editorial {
-    padding: 36px 18px;
+    padding: 38px 20px;
     border-radius: var(--radius);
-    margin-bottom: 55px;
+    margin-bottom: 60px;
   }
   .contact-info h3 {
-    font-size: 28px;
+    font-size: 29px;
   }
   .contact-form-card {
-    padding: 24px 18px;
+    padding: 26px 20px;
   }
 
   /* Rodapé */
