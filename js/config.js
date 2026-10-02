@@ -1,6 +1,6 @@
 // ============================================================================
 // CONFIGURAÇÕES GERAIS E CREDENCIAIS DE NUVEM (SUPABASE)
-// DK Construtora & Serviços
+// DK Revestimentos
 // ============================================================================
 
 // WhatsApp oficial para recebimento e atendimento dos orçamentos

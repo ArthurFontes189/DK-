@@ -1,6 +1,6 @@
 // ============================================================================
 // APLICAÇÃO PRINCIPAL - BOOTSTRAP E RENDERIZAÇÃO
-// DK Construtora & Serviços
+// DK Revestimentos
 // ============================================================================
 
 // Renderiza todas as abas e métricas do Painel Administrativo
@@ -15,7 +15,7 @@ function renderAdmin() {
 
 // Inicialização automática quando a página carregar
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("🪵 DK Construtora & Serviços - Iniciando aplicação modular...");
+  console.log("🪵 DK Revestimentos - Iniciando aplicação modular...");
   loadCachedDB();
   initSupabase();
   updateAdminButton();

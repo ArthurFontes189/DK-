@@ -1,6 +1,6 @@
-# 🏛️ Documentação de Arquitetura de Software - DK Construtora & Serviços
+# 🏛️ Documentação de Arquitetura de Software - DK Revestimentos
 
-Este documento detalha as decisões técnicas, organização de diretórios, padrões de projeto e fluxo de dados da plataforma web **DK Construtora & Serviços**.
+Este documento detalha as decisões técnicas, organização de diretórios, padrões de projeto e fluxo de dados da plataforma web **DK Revestimentos**.
 
 ---
 

@@ -1,6 +1,6 @@
 // ============================================================================
 // MÓDULO DO CATÁLOGO DE TRABALHOS (VÍDEOS E FOTOS VERTICAIS)
-// DK Construtora & Serviços
+// DK Revestimentos
 // ============================================================================
 
 // Detecção precisa e robusta se um item é vídeo ou foto

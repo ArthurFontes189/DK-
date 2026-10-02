@@ -1,4 +1,4 @@
-# 🪚 DK Construtora & Serviços - Marcenaria, Obras e Gestão Integrada
+# 🪚 DK Revestimentos - Marcenaria, Obras e Gestão Integrada
 
 Plataforma web profissional e responsiva desenvolvida para marcenarias e prestadores de serviços em madeira, integrando catálogo vertical de projetos (vídeos e fotos no formato Stories/Reels), captação de leads via WhatsApp, CRM comercial, cadastro unificado de clientes com CPF, fichas técnicas de serviços e fluxo de caixa com banco de dados em nuvem via **Supabase**.
 

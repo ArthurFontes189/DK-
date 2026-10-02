@@ -64,7 +64,7 @@ async function handleLeadSubmit(e) {
 
   document.getElementById("leadForm").reset();
 
-  const textoMsg = `Olá! Meu nome é *${nome}*.\nGostaria de um orçamento com a *DK Construtora & Serviços* para: *${tipo}*.\nLocal: ${bairro || "Não informado"}\n(Solicitado pelo site)`;
+  const textoMsg = `Olá! Meu nome é *${nome}*.\nGostaria de um orçamento com a *DK Revestimentos* para: *${tipo}*.\nLocal: ${bairro || "Não informado"}\n(Solicitado pelo site)`;
   const waUrl = `https://api.whatsapp.com/send?phone=${MARANARIA_WHATSAPP}&text=${encodeURIComponent(textoMsg)}`;
   showToast("Solicitação registrada no banco com sucesso!");
   setTimeout(() => { window.open(waUrl, "_blank"); }, 600);
@@ -98,7 +98,7 @@ function renderLeads(leads) {
     else if (lead.status === "Perdido") badgeClass = "badge-danger";
 
     const cleanTel = lead.telefone ? lead.telefone.replace(/\D/g, "") : "";
-    const waLink = `https://api.whatsapp.com/send?phone=55${cleanTel}&text=${encodeURIComponent("Olá " + lead.nome + ", tudo bem? Aqui é da DK Construtora & Serviços sobre o seu pedido de orçamento.")}`;
+    const waLink = `https://api.whatsapp.com/send?phone=55${cleanTel}&text=${encodeURIComponent("Olá " + lead.nome + ", tudo bem? Aqui é da DK Revestimentos sobre o seu pedido de orçamento.")}`;
 
     const card = document.createElement("div");
     card.className = "lead-card";

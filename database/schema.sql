@@ -1,6 +1,6 @@
 -- ====================================================================
 -- SCRIPT DE ALINHAMENTO DEFINITIVO DO BANCO DE DADOS (SUPABASE)
--- DK Construtora & Serviços (Projeto: rmzhabsrcsaxqnqypoje)
+-- DK Revestimentos (Projeto: rmzhabsrcsaxqnqypoje)
 -- Resolve 100% de erros de 'Could not find column' e 'RLS policy'
 -- ====================================================================
 

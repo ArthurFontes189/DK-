@@ -1,7 +1,7 @@
 // ============================================================================
 // MÓDULO DE GESTÃO DE FUNCIONÁRIOS, COLABORADORES E DIARISTAS
 // Armazenamento Direto no Banco de Dados Supabase (PostgreSQL)
-// DK Construtora & Serviços
+// DK Revestimentos
 // ============================================================================
 
 let currentEmployeeFilter = "Todos";
@@ -480,7 +480,7 @@ function renderEmployees(employees) {
 
   filteredEmployees.forEach(emp => {
     const cleanTel = emp.telefone ? String(emp.telefone).replace(/\D/g, "") : "";
-    const waLink = cleanTel ? `https://api.whatsapp.com/send?phone=55${cleanTel}&text=${encodeURIComponent("Olá " + emp.nome + ", tudo bem? Aqui é da DK Construtora & Serviços sobre as escalas de obras.")}` : "#";
+    const waLink = cleanTel ? `https://api.whatsapp.com/send?phone=55${cleanTel}&text=${encodeURIComponent("Olá " + emp.nome + ", tudo bem? Aqui é da DK Revestimentos sobre as escalas de obras.")}` : "#";
 
     const card = document.createElement("div");
     card.className = "employee-card";

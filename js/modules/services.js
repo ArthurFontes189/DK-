@@ -1,7 +1,7 @@
 // ============================================================================
 // MÓDULO DE GERENCIAMENTO DE OBRAS & PRODUÇÃO
 // Inclui Alocação de Funcionários, Diárias, Contratos e Caixa Centralizado por Obra
-// DK Construtora & Serviços
+// DK Revestimentos
 // ============================================================================
 
 let currentServiceFilter = "Todos";
