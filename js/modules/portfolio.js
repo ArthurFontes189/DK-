@@ -1,96 +1,22 @@
 // ============================================================================
-// MÓDULO DE PORTFÓLIO & GALERIA ARQUITETÔNICA
-// DK Revestimentos - Ateliê de Marcenaria & Revestimentos de Alto Padrão
+// MÓDULO DE PORTFÓLIO & GALERIA REAL
+// DK Revestimentos - Ateliê de Marcenaria & Revestimentos
+// Exclusivamente com projetos e mídias reais cadastradas pelo marceneiro
 // ============================================================================
 
 let currentPortfolioCategory = "Todos";
 
-// Catálogo Curado de Projetos Arquitetônicos de Alto Padrão
-const DEFAULT_CURATED_PROJECTS = [
-  {
-    id: "p1",
-    titulo: "Living Integrado & Painel Louro Freijó",
-    categoria: "Painéis & Revestimentos",
-    ambiente: "Living & Sala de Estar",
-    localizacao: "Lago Sul, Brasília",
-    materiais: "Lâmina Natural de Louro Freijó • Cristaleira com Vidro Fumê • Iluminação LED 2700K",
-    descricao: "Painel ripado em madeira nobre com pórtico de transição para a área íntima, rack suspenso com cantos curvos e cristaleira com perfis em alumínio preto fosco.",
-    midiaUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop",
-    tipoMidia: "foto"
-  },
-  {
-    id: "p2",
-    titulo: "Cozinha Minimalista em Carvalho Americano",
-    categoria: "Cozinhas & Gourmet",
-    ambiente: "Cozinha Gourmet Integrada",
-    localizacao: "Setor Noroeste, Brasília",
-    materiais: "Carvalho Americano Poro Aberto • Laca Cinza Acetinada • Ferragens Ocultas com Amortecimento",
-    descricao: "Mobiliário planejado com ilha central revestida em madeira maciça, armários aéreos com abertura por toque e canaleta oculta para iluminação zenital.",
-    midiaUrl: "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?q=80&w=1200&auto=format&fit=crop",
-    tipoMidia: "foto"
-  },
-  {
-    id: "p3",
-    titulo: "Closet Suíte Master em Laca Gianduia",
-    categoria: "Dormitórios & Closets",
-    ambiente: "Closet & Dormitório",
-    localizacao: "Residencial Alphaville, Brasília",
-    materiais: "MDF Gianduia Acetinado • Gavetas Aveludadas • Portas com Perfil Slim Reflecta",
-    descricao: "Closet espaçoso sob medida com ilha central para joias e acessórios, iluminação técnica vertical embutida em cada nicho e divisórias organizadoras em couro.",
-    midiaUrl: "https://images.unsplash.com/photo-1558997519-83ea9252edf8?q=80&w=1200&auto=format&fit=crop",
-    tipoMidia: "foto"
-  },
-  {
-    id: "p4",
-    titulo: "Revestimento Acústico & Adega Climatizada",
-    categoria: "Salas & Livings",
-    ambiente: "Espaço Gourmet & Adega",
-    localizacao: "Park Way, Brasília",
-    materiais: "Painel Ripado Acústico • Madeira Cumaru • Nichos Usinados sob Medida",
-    descricao: "Revestimento de parede integral com isolamento acústico embutido, nichos geométricos para mais de 120 garrafas e balcão em madeira de demolição tratada.",
-    midiaUrl: "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?q=80&w=1200&auto=format&fit=crop",
-    tipoMidia: "foto"
-  },
-  {
-    id: "p5",
-    titulo: "Varanda Gourmet & Deck de Madeira Maciça",
-    categoria: "Áreas Externas",
-    ambiente: "Área Externa & Piscina",
-    localizacao: "Lago Norte, Brasília",
-    materiais: "Deck em Cumaru Extra • Pergolado com Cobertura Térmica • Bancada com Armários Hidrorrepelentes",
-    descricao: "Deck nivelado com fixação invisível, pergolado de madeira com acabamento em verniz náutico UV e armários sob medida com vedação contra intempéries.",
-    midiaUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200&auto=format&fit=crop",
-    tipoMidia: "foto"
-  },
-  {
-    id: "p6",
-    titulo: "Painel Ripado Geométrico & Hall Social",
-    categoria: "Painéis & Revestimentos",
-    ambiente: "Hall de Entrada & Circulação",
-    localizacao: "Asa Sul, Brasília",
-    materiais: "Lâmina de Nogueira Natural • Porta Mimetizada Pivotante • LED 2700K Indireto",
-    descricao: "Composição contemporânea com porta de entrada pivotante totalmente camuflada no painel ripado, proporcionando continuidade visual e sofisticação arquitetônica.",
-    midiaUrl: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200&auto=format&fit=crop",
-    tipoMidia: "foto"
-  }
-];
-
-// Retorna todos os projetos (itens cadastrados no banco somados aos projetos curados)
+// Retorna apenas os projetos reais cadastrados pelo usuário no banco/armazenamento
 function getAllPortfolioProjects() {
-  const customItems = (db.portfolio || []).map(item => ({
+  return (db.portfolio || []).map(item => ({
     id: item.id,
-    titulo: item.titulo,
-    categoria: item.categoria || "Painéis & Revestimentos",
+    titulo: item.titulo || "Projeto Sob Medida",
+    categoria: item.categoria || "Marcenaria Sob Medida",
     ambiente: item.categoria || "Ambiente Personalizado",
-    localizacao: "Brasília - DF",
-    materiais: "Marcenaria Sob Medida • Revestimentos Especiais",
-    descricao: item.descricao || "Projeto sob medida executado pela equipe DK Revestimentos.",
-    midiaUrl: item.midiaUrl,
+    descricao: item.descricao || "",
+    midiaUrl: item.midiaUrl || "",
     tipoMidia: isVideoMedia(item) ? "video" : "foto"
   }));
-
-  // Itens cadastrados pelo marceneiro aparecem antes, seguidos dos projetos do ateliê
-  return [...customItems, ...DEFAULT_CURATED_PROJECTS];
 }
 
 function isVideoMedia(item) {
@@ -112,31 +38,67 @@ function isVideoMedia(item) {
 function filterPortfolio(categoria, btnEl) {
   currentPortfolioCategory = categoria;
   document.querySelectorAll(".portfolio-filter-btn").forEach(btn => btn.classList.remove("active"));
-  if (btnEl) btnEl.classList.add("active");
+  if (btnEl) {
+    btnEl.classList.add("active");
+  } else {
+    // Se ativado programaticamente (ex: voltar para "Todos")
+    const allBtn = Array.from(document.querySelectorAll(".portfolio-filter-btn")).find(b => b.textContent.includes("Todos"));
+    if (allBtn) allBtn.classList.add("active");
+  }
   renderPublicCatalog();
 }
 
-// Renderiza a galeria pública de projetos
+// Renderiza a galeria pública de projetos reais
 function renderPublicCatalog() {
   const container = document.getElementById("portfolioCatalog");
   if (!container) return;
   container.innerHTML = "";
 
   const allProjects = getAllPortfolioProjects();
-  const filteredProjects = currentPortfolioCategory === "Todos"
-    ? allProjects
-    : allProjects.filter(p => p.categoria === currentPortfolioCategory);
 
-  if (filteredProjects.length === 0) {
+  // Caso ainda não haja nenhum projeto real cadastrado no sistema
+  if (allProjects.length === 0) {
     container.innerHTML = `
-      <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px; color: var(--text-muted); background: #fff; border-radius: var(--radius); border: 1px solid var(--border-soft);">
-        <p style="font-size: 15px; font-weight: 600; color: #0f172a;">Nenhum projeto encontrado nesta categoria.</p>
-        <p style="font-size: 13px; margin-top: 4px;">Selecione outra categoria ou entre em contato para solicitar um projeto sob medida.</p>
+      <div style="grid-column: 1 / -1; text-align: center; padding: 50px 24px; background: #ffffff; border: 1px solid var(--border-soft); border-radius: var(--radius); box-shadow: var(--shadow-subtle);">
+        <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(138, 79, 38, 0.08); color: var(--wood-primary); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+        </div>
+        <h3 style="font-size: 19px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Galeria de Projetos em Atualização</h3>
+        <p style="font-size: 14.5px; color: var(--text-muted); max-width: 520px; margin: 0 auto 20px auto; line-height: 1.6;">
+          Estamos organizando e publicando as fotos e vídeos das obras mais recentes da DK Revestimentos. Para conhecer trabalhos executados ou solicitar um projeto sob medida, fale conosco diretamente no WhatsApp.
+        </p>
+        <a href="#solicitar" class="btn btn-whatsapp" style="font-weight: 700; padding: 12px 24px;">
+          Solicitar Fotos de Projetos no WhatsApp
+        </a>
       </div>
     `;
     return;
   }
 
+  // Filtragem dos projetos reais pela categoria selecionada
+  const filteredProjects = currentPortfolioCategory === "Todos"
+    ? allProjects
+    : allProjects.filter(p => p.categoria.toLowerCase() === currentPortfolioCategory.toLowerCase());
+
+  // Se a categoria selecionada não tiver itens no momento
+  if (filteredProjects.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 45px 20px; color: var(--text-muted); background: #ffffff; border-radius: var(--radius); border: 1px solid var(--border-soft);">
+        <p style="font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Nenhum projeto encontrado na categoria "${currentPortfolioCategory}".</p>
+        <p style="font-size: 13.5px; margin-bottom: 16px;">Selecione outra categoria para visualizar nossos trabalhos.</p>
+        <button type="button" class="btn btn-outline btn-sm" onclick="filterPortfolio('Todos', null)">
+          Ver Todos os Projetos
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Renderiza cada projeto real
   filteredProjects.forEach(item => {
     const isVideo = isVideoMedia(item);
     const card = document.createElement("div");
@@ -162,23 +124,18 @@ function renderPublicCatalog() {
         ${mediaTag}
         <div class="project-media-overlay">
           <button type="button" class="btn btn-outline btn-sm" style="color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(0,0,0,0.4);">
-            Explorar Projeto
+            Visualizar
           </button>
         </div>
       </div>
 
       <div class="project-info">
-        <div class="project-location">${item.localizacao || "Brasília - DF"}</div>
         <h3 class="project-title" onclick="openProjectDetails('${item.id}')" style="cursor: pointer;">${item.titulo}</h3>
-        <p class="project-desc">${item.descricao || ''}</p>
+        ${item.descricao ? `<p class="project-desc">${item.descricao}</p>` : ''}
 
-        <div class="project-specs">
-          <strong>Materiais:</strong> ${item.materiais || "Madeiras nobres & ferragens de amortecimento"}
-        </div>
-
-        <div class="project-footer">
+        <div class="project-footer" style="margin-top: auto; padding-top: 14px;">
           <button type="button" class="btn-inspect-project" onclick="openProjectDetails('${item.id}')">
-            <span>Ver Ficha Técnica</span>
+            <span>Ver em Detalhes</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
           <button type="button" class="btn btn-outline btn-sm" onclick="prefillBudget('${item.titulo}', '${item.categoria}')" style="font-size: 11.5px; padding: 5px 12px;">
@@ -201,7 +158,7 @@ function renderPublicCatalog() {
   });
 }
 
-// Modal Lightbox com Detalhes do Projeto
+// Modal Lightbox com Detalhes do Projeto Real
 function openProjectDetails(projectId) {
   const allProjects = getAllPortfolioProjects();
   const project = allProjects.find(p => String(p.id) === String(projectId));
@@ -218,19 +175,14 @@ function openProjectDetails(projectId) {
   const actionBtn = document.getElementById("projectModalActionBtn");
 
   if (titleEl) titleEl.textContent = project.titulo;
-  if (locationEl) locationEl.textContent = `${project.categoria} • ${project.localizacao || "Brasília - DF"}`;
-  if (descEl) descEl.textContent = project.descricao;
+  if (locationEl) locationEl.textContent = project.categoria || "Marcenaria Sob Medida";
+  if (descEl) descEl.textContent = project.descricao || "Projeto sob medida executado pela DK Revestimentos.";
+  
   if (specsEl) {
     specsEl.innerHTML = `
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-soft);">
-          <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block;">Ambiente</span>
-          <strong style="font-size: 13.5px; color: #0f172a;">${project.ambiente || project.categoria}</strong>
-        </div>
-        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-soft);">
-          <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block;">Materiais & Lâminas</span>
-          <strong style="font-size: 13px; color: #0f172a;">${project.materiais || "Lâminas nobres e laca"}</strong>
-        </div>
+      <div style="background: #f8fafc; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--border-soft);">
+        <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block;">Categoria</span>
+        <strong style="font-size: 13.5px; color: #0f172a;">${project.categoria}</strong>
       </div>
     `;
   }
@@ -243,7 +195,7 @@ function openProjectDetails(projectId) {
       `;
     } else {
       mediaContainer.innerHTML = `
-        <img src="${project.midiaUrl}" alt="${project.titulo}" style="width: 100%; max-height: 480px; object-fit: cover; background: #000;">
+        <img src="${project.midiaUrl}" alt="${project.titulo}" style="width: 100%; max-height: 480px; object-fit: contain; background: #000;">
       `;
     }
   }
@@ -268,18 +220,20 @@ function prefillBudget(titulo, categoria) {
   }
 
   const tipoSelect = document.getElementById("leadTipo");
-  if (tipoSelect) {
-    if (categoria && categoria.includes("Cozinha")) tipoSelect.value = "Cozinhas e Espaço Gourmet";
-    else if (categoria && categoria.includes("Painéis")) tipoSelect.value = "Painéis Ripados e Revestimentos";
-    else if (categoria && categoria.includes("Externa")) tipoSelect.value = "Decks e Pergolados";
-    else tipoSelect.value = "Marcenaria Sob Medida";
+  if (tipoSelect && categoria) {
+    const catLower = categoria.toLowerCase();
+    if (catLower.includes("cozinha")) tipoSelect.value = "Cozinhas e Espaço Gourmet";
+    else if (catLower.includes("pain")) tipoSelect.value = "Painéis Ripados e Revestimentos";
+    else if (catLower.includes("deck") || catLower.includes("extern")) tipoSelect.value = "Decks e Pergolados";
+    else if (catLower.includes("closet") || catLower.includes("dormit")) tipoSelect.value = "Closets e Suítes";
+    else tipoSelect.value = "Marcenaria Sob Medida Completa";
   }
 
-  showToast(`Projeto "${titulo}" selecionado para referência.`, "info");
+  showToast(`Projeto selecionado para referência no orçamento.`, "info");
 }
 
 // ----------------------------------------------------------------------------
-// GESTÃO NO PAINEL ADMINISTRATIVO (ADMINISTRAÇÃO DO CATÁLOGO)
+// GESTÃO NO PAINEL ADMINISTRATIVO (ADMINISTRAÇÃO DO CATÁLOGO REAL)
 // ----------------------------------------------------------------------------
 function renderAdminPortfolio(portfolio) {
   const container = document.getElementById("adminPortfolioList");
@@ -289,8 +243,8 @@ function renderAdminPortfolio(portfolio) {
   if (!portfolio || portfolio.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 36px 20px; color: var(--text-muted); background: #fff; border-radius: var(--radius); border: 1px dashed var(--border-soft);">
-        <p style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">Nenhuma foto ou vídeo adicional cadastrado na nuvem.</p>
-        <p style="font-size: 13px;">O site está exibindo a galeria curada oficial de projetos da DK Revestimentos. Use o botão acima para adicionar registros da sua própria oficina.</p>
+        <p style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">Nenhuma foto ou vídeo cadastrado.</p>
+        <p style="font-size: 13px;">Use o botão "Adicionar Foto / Vídeo" acima para cadastrar os trabalhos reais executados pela marcenaria.</p>
       </div>
     `;
     return;
@@ -387,7 +341,7 @@ async function handleSaveMedia(e) {
 
   if (currentSelectedFile && typeof sbClient !== "undefined" && sbClient && sbClient.storage) {
     try {
-      showToast("Enviando mídia para o servidor de arquivos...", "info");
+      showToast("Enviando mídia para o armazenamento...", "info");
       const fileExt = currentSelectedFile.name.split('.').pop() || (currentSelectedFile.type.startsWith("video") ? "mp4" : "jpg");
       const cleanFileName = `midia_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
       const filePath = `uploads/${cleanFileName}`;
@@ -403,7 +357,7 @@ async function handleSaveMedia(e) {
         }
       }
     } catch (storageErr) {
-      console.warn("Storage fallback:", storageErr);
+      console.warn("Storage upload fallback:", storageErr);
     }
   }
 
@@ -443,7 +397,7 @@ async function handleSaveMedia(e) {
   db.portfolio.unshift(newMedia);
   saveCacheDB("portfolio", db.portfolio);
   closeModal("photoModal");
-  showToast("Projeto adicionado ao catálogo com sucesso!", "success");
+  showToast("Projeto adicionado ao portfólio com sucesso!", "success");
   renderAdminPortfolio(db.portfolio);
   renderPublicCatalog();
 }
