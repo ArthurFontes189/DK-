@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>DK Revestimentos | Marcenaria Autoral & Revestimentos de Alto Padrão</title>
-  <meta name="description" content="Ateliê de marcenaria fina e revestimentos arquitetônicos sob medida em Brasília. Painéis ripados, móveis planejados de alto padrão e acabamentos nobres com precisão milimétrica.">
+  <title>DK Revestimentos | Marcenaria e Soluções Sob Medida</title>
+  <meta name="description" content="Marcenaria, revestimentos e soluções personalizadas para residências e espaços corporativos que valorizam arquitetura, acabamento e precisão. Atendimento em Brasília e Entorno.">
   <meta name="theme-color" content="#0e0f13">
 
   <!-- Favicon Oficial -->
@@ -13,8 +13,8 @@
   <link rel="manifest" href="manifest.json">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="DK Revestimentos | Marcenaria Autoral & Revestimentos de Alto Padrão">
-  <meta property="og:description" content="Móveis sob medida, painéis ripados e revestimentos arquitetônicos em Brasília. Atendimento exclusivo e acabamentos impecáveis.">
+  <meta property="og:title" content="DK Revestimentos | Marcenaria e Soluções Sob Medida">
+  <meta property="og:description" content="Ambientes sob medida, executados para durar. Marcenaria fina e revestimentos arquitetônicos em Brasília e Entorno.">
   <meta property="og:type" content="website">
 
   <!-- Google Fonts Preconnect -->
@@ -23,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS Standalone Otimizado -->
-  <link rel="stylesheet" href="css/style.css?v=20261002_luxury_final">
+  <link rel="stylesheet" href="css/style.css?v=20261002_editorial_v1">
 </head>
 <body>
 
@@ -60,20 +60,21 @@
         </div>
       </a>
 
-      <!-- Menu Principal -->
+      <!-- Menu Principal Editorial -->
       <ul class="nav-links">
         <li><a href="#inicio" class="nav-link">Início</a></li>
-        <li><a href="#especialidades" class="nav-link">Especialidades</a></li>
-        <li><a href="#catalogo" class="nav-link">Portfólio</a></li>
-        <li><a href="#metodo" class="nav-link">O Método</a></li>
-        <li><a href="#solicitar" class="nav-link">Orçamento</a></li>
+        <li><a href="#projetos" class="nav-link">Projetos</a></li>
+        <li><a href="#solucoes" class="nav-link">Soluções</a></li>
+        <li><a href="#a-dk" class="nav-link">A DK</a></li>
+        <li><a href="#como-trabalhamos" class="nav-link">Como Trabalhamos</a></li>
+        <li><a href="#contato" class="nav-link">Contato</a></li>
       </ul>
 
       <!-- Ações da Navbar -->
       <div class="nav-actions">
-        <a href="#solicitar" class="nav-wa-btn" title="Atendimento WhatsApp">
+        <a href="#contato" class="nav-wa-btn" title="Falar com Especialista">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
-          <span>Falar com Especialista</span>
+          <span>Falar com um Especialista</span>
         </a>
         <button type="button" class="nav-admin-btn" id="adminAccessBtn" onclick="handleAdminAccessClick()" title="Gestão Interna">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -88,10 +89,11 @@
     <!-- Mobile Dropdown -->
     <div class="mobile-menu" id="mobileMenu">
       <a href="#inicio" class="nav-link" onclick="toggleMobileMenu()">Início</a>
-      <a href="#especialidades" class="nav-link" onclick="toggleMobileMenu()">Especialidades</a>
-      <a href="#catalogo" class="nav-link" onclick="toggleMobileMenu()">Portfólio de Projetos</a>
-      <a href="#metodo" class="nav-link" onclick="toggleMobileMenu()">O Método DK</a>
-      <a href="#solicitar" class="nav-link" onclick="toggleMobileMenu()">Solicitar Orçamento</a>
+      <a href="#projetos" class="nav-link" onclick="toggleMobileMenu()">Projetos</a>
+      <a href="#solucoes" class="nav-link" onclick="toggleMobileMenu()">Soluções</a>
+      <a href="#a-dk" class="nav-link" onclick="toggleMobileMenu()">A DK</a>
+      <a href="#como-trabalhamos" class="nav-link" onclick="toggleMobileMenu()">Como Trabalhamos</a>
+      <a href="#contato" class="nav-link" onclick="toggleMobileMenu()">Contato</a>
       <hr style="border: 0; border-top: 1px solid var(--border-dark);">
       <button type="button" class="btn btn-outline btn-sm" onclick="toggleMobileMenu(); handleAdminAccessClick();" style="width: 100%; color: #fff; border-color: rgba(255,255,255,0.2);">
         Gestão do Ateliê
@@ -103,91 +105,59 @@
   <!-- 2. ÁREA DO CLIENTE (VISUAL SUAVE PREMIUM) -->
   <!-- ============================================== -->
   <main id="clientArea">
-    <!-- HERO BANNER ARQUITETÔNICO -->
-    <section id="inicio" class="hero-section">
-      <div class="container hero-grid">
-        <div class="hero-content">
-          <div class="hero-badge-tag">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            <span>Marcenaria Autoral & Revestimentos de Alto Padrão</span>
-          </div>
-          <h2>A nobreza da madeira e o rigor do <span>acabamento sob medida</span></h2>
-          <p>
-            Projetos residenciais e corporativos personalizados com foco em revestimentos nobres, painéis ripados contemporâneos e mobiliário sob medida de alta precisão. Atendemos clientes exigentes e escritórios de arquitetura em Brasília e região.
-          </p>
-          <div class="hero-actions">
-            <a href="#solicitar" class="btn btn-gold btn-lg">
-              <span>Iniciar Atendimento no WhatsApp</span>
-            </a>
-            <a href="#catalogo" class="btn btn-outline btn-lg" style="background: rgba(255,255,255,0.06); color: #fff; border-color: rgba(255,255,255,0.2);">
-              <span>Explorar Portfólio de Projetos</span>
-            </a>
-          </div>
+    <!-- ============================================================ -->
+    <!-- 1. HERO / PRIMEIRA DOBRA EDITORIAL (IMPACTO VISUAL & DESEJO) -->
+    <!-- ============================================================ -->
+    <section id="inicio" class="hero-section hero-editorial">
+      <div class="container hero-editorial-inner">
+        <div class="hero-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Marcenaria & Revestimentos Sob Medida</span>
+        </div>
+        <h2>Ambientes sob medida, executados <span>para durar.</span></h2>
+        <p>
+          Marcenaria, revestimentos e soluções personalizadas para residências e espaços corporativos que valorizam arquitetura, acabamento e precisão.<br>
+          Da concepção à instalação, a DK transforma projetos em ambientes cuidadosamente executados.
+        </p>
+        <div class="hero-editorial-actions">
+          <a href="#projetos" class="btn btn-gold btn-lg">
+            <span>Conhecer nossos projetos</span>
+          </a>
+          <a href="#contato" class="btn btn-outline-light btn-lg">
+            <span>Falar com um especialista</span>
+          </a>
         </div>
 
-        <div class="hero-card-side">
-          <h4>Diferenciais da DK Revestimentos</h4>
-          <ul>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><strong>Acabamento de Alto Padrão:</strong> Atenção aos detalhes e qualidade em cada etapa do projeto.</span>
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><strong>Soluções Personalizadas:</strong> Marcenaria, revestimentos e serviços pensados para cada ambiente.</span>
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><strong>Precisão & Compromisso:</strong> Planejamento e execução cuidadosa para um resultado durável.</span>
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span><strong>Cuidado do Início ao Fim:</strong> Organização, limpeza e acompanhamento em todas as etapas da obra.</span>
-            </li>
-          </ul>
-          <a href="#solicitar" class="btn btn-primary" style="width: 100%; font-weight: 700;">Solicitar Orçamento</a>
-        </div>
-      </div>
-
-      <!-- Barra de Credibilidade Institucional -->
-      <div class="container">
-        <div class="hero-trust-bar">
-          <div class="trust-item">
-            <div class="trust-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-            </div>
+        <!-- Faixa de Credibilidade Minimalista -->
+        <div class="hero-trust-strip">
+          <div class="trust-item-clean">
+            <div class="trust-bullet"></div>
             <div>
-              <div class="trust-title">Oficina & Fábrica Própria</div>
-              <div class="trust-desc">Controle rigoroso de produção sem terceirizações</div>
+              <div class="trust-title">Oficina Própria</div>
+              <div class="trust-desc">Fabricação direta e sem terceirizações</div>
             </div>
           </div>
 
-          <div class="trust-item">
-            <div class="trust-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            </div>
+          <div class="trust-item-clean">
+            <div class="trust-bullet"></div>
             <div>
-              <div class="trust-title">Pontualidade no Cronograma</div>
-              <div class="trust-desc">Prazos de entrega acordados e cumpridos à risca</div>
+              <div class="trust-title">Pontualidade</div>
+              <div class="trust-desc">Cronograma e prazos cumpridos com rigor</div>
             </div>
           </div>
 
-          <div class="trust-item">
-            <div class="trust-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            </div>
+          <div class="trust-item-clean">
+            <div class="trust-bullet"></div>
             <div>
-              <div class="trust-title">Garantia & Assistência Pós-Obra</div>
-              <div class="trust-desc">Suporte técnico direto do ateliê para ajustes finos</div>
+              <div class="trust-title">Garantia Pós-Obra</div>
+              <div class="trust-desc">Acompanhamento e assistência direta do ateliê</div>
             </div>
           </div>
 
-          <div class="trust-item">
-            <div class="trust-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-            </div>
+          <div class="trust-item-clean">
+            <div class="trust-bullet"></div>
             <div>
-              <div class="trust-title">Atendimento em Brasília</div>
+              <div class="trust-title">Atendimento</div>
               <div class="trust-desc">Brasília e Entorno</div>
             </div>
           </div>
@@ -195,63 +165,21 @@
       </div>
     </section>
 
-    <div class="container">
-      <!-- 2. ESPECIALIDADES DO ATELIÊ -->
-      <section id="especialidades" style="scroll-margin-top: 100px; margin-bottom: 75px;">
+    <!-- ============================================================ -->
+    <!-- 2. PROJETOS / PORTFÓLIO (PROJETOS QUE GANHARAM FORMA)        -->
+    <!-- ============================================================ -->
+    <section id="projetos" class="portfolio-section-editorial" style="scroll-margin-top: 100px;">
+      <div id="catalogo"></div>
+      <div class="container">
         <div class="section-header">
-          <span class="section-tag">O que Executamos</span>
-          <h2 class="section-title">Especialidades em Revestimentos & Marcenaria</h2>
+          <span class="section-tag">Portfólio</span>
+          <h2 class="section-title">Projetos que ganharam forma</h2>
           <p class="section-desc">
-            Equilíbrio perfeito entre estética contemporânea, conforto térmico-acústico e aproveitamento inteligente de cada centímetro do seu imóvel.
+            Conheça alguns dos ambientes executados pela DK e veja como cada detalhe é pensado para integrar estética, funcionalidade e acabamento.
           </p>
         </div>
 
-        <div class="services-grid">
-          <div class="service-card">
-            <div class="service-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-            </div>
-            <h3>Painéis Ripados & Revestimentos Murais</h3>
-            <p>Paredes com continuidade visual, portas mimetizadas que desaparecem no ripado, divisórias de ambientes e painéis acústicos com ripas sob medida.</p>
-          </div>
-
-          <div class="service-card">
-            <div class="service-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </div>
-            <h3>Marcenaria Fina para Livings & Gourmet</h3>
-            <p>Móveis integrados, racks com cantos curvos usinados, cristaleiras iluminadas com perfil slim em alumínio preto e bancadas gourmet em lâmina natural.</p>
-          </div>
-
-          <div class="service-card">
-            <div class="service-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M12 3v18"></path><path d="M8 12h.01"></path><path d="M16 12h.01"></path></svg>
-            </div>
-            <h3>Closets & Suítes Sob Medida</h3>
-            <p>Sistemas modulares com gaveteiros aveludados para joias e relógios, portas com vidro reflecta, cabideiros iluminados e acabamentos em laca fendi acetinada.</p>
-          </div>
-
-          <div class="service-card">
-            <div class="service-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20"></path><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6"></path><path d="M4 6l8-4 8 4"></path></svg>
-            </div>
-            <h3>Decks, Pergolados & Áreas Externas</h3>
-            <p>Instalação de decks em madeira nobre (Cumaru, Ipê) com fixação invisível, pergolados resistentes e marcenaria para varandas com proteção UV e hidrorrepelência.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 3. ÁREA PRINCIPAL DO PORTFÓLIO (REFATORADA DE FORMA IMERSIVA) -->
-      <section id="catalogo" class="portfolio-section" style="scroll-margin-top: 100px;">
-        <div class="section-header">
-          <span class="section-tag">Galeria de Obras</span>
-          <h2 class="section-title">Portfólio de Projetos Executados</h2>
-          <p class="section-desc">
-            Navegue por ambientes reais entregues pela DK Revestimentos em Brasília e comprove a qualidade de cada junção, veio e textura.
-          </p>
-        </div>
-
-        <!-- Barra de Filtros de Alta Fidelidade -->
+        <!-- Filtros por Categoria -->
         <div class="portfolio-filters-wrap">
           <button type="button" class="portfolio-filter-btn active" onclick="filterPortfolio('Todos', this)">Todos os Projetos</button>
           <button type="button" class="portfolio-filter-btn" onclick="filterPortfolio('Painéis & Revestimentos', this)">Painéis & Revestimentos</button>
@@ -261,62 +189,216 @@
           <button type="button" class="portfolio-filter-btn" onclick="filterPortfolio('Áreas Externas', this)">Áreas Externas</button>
         </div>
 
-        <!-- Grade Dinâmica de Projetos -->
+        <!-- Grade Dinâmica de Projetos Reais -->
         <div class="portfolio-projects-grid" id="portfolioCatalog">
-          <!-- Renderizado com riqueza de detalhes via JavaScript -->
+          <!-- Renderizado dinamicamente via portfolio.js -->
         </div>
-      </section>
 
-      <!-- 4. SEÇÃO DO MÉTODO / PROCESSO EXECUTIVO -->
-      <section id="metodo" class="method-section" style="scroll-margin-top: 100px;">
-        <div class="section-header" style="margin-bottom: 20px;">
-          <span class="section-tag">Rigor Técnico</span>
-          <h2 class="section-title">O Método de Trabalho DK</h2>
+        <!-- Micro-CTA sutil pós-portfólio -->
+        <div style="text-align: center; margin-top: 42px;">
+          <p style="font-size: 14.5px; color: var(--text-muted); margin-bottom: 12px;">Deseja um projeto pensado exclusivamente para seu espaço?</p>
+          <a href="#contato" class="btn btn-outline btn-sm">Conversar com um especialista →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 3. SOLUÇÕES PENSADAS PARA CADA AMBIENTE                      -->
+    <!-- ============================================================ -->
+    <section id="solucoes" class="solutions-section" style="scroll-margin-top: 100px;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Soluções</span>
+          <h2 class="section-title">Soluções pensadas para cada ambiente</h2>
           <p class="section-desc">
-            Garantimos que o projeto concebido na prancheta do arquiteto seja materializado com absoluta fidelidade na sua residência.
+            Cada espaço pede uma solução diferente. Desenvolvemos e executamos marcenaria, revestimentos e elementos personalizados de acordo com a arquitetura e a necessidade de cada projeto.
           </p>
         </div>
 
-        <div class="method-grid">
-          <div class="method-card">
-            <div class="method-number">01</div>
-            <h4 class="method-title">Consultoria & Medição Fina</h4>
-            <p class="method-desc">Realizamos visita técnica in loco para conferência milimétrica de prumos, desníveis de piso e compatibilização com pontos elétricos e hidráulicos.</p>
+        <div class="solutions-grid">
+          <div class="solution-card">
+            <div class="solution-number">01</div>
+            <h3>Painéis & Revestimentos</h3>
+            <p>Painéis ripados, revestimentos decorativos, portas mimetizadas e soluções integradas à arquitetura.</p>
+            <a href="#contato" class="solution-link">Conversar sobre este ambiente →</a>
           </div>
 
-          <div class="method-card">
-            <div class="method-number">02</div>
-            <h4 class="method-title">Detalhamento & Amostras</h4>
-            <p class="method-desc">Apresentação física de amostras de lâminas de madeira, padrões de cores de MDF e catálogos de puxadores e ferragens importadas com o cliente.</p>
+          <div class="solution-card">
+            <div class="solution-number">02</div>
+            <h3>Marcenaria Sob Medida</h3>
+            <p>Mobiliário desenvolvido para aproveitar o espaço com precisão e criar ambientes únicos.</p>
+            <a href="#contato" class="solution-link">Conversar sobre este ambiente →</a>
           </div>
 
-          <div class="method-card">
-            <div class="method-number">03</div>
-            <h4 class="method-title">Usinagem de Precisão</h4>
-            <p class="method-desc">Cortes automatizados na nossa oficina, usinagem CNC de detalhes curvos e aplicação de fitas de borda com tecnologia que impede a penetração de umidade.</p>
+          <div class="solution-card">
+            <div class="solution-number">03</div>
+            <h3>Cozinhas, Closets & Suítes</h3>
+            <p>Projetos personalizados com atenção especial à organização, funcionalidade e acabamento.</p>
+            <a href="#contato" class="solution-link">Conversar sobre este ambiente →</a>
           </div>
 
-          <div class="method-card">
-            <div class="method-number">04</div>
-            <h4 class="method-title">Montagem Silenciosa & Limpa</h4>
-            <p class="method-desc">Instalação por equipe própria e especializada. Forramos e protegemos pisos de porcelanato ou madeira e entregamos o ambiente pronto para uso.</p>
+          <div class="solution-card">
+            <div class="solution-number">04</div>
+            <h3>Ambientes Externos</h3>
+            <p>Decks, pergolados e soluções em madeira para áreas externas residenciais e corporativas.</p>
+            <a href="#contato" class="solution-link">Conversar sobre este ambiente →</a>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- 5. CONSULTORIA & ORÇAMENTO EXCLUSIVO -->
-      <section id="solicitar" class="quote-section" style="scroll-margin-top: 100px;">
-        <div class="quote-grid">
-          <div class="quote-info">
-            <span class="hero-badge-tag" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); color: #fff;">Atendimento Exclusivo</span>
-            <h3>Inicie seu Projeto com a DK Revestimentos</h3>
+    <!-- ============================================================ -->
+    <!-- 4. A DK ("MAIS DO QUE FABRICAR. EXECUTAMOS O PROJETO.")       -->
+    <!-- ============================================================ -->
+    <section id="a-dk" class="container" style="scroll-margin-top: 100px;">
+      <div class="about-section">
+        <div class="about-header-wrap">
+          <span class="hero-tag" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); color: #fff;">A DK</span>
+          <h2>Mais do que fabricar. Executamos o projeto.</h2>
+          <p>
+            Trabalhamos em conjunto com clientes, arquitetos e designers para transformar projetos em ambientes reais, respeitando medidas, materiais, detalhes e linguagem arquitetônica.
+          </p>
+          <p style="color: #94a3b8; font-size: 15px;">
+            Nosso trabalho une marcenaria, revestimentos e execução para que o resultado final mantenha a intenção original do projeto.
+          </p>
+        </div>
+
+        <div class="about-pillars-grid">
+          <div class="about-pillar-card">
+            <h4>Atendimento Próximo</h4>
+            <p>Diálogo constante do alinhamento inicial ao acompanhamento presencial na obra.</p>
+          </div>
+          <div class="about-pillar-card">
+            <h4>Execução Cuidadosa</h4>
+            <p>Respeito integral ao espaço, às medidas e às diretrizes do projeto arquitetônico.</p>
+          </div>
+          <div class="about-pillar-card">
+            <h4>Precisão nos Detalhes</h4>
+            <p>Encontros perfeitos, alinhamento milimétrico e encaixes discretos em cada união.</p>
+          </div>
+          <div class="about-pillar-card">
+            <h4>Compromisso com o Acabamento</h4>
+            <p>Seleção criteriosa de materiais e rigor estético em todas as superfícies visíveis.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 5. COMO TRABALHAMOS (PROCESSO)                               -->
+    <!-- ============================================================ -->
+    <section id="como-trabalhamos" class="process-section" style="scroll-margin-top: 100px;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Como Trabalhamos</span>
+          <h2 class="section-title">Como transformamos seu projeto em realidade</h2>
+          <p class="section-desc">
+            Um processo cuidadoso para que cada decisão, medida e acabamento esteja alinhado ao resultado esperado.
+          </p>
+        </div>
+
+        <div class="process-grid">
+          <div class="process-card">
+            <div class="process-number">01</div>
+            <h4 class="process-title">Entendemos o Projeto</h4>
+            <p class="process-desc">Visita técnica, levantamento do espaço e entendimento das necessidades do cliente.</p>
+          </div>
+
+          <div class="process-card">
+            <div class="process-number">02</div>
+            <h4 class="process-title">Definimos Materiais e Detalhes</h4>
+            <p class="process-desc">Alinhamento de acabamentos, materiais, medidas e soluções junto ao cliente e aos profissionais envolvidos.</p>
+          </div>
+
+          <div class="process-card">
+            <div class="process-number">03</div>
+            <h4 class="process-title">Produzimos com Precisão</h4>
+            <p class="process-desc">Cada elemento é preparado para que a execução final respeite o projeto e seus detalhes.</p>
+          </div>
+
+          <div class="process-card">
+            <div class="process-number">04</div>
+            <h4 class="process-title">Instalamos e Finalizamos</h4>
+            <p class="process-desc">Nossa equipe realiza a montagem com cuidado, organização e atenção ao ambiente.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 6. O PADRÃO DK DE EXECUÇÃO / PRECISÃO NOS DETALHES           -->
+    <!-- ============================================================ -->
+    <section id="padrao-dk" class="precision-section" style="scroll-margin-top: 100px;">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">O Padrão DK de Execução</span>
+          <h2 class="section-title">Precisão nos detalhes</h2>
+          <p class="section-desc">
+            Cada etapa é planejada para preservar a qualidade do projeto até a entrega final.
+          </p>
+        </div>
+
+        <div class="precision-grid">
+          <div class="precision-card">
+            <h4>Precisão</h4>
+            <p>Projeto e execução com atenção rigorosa às medidas, encontros e acabamentos.</p>
+          </div>
+
+          <div class="precision-card">
+            <h4>Materiais</h4>
+            <p>Seleção criteriosa de madeiras, lâminas, revestimentos e acabamentos.</p>
+          </div>
+
+          <div class="precision-card">
+            <h4>Execução</h4>
+            <p>Instalação cuidadosa, organizada e alinhada ao projeto.</p>
+          </div>
+
+          <div class="precision-card">
+            <h4>Pós-Entrega</h4>
+            <p>Acompanhamento e suporte mesmo após a conclusão do projeto.</p>
+          </div>
+        </div>
+
+        <!-- Faixa de Capacidade Técnica -->
+        <div class="capability-strip">
+          <div class="capability-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Usinagem com alinhamento milimétrico</span>
+          </div>
+          <div class="capability-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Ferragens com amortecimento suave</span>
+          </div>
+          <div class="capability-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Proteção de pisos e forros na montagem</span>
+          </div>
+          <div class="capability-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Pós-obra limpo e organizado</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- 7. CTA FINAL / CONTATO ("VAMOS CONVERSAR SOBRE O SEU PROJETO?") -->
+    <!-- ============================================================ -->
+    <section id="contato" class="container" style="scroll-margin-top: 100px;">
+      <div id="solicitar"></div>
+      <div class="contact-section-editorial">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <span class="hero-tag" style="background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); color: #fff;">Atendimento Consultivo</span>
+            <h3>Vamos conversar sobre o seu projeto?</h3>
             <p>
-              Envie suas ideias, referências ou o projeto arquitetônico em PDF/DWG. Nossa equipe técnica entrará em contato para alinhar os detalhes e agendar uma visita sem compromisso.
+              Conte um pouco sobre o ambiente, envie suas referências ou compartilhe seu projeto. Nossa equipe analisará as informações e entrará em contato para entender a melhor solução para o seu espaço.
             </p>
-            <ul class="quote-perks">
+            <ul class="contact-highlights">
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span>Atendimento presencial em todo o Distrito Federal e Entorno</span>
+                <span>Atendimento presencial e visita técnica em Brasília e Entorno</span>
               </li>
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -324,12 +406,12 @@
               </li>
               <li>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span>Transparência de custos, cronograma garantido e suporte pós-entrega</span>
+                <span>Acompanhamento pontual e suporte em todas as etapas</span>
               </li>
             </ul>
           </div>
 
-          <div class="quote-form-wrap">
+          <div class="contact-form-card">
             <form id="leadForm" onsubmit="handleLeadSubmit(event)">
               <div class="form-group">
                 <label for="leadNome" class="form-label">Seu Nome Completo *</label>
@@ -338,62 +420,71 @@
 
               <div class="form-row">
                 <div class="form-group" style="flex: 1;">
-                  <label for="leadTel" class="form-label">Telefone / WhatsApp *</label>
+                  <label for="leadTel" class="form-label">WhatsApp / Telefone *</label>
                   <input type="tel" id="leadTel" class="form-control" placeholder="(61) 90000-0000" required>
                 </div>
                 <div class="form-group" style="flex: 1;">
-                  <label for="leadBairro" class="form-label">Bairro ou Condomínio</label>
-                  <input type="text" id="leadBairro" class="form-control" placeholder="Ex: Seu bairro ou cidade do entorno">
+                  <label for="leadBairro" class="form-label">Cidade / Bairro</label>
+                  <input type="text" id="leadBairro" class="form-control" placeholder="Brasília e Entorno">
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="leadTipo" class="form-label">Tipo de Projeto Desejado</label>
+                <label for="leadTipo" class="form-label">Tipo de Projeto</label>
                 <select id="leadTipo" class="form-control">
-                  <option value="Painéis Ripados e Revestimentos">Painéis Ripados & Revestimentos Murais</option>
-                  <option value="Marcenaria Sob Medida Completa">Marcenaria Sob Medida Completa (Apartamento/Casa)</option>
-                  <option value="Cozinhas e Espaço Gourmet">Cozinha Planejada & Área Gourmet</option>
-                  <option value="Closets e Suítes">Closet & Dormitório Sob Medida</option>
-                  <option value="Decks e Pergolados">Decks, Pergolados & Área Externa</option>
-                  <option value="Projeto Comercial ou Corporativo">Projeto Corporativo / Comercial</option>
+                  <option value="Painéis & Revestimentos">Painéis & Revestimentos</option>
+                  <option value="Marcenaria Sob Medida">Marcenaria Sob Medida</option>
+                  <option value="Cozinhas, Closets & Suítes">Cozinhas, Closets & Suítes</option>
+                  <option value="Ambientes Externos">Ambientes Externos</option>
+                  <option value="Espaço Corporativo / Comercial">Espaço Corporativo / Comercial</option>
+                  <option value="Outro Projeto Personalizado">Outro Projeto Personalizado</option>
                 </select>
               </div>
 
-              <button type="submit" class="btn btn-whatsapp" style="width: 100%; margin-top: 10px; padding: 14px; font-size: 14.5px; font-weight: 700;">
+              <div class="form-group">
+                <label for="leadMensagem" class="form-label">Conte brevemente sobre o que você deseja realizar</label>
+                <textarea id="leadMensagem" class="form-control" rows="3" placeholder="Ex: Reforma da sala de estar com painel ripado e rack suspenso. Já possuo projeto de arquitetura."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-whatsapp" style="width: 100%; margin-top: 8px; padding: 14px; font-size: 14.5px; font-weight: 700;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
-                <span>Enviar Especificações no WhatsApp</span>
+                <span>Quero conversar com a DK</span>
               </button>
+              <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 10px; margin-bottom: 0;">Atendimento direto com nossa equipe via WhatsApp.</p>
             </form>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
 
-    <!-- RODAPÉ INSTITUCIONAL -->
+    <!-- ============================================================ -->
+    <!-- 8. RODAPÉ INSTITUCIONAL EDITORIAL                            -->
+    <!-- ============================================================ -->
     <footer class="site-footer">
       <div class="container">
         <div class="footer-top">
           <div class="footer-brand">
             <h4>DK Revestimentos</h4>
-            <p>Ateliê de Marcenaria & Revestimentos de Alto Padrão</p>
+            <p>Marcenaria, revestimentos e soluções sob medida.</p>
           </div>
-          <div style="display: flex; gap: 24px; font-size: 13.5px; font-weight: 600;">
-            <a href="#inicio" style="color: #cbd5e1;">Início</a>
-            <a href="#especialidades" style="color: #cbd5e1;">Especialidades</a>
-            <a href="#catalogo" style="color: #cbd5e1;">Portfólio</a>
-            <a href="#metodo" style="color: #cbd5e1;">O Método</a>
-            <a href="#solicitar" style="color: #cbd5e1;">Orçamento</a>
+          <div class="footer-links">
+            <a href="#inicio">Início</a>
+            <a href="#projetos">Projetos</a>
+            <a href="#solucoes">Soluções</a>
+            <a href="#a-dk">A DK</a>
+            <a href="#como-trabalhamos">Como Trabalhamos</a>
+            <a href="#contato">Contato</a>
           </div>
         </div>
         <div class="footer-bottom">
-          <div>© 2026 DK Revestimentos. Todos os direitos reservados. Marcenaria & Revestimentos em Brasília - DF.</div>
-          <div style="font-size: 12px; color: #64748b;">Mobiliário sob medida com fabricação de precisão e acabamentos de alto padrão.</div>
+          <div>© 2026 DK Revestimentos. Todos os direitos reservados.</div>
+          <div>Brasília – DF • Atendimento em Brasília e Entorno</div>
         </div>
       </div>
     </footer>
 
     <!-- Botão Flutuante do WhatsApp -->
-    <a href="#solicitar" class="whatsapp-float" title="Solicitar Orçamento no WhatsApp">
+    <a href="#contato" class="whatsapp-float" title="Falar com a DK no WhatsApp">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/>
       </svg>

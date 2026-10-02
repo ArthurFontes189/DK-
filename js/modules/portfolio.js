@@ -41,7 +41,6 @@ function filterPortfolio(categoria, btnEl) {
   if (btnEl) {
     btnEl.classList.add("active");
   } else {
-    // Se ativado programaticamente (ex: voltar para "Todos")
     const allBtn = Array.from(document.querySelectorAll(".portfolio-filter-btn")).find(b => b.textContent.includes("Todos"));
     if (allBtn) allBtn.classList.add("active");
   }
@@ -59,7 +58,7 @@ function renderPublicCatalog() {
   // Caso ainda não haja nenhum projeto real cadastrado no sistema
   if (allProjects.length === 0) {
     container.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 50px 24px; background: #ffffff; border: 1px solid var(--border-soft); border-radius: var(--radius); box-shadow: var(--shadow-subtle);">
+      <div style="grid-column: 1 / -1; text-align: center; padding: 55px 24px; background: #ffffff; border: 1px solid var(--border-soft); border-radius: var(--radius); box-shadow: var(--shadow-subtle);">
         <div style="width: 52px; height: 52px; border-radius: 12px; background: rgba(138, 79, 38, 0.08); color: var(--wood-primary); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2"></rect>
@@ -69,9 +68,9 @@ function renderPublicCatalog() {
         </div>
         <h3 style="font-size: 19px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Galeria de Projetos em Atualização</h3>
         <p style="font-size: 14.5px; color: var(--text-muted); max-width: 520px; margin: 0 auto 20px auto; line-height: 1.6;">
-          Estamos organizando e publicando as fotos e vídeos das obras mais recentes da DK Revestimentos. Para conhecer trabalhos executados ou solicitar um projeto sob medida, fale conosco diretamente no WhatsApp.
+          Estamos organizando e publicando as fotos e vídeos das obras mais recentes da DK Revestimentos. Para conhecer trabalhos executados ou conversar sobre seu projeto, fale conosco pelo WhatsApp.
         </p>
-        <a href="#solicitar" class="btn btn-whatsapp" style="font-weight: 700; padding: 12px 24px;">
+        <a href="#contato" class="btn btn-whatsapp" style="font-weight: 700; padding: 12px 24px;">
           Solicitar Fotos de Projetos no WhatsApp
         </a>
       </div>
@@ -139,13 +138,12 @@ function renderPublicCatalog() {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
           <button type="button" class="btn btn-outline btn-sm" onclick="prefillBudget('${item.titulo}', '${item.categoria}')" style="font-size: 11.5px; padding: 5px 12px;">
-            Orçar Similar
+            Solicitar Projeto Similar
           </button>
         </div>
       </div>
     `;
 
-    // Reproduzir vídeo curto ao passar o mouse se for vídeo
     if (isVideo) {
       const vid = card.querySelector("video");
       if (vid) {
@@ -211,7 +209,7 @@ function openProjectDetails(projectId) {
 }
 
 function prefillBudget(titulo, categoria) {
-  const section = document.getElementById("solicitar");
+  const section = document.getElementById("contato") || document.getElementById("solicitar");
   if (section) section.scrollIntoView({ behavior: "smooth" });
   
   const nomeInput = document.getElementById("leadNome");
@@ -222,14 +220,23 @@ function prefillBudget(titulo, categoria) {
   const tipoSelect = document.getElementById("leadTipo");
   if (tipoSelect && categoria) {
     const catLower = categoria.toLowerCase();
-    if (catLower.includes("cozinha")) tipoSelect.value = "Cozinhas e Espaço Gourmet";
-    else if (catLower.includes("pain")) tipoSelect.value = "Painéis Ripados e Revestimentos";
-    else if (catLower.includes("deck") || catLower.includes("extern")) tipoSelect.value = "Decks e Pergolados";
-    else if (catLower.includes("closet") || catLower.includes("dormit")) tipoSelect.value = "Closets e Suítes";
-    else tipoSelect.value = "Marcenaria Sob Medida Completa";
+    if (catLower.includes("cozinha") || catLower.includes("closet") || catLower.includes("dormit") || catLower.includes("suíte") || catLower.includes("suite")) {
+      tipoSelect.value = "Cozinhas, Closets & Suítes";
+    } else if (catLower.includes("pain") || catLower.includes("revest")) {
+      tipoSelect.value = "Painéis & Revestimentos";
+    } else if (catLower.includes("deck") || catLower.includes("extern") || catLower.includes("pergol")) {
+      tipoSelect.value = "Ambientes Externos";
+    } else {
+      tipoSelect.value = "Marcenaria Sob Medida";
+    }
   }
 
-  showToast(`Projeto selecionado para referência no orçamento.`, "info");
+  const msgInput = document.getElementById("leadMensagem");
+  if (msgInput && titulo) {
+    msgInput.value = `Gostaria de um projeto com referência semelhante a: ${titulo}`;
+  }
+
+  showToast(`Projeto selecionado para referência.`, "info");
 }
 
 // ----------------------------------------------------------------------------

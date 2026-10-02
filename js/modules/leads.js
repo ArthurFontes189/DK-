@@ -18,6 +18,8 @@ async function handleLeadSubmit(e) {
   const tel = document.getElementById("leadTel").value.trim();
   const bairro = document.getElementById("leadBairro").value.trim();
   const tipo = document.getElementById("leadTipo").value;
+  const msgEl = document.getElementById("leadMensagem");
+  const mensagem = msgEl ? msgEl.value.trim() : "";
 
   const now = new Date();
   const dataHora = now.toLocaleDateString("pt-BR") + " " + now.toLocaleTimeString("pt-BR", {hour: "2-digit", minute:"2-digit"});
@@ -28,7 +30,7 @@ async function handleLeadSubmit(e) {
       const payload = {
         nome,
         telefone: tel,
-        bairro,
+        bairro: bairro ? (mensagem ? `${bairro} | Detalhes: ${mensagem}` : bairro) : (mensagem || "Brasília e Entorno"),
         tipo_servico: tipo,
         status: "Pendente de Contato",
         data_hora: dataHora
@@ -37,7 +39,7 @@ async function handleLeadSubmit(e) {
       let { data, error } = await safeDbInsert("leads", payload);
 
       if (error) {
-        alert("Erro ao gravar orçamento no banco de dados: " + error.message);
+        alert("Erro ao gravar solicitação no banco de dados: " + error.message);
         return;
       }
       if (data && data[0]) {
@@ -45,7 +47,7 @@ async function handleLeadSubmit(e) {
           id: data[0].id,
           nome,
           telefone: tel,
-          bairro,
+          bairro: payload.bairro,
           tipo,
           status: "Pendente de Contato",
           dataHora: data[0].data_hora || (data[0].created_at ? new Date(data[0].created_at).toLocaleString("pt-BR") : dataHora)
@@ -57,16 +59,29 @@ async function handleLeadSubmit(e) {
       return;
     }
   } else {
-    const localLead = { id: Date.now(), nome, telefone: tel, bairro, tipo, status: "Pendente de Contato", dataHora };
+    const localLead = { 
+      id: Date.now(), 
+      nome, 
+      telefone: tel, 
+      bairro: bairro ? (mensagem ? `${bairro} | Detalhes: ${mensagem}` : bairro) : (mensagem || "Brasília e Entorno"), 
+      tipo, 
+      status: "Pendente de Contato", 
+      dataHora 
+    };
     db.leads.unshift(localLead);
     saveCacheDB("leads", db.leads);
   }
 
   document.getElementById("leadForm").reset();
 
-  const textoMsg = `Olá! Meu nome é *${nome}*.\nGostaria de um orçamento com a *DK Revestimentos* para: *${tipo}*.\nLocal: ${bairro || "Não informado"}\n(Solicitado pelo site)`;
+  let textoMsg = `Olá! Meu nome é *${nome}*.\nGostaria de conversar com a *DK Revestimentos* sobre: *${tipo}*.\nLocal: ${bairro || "Brasília e Entorno"}`;
+  if (mensagem) {
+    textoMsg += `\nDetalhes do projeto: ${mensagem}`;
+  }
+  textoMsg += `\n(Solicitado pelo site)`;
+
   const waUrl = `https://api.whatsapp.com/send?phone=${MARANARIA_WHATSAPP}&text=${encodeURIComponent(textoMsg)}`;
-  showToast("Solicitação registrada no banco com sucesso!");
+  showToast("Solicitação enviada com sucesso! Abrindo WhatsApp...");
   setTimeout(() => { window.open(waUrl, "_blank"); }, 600);
 }
 
@@ -98,7 +113,7 @@ function renderLeads(leads) {
     else if (lead.status === "Perdido") badgeClass = "badge-danger";
 
     const cleanTel = lead.telefone ? lead.telefone.replace(/\D/g, "") : "";
-    const waLink = `https://api.whatsapp.com/send?phone=55${cleanTel}&text=${encodeURIComponent("Olá " + lead.nome + ", tudo bem? Aqui é da DK Revestimentos sobre o seu pedido de orçamento.")}`;
+    const waLink = `https://api.whatsapp.com/send?phone=55${cleanTel}&text=${encodeURIComponent("Olá " + lead.nome + ", tudo bem? Aqui é da DK Revestimentos sobre a sua solicitação de projeto.")}`;
 
     const card = document.createElement("div");
     card.className = "lead-card";
@@ -168,7 +183,6 @@ async function updateLeadStatus(id, newStatus) {
   }
 }
 
-
 // Exclui permanentemente uma solicitação/lead com confirmação prévia
 async function deleteLead(id) {
   const lead = db.leads.find(l => l.id == id);
@@ -177,13 +191,11 @@ async function deleteLead(id) {
   const confirmado = await customConfirm(`Deseja realmente excluir a solicitação de "${leadNome}"?\nEsta ação removerá o pedido permanentemente.`, "Excluir Solicitação", { danger: true, confirmText: "Sim, Excluir" });
   if (!confirmado) return;
 
-  // 1. Remover do banco local / cache
   db.leads = db.leads.filter(l => l.id != id);
   saveCacheDB("leads", db.leads);
   renderLeads(db.leads);
   showToast("Solicitação excluída com sucesso!");
 
-  // 2. Remover do Supabase se estiver conectado
   if (sbClient) {
     try {
       const { error } = await sbClient.from("leads").delete().eq("id", id);
@@ -195,4 +207,5 @@ async function deleteLead(id) {
     }
   }
 }
+
 window.deleteLead = deleteLead;
