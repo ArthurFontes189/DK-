@@ -498,55 +498,67 @@ function openProjectDetails(projectId) {
     mediaContainer.innerHTML = '';
 
     if (isVideo) {
-      let mediaSourceUrl = project.midiaUrl;
-      if (project.gdriveId && (!mediaSourceUrl || mediaSourceUrl.endsWith(".mp4"))) {
-        mediaSourceUrl = "https://drive.google.com/file/d/" + project.gdriveId + "/preview";
-      }
-      const vSource = parseVideoSource(mediaSourceUrl);
+      const isDirectFile = project.midiaUrl && (project.midiaUrl.endsWith('.mp4') || project.midiaUrl.endsWith('.mov') || project.midiaUrl.endsWith('.webm') || project.midiaUrl.startsWith('blob:') || project.midiaUrl.startsWith('data:'));
+      const gdriveFallbackUrl = project.gdriveId ? ('https://drive.google.com/file/d/' + project.gdriveId + '/preview') : '';
 
-      if (vSource.type === 'gdrive') {
-        // Player Oficial do Google Drive (Preview Embed)
-        mediaContainer.innerHTML = `
-          <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
-            <iframe src="${vSource.embedUrl}" 
-                    title="${project.titulo}"
-                    allow="autoplay; encrypted-media; fullscreen" 
-                    allowfullscreen>
-            </iframe>
-          </div>
-        `;
-      } else if (vSource.type === 'youtube') {
-        // Player do YouTube
-        const isShorts = vSource.isShorts || isVertical;
-        mediaContainer.innerHTML = `
-          <div class="project-modal-stage ${isShorts ? 'stage-vertical' : 'stage-horizontal'}">
-            <iframe src="${vSource.embedUrl}" 
-                    title="${project.titulo}"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen>
-            </iframe>
-          </div>
-        `;
-      } else if (vSource.type === 'vimeo') {
-        mediaContainer.innerHTML = `
-          <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
-            <iframe src="${vSource.embedUrl}" 
-                    title="${project.titulo}"
-                    allow="autoplay; fullscreen; picture-in-picture" 
-                    allowfullscreen>
-            </iframe>
-          </div>
-        `;
-      } else {
-        // Vídeo Direto MP4
+      if (isDirectFile) {
+        // Player HTML5 Nativo em Alta Resolucao Original (Sem compressao secundaria de 360p do Google Drive)
         mediaContainer.innerHTML = `
           <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
             <video src="${project.midiaUrl}" 
                    ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
-                   controls autoplay playsinline>
+                   controls autoplay playsinline 
+                   style="width: 100%; height: 100%; object-fit: contain;"
+                   onerror="if ('${gdriveFallbackUrl}') { this.style.display='none'; this.parentElement.innerHTML = '<iframe src=\'${gdriveFallbackUrl}\' title=\'${project.titulo}\' style=\'position:absolute;top:0;left:0;width:100%;height:100%;border:0;\' allow=\'autoplay; encrypted-media; fullscreen\' allowfullscreen></iframe>'; }">
             </video>
           </div>
         `;
+      } else {
+        const vSource = parseVideoSource(project.midiaUrl || gdriveFallbackUrl);
+
+        if (vSource.type === 'gdrive') {
+          // Player Oficial do Google Drive (Preview Embed)
+          mediaContainer.innerHTML = `
+            <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
+              <iframe src="${vSource.embedUrl}" 
+                      title="${project.titulo}"
+                      allow="autoplay; encrypted-media; fullscreen" 
+                      allowfullscreen>
+              </iframe>
+            </div>
+          `;
+        } else if (vSource.type === 'youtube') {
+          // Player Oficial do YouTube (Full HD / 4K / Shorts)
+          const isShorts = vSource.isShorts || isVertical;
+          mediaContainer.innerHTML = `
+            <div class="project-modal-stage ${isShorts ? 'stage-vertical' : 'stage-horizontal'}">
+              <iframe src="${vSource.embedUrl}" 
+                      title="${project.titulo}"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                      allowfullscreen>
+              </iframe>
+            </div>
+          `;
+        } else if (vSource.type === 'vimeo') {
+          mediaContainer.innerHTML = `
+            <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
+              <iframe src="${vSource.embedUrl}" 
+                      title="${project.titulo}"
+                      allow="autoplay; fullscreen; picture-in-picture" 
+                      allowfullscreen>
+              </iframe>
+            </div>
+          `;
+        } else {
+          mediaContainer.innerHTML = `
+            <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
+              <video src="${project.midiaUrl}" 
+                     ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
+                     controls autoplay playsinline>
+              </video>
+            </div>
+          `;
+        }
       }
     } else {
       // Fotografia ou Documento
