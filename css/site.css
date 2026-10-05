@@ -422,9 +422,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
   padding-top: 18px;
   border-top: 1px solid var(--border-soft);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .btn-inspect-project {
@@ -485,6 +488,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 28px;
+  width: 100%;
+  max-width: 100%;
+}
+.solutions-grid > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .solution-card {
@@ -700,6 +709,12 @@
   grid-template-columns: 1fr 1.25fr;
   gap: 52px;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
+}
+.contact-grid > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .contact-info h3 {
@@ -829,4 +844,153 @@
   transform: scale(1.06) translateY(-2px);
   box-shadow: 0 10px 26px rgba(21, 128, 61, 0.55);
   color: #ffffff;
+}
+
+
+/* ==========================================================================
+   COMPONENTES DE VÍDEO & CATÁLOGO MULTIMÍDIA (ALTO PADRÃO)
+   ========================================================================== */
+
+/* Abas de Seleção de Tipo de Mídia (Segmented Control) */
+.media-type-selector-tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+  border: 1px solid var(--border-soft);
+}
+
+.media-type-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.media-type-tab:hover {
+  color: var(--text-main);
+}
+
+.media-type-tab.active {
+  background: #ffffff;
+  color: var(--wood-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Pílulas de Seleção de Origem do Vídeo */
+.media-source-pill {
+  padding: 5px 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: 20px;
+  border: 1px solid var(--border-soft);
+  background: #ffffff;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.media-source-pill:hover {
+  border-color: var(--wood-primary);
+  color: var(--text-main);
+}
+
+.media-source-pill.active {
+  background: var(--wood-primary);
+  border-color: var(--wood-primary);
+  color: #ffffff;
+}
+
+/* Dropzone de Vídeo */
+.media-dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.media-dropzone:hover {
+  border-color: var(--wood-primary);
+  background: #fdfaf6;
+}
+
+/* Indicador de Play no Catálogo Público */
+.video-play-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.video-play-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(14, 15, 19, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid var(--wood-gold);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, border-color 0.25s ease;
+}
+
+.project-card:hover .video-play-btn {
+  transform: scale(1.14);
+  background: var(--wood-primary);
+  border-color: #ffffff;
+}
+
+.video-play-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: rgba(14, 15, 19, 0.82);
+  padding: 4px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.project-media-type-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(14, 15, 19, 0.88);
+  color: var(--wood-gold);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(197, 155, 109, 0.35);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 6px;
+  z-index: 2;
 }

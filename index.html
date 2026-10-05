@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
   <title>DK Revestimentos | Marcenaria e Soluções Sob Medida</title>
   <meta name="description" content="Marcenaria, revestimentos e soluções personalizadas para residências e espaços corporativos que valorizam arquitetura, acabamento e precisão. Atendimento em Brasília e Entorno.">
   <meta name="theme-color" content="#0e0f13">
@@ -650,12 +650,19 @@
 
       <!-- PAINEL 5: GERENCIAR PORTFÓLIO -->
       <div id="tabPortfolioAdmin" class="admin-tab-content" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
           <div>
-            <h3 style="font-size: 18px; font-weight: 700;">Catálogo de Mídias (Vídeos e Fotos)</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Adicione vídeos ou fotos verticais de projetos finalizados.</p>
+            <h3 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">Catálogo de Mídias (Vídeos e Fotos)</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Publique vídeos de tours pelos ambientes concluídos e fotos em alta resolução dos projetos da marcenaria.</p>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="openNewPhotoModal()">+ Adicionar Nova Mídia</button>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="openNewMediaModal('video')" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+              <span>🎥 + Adicionar Vídeo</span>
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="openNewMediaModal('foto')" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <span>📷 + Adicionar Foto</span>
+            </button>
+          </div>
         </div>
         <div id="adminPortfolioList"></div>
       </div>
@@ -881,69 +888,161 @@
     </div>
   </div>
 
-  <!-- MODAL: ADICIONAR MÍDIA VERTICAL (FOTO OU VÍDEO) -->
+  <!-- MODAL: ADICIONAR VÍDEO OU FOTO AO CATÁLOGO (REFATORADO) -->
   <div class="modal-overlay" id="photoModal">
-    <div class="modal-content" style="max-width: 500px;">
-      <div class="modal-header">
-        <h4 class="modal-title">Adicionar Vídeo ou Foto Vertical</h4>
-        <button class="close-modal" onclick="closeModal('photoModal')">&times;</button>
+    <div class="modal-content" style="max-width: 560px;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--border-soft); padding-bottom: 14px; margin-bottom: 18px;">
+        <div>
+          <h4 class="modal-title" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0;">Publicar Projeto no Portfólio</h4>
+          <p style="font-size: 12.5px; color: var(--text-muted); margin: 3px 0 0 0;">Vídeos de ambientes e fotografias em alta resolução dos trabalhos da DK.</p>
+        </div>
+        <button type="button" class="close-modal" onclick="closeModal('photoModal')">&times;</button>
       </div>
+
       <form id="photoForm" onsubmit="handleSaveMedia(event)">
-        <div class="form-group">
-          <label for="photoTipoRegistro">Enquadramento do Projeto</label>
-          <select id="photoTipoRegistro" class="form-control">
-            <option value="ambiente_finalizado">Ambiente Finalizado (Destaque Principal)</option>
-            <option value="foto_ampla">Foto Ampla do Espaço</option>
-            <option value="detalhe_acabamento">Detalhe de Acabamento</option>
-            <option value="processo_fabricacao">Processo de Fabricação / Oficina</option>
-          </select>
+        <!-- SELETOR PRINCIPAL: VÍDEO vs FOTO -->
+        <div style="margin-bottom: 18px;">
+          <label class="form-label" style="font-weight: 700; margin-bottom: 8px;">Tipo de Mídia *</label>
+          <div class="media-type-selector-tabs">
+            <button type="button" class="media-type-tab active" id="tabSelectVideo" onclick="selectMediaType('video')">
+              <span style="font-size: 16px;">🎥</span>
+              <span>Vídeo do Projeto</span>
+            </button>
+            <button type="button" class="media-type-tab" id="tabSelectFoto" onclick="selectMediaType('foto')">
+              <span style="font-size: 16px;">📷</span>
+              <span>Fotografia em Alta</span>
+            </button>
+          </div>
+          <input type="hidden" id="mediaTipo" value="video">
         </div>
 
-        <div class="form-group">
-          <label for="mediaTipo">Tipo de Mídia *</label>
-          <select id="mediaTipo" class="form-control" onchange="toggleMediaInputType(this.value)">
-            <option value="foto">Foto Vertical</option>
-            <option value="video">Vídeo Vertical (MP4)</option>
-          </select>
-        </div>
+        <!-- PAINEL EXCLUSIVO: OPÇÕES DE VÍDEO -->
+        <div id="videoSourceOptions" style="background: #fbf9f6; border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px; margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <label class="form-label" style="font-size: 13px; font-weight: 700; margin: 0; color: var(--wood-primary);">
+              Origem do Vídeo:
+            </label>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="media-source-pill active" id="pillSourceUrl" onclick="selectVideoSource('url')">
+                🔗 Link (YouTube / Shorts / Nuvem)
+              </button>
+              <button type="button" class="media-source-pill" id="pillSourceUpload" onclick="selectVideoSource('upload')">
+                📤 Arquivo (MP4 / Celular)
+              </button>
+            </div>
+          </div>
 
-        <div class="form-group">
-          <label for="photoTitulo">Título do Projeto *</label>
-          <input type="text" id="photoTitulo" class="form-control" required placeholder="Ex: Deck Suspenso em Cumaru com Iluminação">
-        </div>
+          <!-- BLOCO 1: LINK DE VÍDEO (YOUTUBE / SHORTS / VIMEO / MP4) -->
+          <div id="videoSourceUrlBox">
+            <div class="form-group" style="margin-bottom: 6px;">
+              <label for="mediaUrlInput" style="font-size: 12.5px; font-weight: 600;">Link do Vídeo (YouTube, YouTube Shorts, Vimeo ou link direto MP4):</label>
+              <input type="url" id="mediaUrlInput" class="form-control" 
+                     placeholder="Ex: https://www.youtube.com/watch?v=... ou https://youtu.be/..."
+                     oninput="handleVideoUrlChange(this.value)">
+            </div>
+            <div id="videoUrlFeedback" style="display: none; margin-top: 8px; font-size: 12px; padding: 8px 12px; border-radius: 8px;"></div>
+          </div>
 
-        <div class="form-group">
-          <label for="photoCategoria">Categoria *</label>
-          <select id="photoCategoria" class="form-control">
-            <option value="Painéis & Revestimentos">Painéis & Revestimentos</option>
-            <option value="Salas & Livings">Salas & Livings</option>
-            <option value="Cozinhas & Gourmet">Cozinhas & Gourmet</option>
-            <option value="Dormitórios & Closets">Dormitórios & Closets</option>
-            <option value="Áreas Externas">Áreas Externas</option>
-            <option value="Marcenaria Sob Medida">Marcenaria Sob Medida</option>
-          </select>
-        </div>
+          <!-- BLOCO 2: ARQUIVO DO DISPOSITIVO (MP4 / CELULAR) -->
+          <div id="videoSourceUploadBox" style="display: none;">
+            <div class="media-dropzone" onclick="document.getElementById('mediaFileInput').click()">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(138, 79, 38, 0.1); color: var(--wood-primary); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              </div>
+              <div style="font-weight: 700; font-size: 13.5px; color: var(--text-main);">Clique para escolher o vídeo do celular ou arraste aqui</div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Formatos: MP4, MOV, WebM (Gera foto de capa automaticamente)</div>
+            </div>
+            <input type="file" id="mediaFileInput" accept="video/mp4,video/quicktime,video/webm,video/*" style="display: none;" onchange="previewMediaFile(this)">
+          </div>
 
-        <div class="form-group">
-          <label for="photoDesc">Descrição do Trabalho</label>
-          <input type="text" id="photoDesc" class="form-control" placeholder="Ex: Projeto finalizado com acabamento acetinado de alta durabilidade.">
-        </div>
-
-        <div class="form-group">
-          <label for="mediaUrlInput">URL da Mídia (ou escolha um arquivo abaixo) *</label>
-          <input type="url" id="mediaUrlInput" class="form-control" placeholder="https://exemplo.com/video.mp4 ou link da imagem">
-        </div>
-
-        <div class="form-group">
-          <label for="mediaFileInput">Ou selecione do dispositivo (câmera / galeria):</label>
-          <input type="file" id="mediaFileInput" accept="image/*,video/*" class="form-control" onchange="previewMediaFile(this)">
-          <input type="hidden" id="mediaBase64">
-          <div id="mediaPreviewContainer" style="margin-top: 12px; display: none; text-align: center;">
-            <div id="mediaPreviewSlot"></div>
+          <!-- PREVIEW DO VÍDEO COM PLAYER E FOTO DE CAPA -->
+          <div id="mediaPreviewContainer" style="margin-top: 14px; display: none; background: #ffffff; border: 1px solid var(--border-soft); border-radius: 10px; padding: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 700; color: #0f172a;" id="mediaPreviewLabel">Pré-visualização do Vídeo</span>
+              <button type="button" class="btn btn-outline btn-sm" onclick="clearSelectedMedia()" style="font-size: 11px; padding: 2px 8px;">Limpar</button>
+            </div>
+            <div id="mediaPreviewSlot" style="border-radius: 8px; overflow: hidden; background: #000; text-align: center;"></div>
+            
+            <!-- CAPA / POSTER DO VÍDEO -->
+            <div id="videoPosterContainer" style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-soft); display: none;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <div>
+                  <span style="font-size: 11.5px; font-weight: 700; color: #0f172a; display: block;">Foto de Capa (Thumbnail do Vídeo)</span>
+                  <span style="font-size: 11px; color: var(--text-muted);" id="posterSourceNote">Capturada automaticamente do primeiro segundo</span>
+                </div>
+                <div id="posterMiniPreview" style="width: 56px; height: 40px; border-radius: 4px; overflow: hidden; background: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">Publicar no Catálogo</button>
+        <!-- PAINEL EXCLUSIVO: OPÇÕES DE FOTO -->
+        <div id="fotoSourceOptions" style="display: none; background: #fbf9f6; border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px; margin-bottom: 18px;">
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="fotoFileInput" style="font-size: 12.5px; font-weight: 600;">Selecione a fotografia do dispositivo:</label>
+            <input type="file" id="fotoFileInput" accept="image/*" class="form-control" onchange="previewFotoFile(this)">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="fotoUrlInput" style="font-size: 12.5px; font-weight: 600;">Ou informe a URL direta da imagem:</label>
+            <input type="url" id="fotoUrlInput" class="form-control" placeholder="https://exemplo.com/foto.jpg" oninput="handleFotoUrlChange(this.value)">
+          </div>
+          <div id="fotoPreviewContainer" style="margin-top: 12px; display: none; text-align: center;">
+            <div id="fotoPreviewSlot"></div>
+          </div>
+        </div>
+
+        <input type="hidden" id="mediaBase64">
+        <input type="hidden" id="mediaPosterBase64">
+
+        <!-- DADOS DO PROJETO -->
+        <div class="form-group">
+          <label for="photoTitulo" style="font-weight: 700;">Título do Projeto *</label>
+          <input type="text" id="photoTitulo" class="form-control" required placeholder="Ex: Living Integrado com Painel Ripado e LED">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="photoCategoria" style="font-weight: 700;">Categoria *</label>
+            <select id="photoCategoria" class="form-control">
+              <option value="Painéis & Revestimentos">Painéis & Revestimentos</option>
+              <option value="Salas & Livings">Salas & Livings</option>
+              <option value="Cozinhas & Gourmet">Cozinhas & Gourmet</option>
+              <option value="Dormitórios & Closets">Dormitórios & Closets</option>
+              <option value="Áreas Externas">Áreas Externas</option>
+              <option value="Marcenaria Sob Medida">Marcenaria Sob Medida</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="photoTipoRegistro" style="font-weight: 700;">Destaque do Registro</label>
+            <select id="photoTipoRegistro" class="form-control">
+              <option value="ambiente_finalizado">Ambiente Finalizado (Destaque Principal)</option>
+              <option value="foto_ampla">Tour Amplo pelo Espaço</option>
+              <option value="detalhe_acabamento">Detalhe Construtivo & Acabamento</option>
+              <option value="processo_fabricacao">Processo de Fabricação / Oficina</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="photoDesc">Descrição do Trabalho / Detalhes de Marcenaria</label>
+          <input type="text" id="photoDesc" class="form-control" placeholder="Ex: Marcenaria com lâmina natural de Louro Freijó, portas ocultas e iluminação embutida.">
+        </div>
+
+        <!-- BARRA DE PROGRESSO DE UPLOAD -->
+        <div id="mediaUploadProgress" style="display: none; margin-bottom: 14px;">
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; font-weight: 600;">
+            <span id="uploadProgressText">Enviando mídia...</span>
+            <span id="uploadProgressPercent">0%</span>
+          </div>
+          <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+            <div id="uploadProgressBar" style="width: 0%; height: 100%; background: var(--wood-primary); transition: width 0.2s ease;"></div>
+          </div>
+        </div>
+
+        <button type="submit" id="btnSubmitMedia" class="btn btn-primary" style="margin-top: 10px; width: 100%; padding: 14px; font-weight: 700; font-size: 14.5px;">
+          Publicar no Catálogo
+        </button>
       </form>
     </div>
   </div>

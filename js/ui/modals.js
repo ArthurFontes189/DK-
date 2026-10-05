@@ -6,7 +6,6 @@ function openModal(id) {
   const el = document.getElementById(id);
   if (el) {
     el.classList.add("active");
-    // Trava rolagem do fundo para melhor experiência
     document.body.style.overflow = "hidden";
   }
 }
@@ -15,7 +14,13 @@ function closeModal(id) {
   const el = document.getElementById(id);
   if (el) {
     el.classList.remove("active");
-    // Restaura rolagem se não houver outros modais abertos
+
+    // Limpa vídeo/áudio ativo do lightbox ao fechar
+    if (id === "projectDetailModal") {
+      const mediaContainer = document.getElementById("projectModalMediaContainer");
+      if (mediaContainer) mediaContainer.innerHTML = "";
+    }
+
     const activeModals = document.querySelectorAll(".modal-overlay.active");
     if (activeModals.length === 0) {
       document.body.style.overflow = "";
@@ -26,8 +31,16 @@ function closeModal(id) {
 // Fechamento ao clicar fora do conteúdo
 window.addEventListener("click", function(e) {
   if (e.target.classList.contains("modal-overlay")) {
+    const modalId = e.target.id;
+    if (modalId === "projectDetailModal") {
+      const mediaContainer = document.getElementById("projectModalMediaContainer");
+      if (mediaContainer) mediaContainer.innerHTML = "";
+    }
     e.target.classList.remove("active");
-    document.body.style.overflow = "";
+    const activeModals = document.querySelectorAll(".modal-overlay.active");
+    if (activeModals.length === 0) {
+      document.body.style.overflow = "";
+    }
   }
 });
 
@@ -36,6 +49,10 @@ window.addEventListener("keydown", function(e) {
   if (e.key === "Escape") {
     const activeModal = document.querySelector(".modal-overlay.active");
     if (activeModal) {
+      if (activeModal.id === "projectDetailModal") {
+        const mediaContainer = document.getElementById("projectModalMediaContainer");
+        if (mediaContainer) mediaContainer.innerHTML = "";
+      }
       activeModal.classList.remove("active");
       document.body.style.overflow = "";
     }
@@ -134,4 +151,6 @@ function customConfirm(message, title = "Confirmação", options = {}) {
   });
 }
 
+window.openModal = openModal;
+window.closeModal = closeModal;
 window.customConfirm = customConfirm;
