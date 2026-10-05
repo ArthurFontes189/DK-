@@ -11,7 +11,11 @@
     font-size: 42px;
   }
   .portfolio-projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+    column-count: 2;
+    column-gap: 20px;
+  }
+  .project-card {
+    margin-bottom: 20px;
   }
   .hero-trust-strip {
     grid-template-columns: repeat(2, 1fr);
@@ -213,11 +217,23 @@
     box-sizing: border-box;
   }
 
+  .portfolio-format-bar {
+    justify-content: flex-start;
+    padding: 4px;
+    gap: 4px;
+  }
+  .portfolio-format-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
   .portfolio-projects-grid {
-    grid-template-columns: 1fr;
-    gap: 22px;
+    column-count: 1;
+    column-gap: 0;
     width: 100%;
     max-width: 100%;
+  }
+  .project-card {
+    margin-bottom: 20px;
   }
 
   .portfolio-projects-grid > * {

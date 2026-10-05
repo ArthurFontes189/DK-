@@ -896,6 +896,9 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
 }
 
 .project-card {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 28px;
   background: #ffffff;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius);
@@ -904,6 +907,32 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Proporções dinâmicas para mídias */
+.project-media-wrapper-aspect {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #0e0f13;
+}
+
+/* Formato Vertical: 9:14 estilo Stories/Reels */
+.aspect-vertical-9-16 {
+  aspect-ratio: 9 / 14;
+}
+
+/* Formato Horizontal: 16:11 Widescreen */
+.aspect-horizontal-16-11 {
+  aspect-ratio: 16 / 11;
+}
+
+.badge-photo-subtle {
+  background: rgba(14, 15, 19, 0.75) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 .project-card:hover {
@@ -2001,7 +2030,11 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
     font-size: 42px;
   }
   .portfolio-projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+    column-count: 2;
+    column-gap: 20px;
+  }
+  .project-card {
+    margin-bottom: 20px;
   }
   .hero-trust-strip {
     grid-template-columns: repeat(2, 1fr);
@@ -2203,11 +2236,23 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
     box-sizing: border-box;
   }
 
+  .portfolio-format-bar {
+    justify-content: flex-start;
+    padding: 4px;
+    gap: 4px;
+  }
+  .portfolio-format-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
   .portfolio-projects-grid {
-    grid-template-columns: 1fr;
-    gap: 22px;
+    column-count: 1;
+    column-gap: 0;
     width: 100%;
     max-width: 100%;
+  }
+  .project-card {
+    margin-bottom: 20px;
   }
 
   .portfolio-projects-grid > * {

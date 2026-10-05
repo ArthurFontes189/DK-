@@ -652,12 +652,18 @@
       <div id="tabPortfolioAdmin" class="admin-tab-content" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
           <div>
-            <h3 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">Catálogo de Mídias (Vídeos e Fotos)</h3>
-            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Publique vídeos de tours pelos ambientes concluídos e fotos em alta resolução dos projetos da marcenaria.</p>
+            <h3 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">Catálogo de Mídias (Vídeos & Fotos)</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Publique vídeos pelo Google Drive, YouTube ou fotos de alta resolução dos projetos da DK.</p>
           </div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button type="button" class="btn btn-primary btn-sm" onclick="openNewMediaModal('video')" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
-              <span>🎥 + Adicionar Vídeo</span>
+            <button type="button" class="btn btn-primary btn-sm" onclick="openNewMediaModal('gdrive')" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(138, 79, 38, 0.28);">
+              <span>📁 + Adicionar Vídeo do Google Drive</span>
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="syncGoogleDriveFolderMedia()" title="Recarregar todas as mídias da pasta do Google Drive" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <span>🔄 Sincronizar Pasta do Drive</span>
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="openNewMediaModal('video')" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <span>🎥 + Outro Vídeo</span>
             </button>
             <button type="button" class="btn btn-outline btn-sm" onclick="openNewMediaModal('foto')" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
               <span>📷 + Adicionar Foto</span>
@@ -888,62 +894,127 @@
     </div>
   </div>
 
-  <!-- MODAL: ADICIONAR VÍDEO OU FOTO AO CATÁLOGO (REFATORADO) -->
+  <!-- MODAL: ADICIONAR VÍDEO OU FOTO AO CATÁLOGO (COM SUPORTE GOOGLE DRIVE) -->
   <div class="modal-overlay" id="photoModal">
-    <div class="modal-content" style="max-width: 560px;">
+    <div class="modal-content" style="max-width: 580px;">
       <div class="modal-header" style="border-bottom: 1px solid var(--border-soft); padding-bottom: 14px; margin-bottom: 18px;">
         <div>
           <h4 class="modal-title" style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0;">Publicar Projeto no Portfólio</h4>
-          <p style="font-size: 12.5px; color: var(--text-muted); margin: 3px 0 0 0;">Vídeos de ambientes e fotografias em alta resolução dos trabalhos da DK.</p>
+          <p style="font-size: 12.5px; color: var(--text-muted); margin: 3px 0 0 0;">Adicione vídeos através do Google Drive, YouTube ou fotografias em alta resolução.</p>
         </div>
         <button type="button" class="close-modal" onclick="closeModal('photoModal')">&times;</button>
       </div>
 
       <form id="photoForm" onsubmit="handleSaveMedia(event)">
-        <!-- SELETOR PRINCIPAL: VÍDEO vs FOTO -->
+        <!-- SELETOR PRINCIPAL DE ORIGEM -->
         <div style="margin-bottom: 18px;">
-          <label class="form-label" style="font-weight: 700; margin-bottom: 8px;">Tipo de Mídia *</label>
+          <label class="form-label" style="font-weight: 700; margin-bottom: 8px;">Tipo de Mídia / Plataforma *</label>
           <div class="media-type-selector-tabs">
-            <button type="button" class="media-type-tab active" id="tabSelectVideo" onclick="selectMediaType('video')">
-              <span style="font-size: 16px;">🎥</span>
-              <span>Vídeo do Projeto</span>
+            <button type="button" class="media-type-tab active" id="tabSelectGdrive" onclick="selectMediaType('gdrive')">
+              <span style="font-size: 15px;">📁</span>
+              <span>Google Drive</span>
+            </button>
+            <button type="button" class="media-type-tab" id="tabSelectVideo" onclick="selectMediaType('video')">
+              <span style="font-size: 15px;">🎥</span>
+              <span>YouTube / MP4</span>
             </button>
             <button type="button" class="media-type-tab" id="tabSelectFoto" onclick="selectMediaType('foto')">
-              <span style="font-size: 16px;">📷</span>
-              <span>Fotografia em Alta</span>
+              <span style="font-size: 15px;">📷</span>
+              <span>Fotografia</span>
             </button>
           </div>
           <input type="hidden" id="mediaTipo" value="video">
         </div>
 
-        <!-- PAINEL EXCLUSIVO: OPÇÕES DE VÍDEO -->
-        <div id="videoSourceOptions" style="background: #fbf9f6; border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px; margin-bottom: 18px;">
+        <!-- 1. BLOCO DEDICADO: VÍDEO DO GOOGLE DRIVE -->
+        <div id="gdriveSourceOptions" style="background: #fbf9f6; border: 1px solid var(--border-soft); border-left: 4px solid var(--wood-primary); border-radius: 12px; padding: 18px; margin-bottom: 18px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 26px; height: 26px; border-radius: 6px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px;">📁</div>
+              <strong style="font-size: 13.5px; color: #0f172a;">Vídeo Hospedado no Google Drive</strong>
+            </div>
+            <span class="badge badge-success" style="font-size: 11px;">Transmissão Direta</span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label for="gdriveUrlInput" style="font-size: 12.5px; font-weight: 600;">Link de Compartilhamento do Vídeo no Google Drive *</label>
+            <input type="url" id="gdriveUrlInput" class="form-control" 
+                   placeholder="Ex: https://drive.google.com/file/d/1KYP9CVH94EqBlIJno7avKsTkxYf6xFCs/view?usp=sharing" 
+                   oninput="handleGdriveUrlChange(this.value)">
+            <p style="font-size: 11.5px; color: var(--text-muted); margin: 5px 0 0 0;">
+              💡 <em>No Google Drive, clique no vídeo com botão direito > Compartilhar > marque <strong>"Qualquer pessoa com o link pode ver"</strong>.</em>
+            </p>
+          </div>
+
+          <!-- SELETOR DE PROPORÇÃO PARA O GOOGLE DRIVE -->
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label style="font-size: 12.5px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block;">Proporção do Vídeo gravado no celular / câmera:</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #ffffff; border: 1px solid var(--border-soft); border-radius: 8px; cursor: pointer; font-size: 12.5px; font-weight: 600;">
+                <input type="radio" name="gdriveProporcao" id="gdriveProporcaoVertical" value="vertical" checked onchange="updateGdriveProportionPreview()">
+                <span>📱 Vertical (9:16 / Reels / Stories)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #ffffff; border: 1px solid var(--border-soft); border-radius: 8px; cursor: pointer; font-size: 12.5px; font-weight: 600;">
+                <input type="radio" name="gdriveProporcao" id="gdriveProporcaoHorizontal" value="horizontal" onchange="updateGdriveProportionPreview()">
+                <span>🖥️ Horizontal (16:9 / Widescreen)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- FOTO DE CAPA PERSONALIZADA (OPCIONAL) -->
+          <div class="form-group" style="margin-bottom: 6px;">
+            <label for="gdrivePosterInput" style="font-size: 12px; font-weight: 600;">Link de Foto de Capa / Thumbnail (Opcional):</label>
+            <input type="url" id="gdrivePosterInput" class="form-control" placeholder="https://exemplo.com/capa.jpg (ou deixe vazio para capa padrão)">
+          </div>
+
+          <div id="gdriveUrlFeedback" style="display: none; margin-top: 10px; font-size: 12px; padding: 8px 12px; border-radius: 8px;"></div>
+
+          <!-- PREVIEW EM TEMPO REAL DO GOOGLE DRIVE -->
+          <div id="gdrivePreviewContainer" style="margin-top: 14px; display: none; background: #ffffff; border: 1px solid var(--border-soft); border-radius: 10px; padding: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 700; color: #0f172a;">Prévia do Player do Google Drive</span>
+              <button type="button" class="btn btn-outline btn-sm" onclick="clearSelectedMedia()" style="font-size: 11px; padding: 2px 8px;">Limpar</button>
+            </div>
+            <div id="gdrivePreviewSlot"></div>
+          </div>
+        </div>
+
+        <!-- 2. BLOCO DEDICADO: YOUTUBE / UPLOAD DIRETO -->
+        <div id="videoSourceOptions" style="display: none; background: #fbf9f6; border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px; margin-bottom: 18px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
             <label class="form-label" style="font-size: 13px; font-weight: 700; margin: 0; color: var(--wood-primary);">
               Origem do Vídeo:
             </label>
             <div style="display: flex; gap: 6px;">
               <button type="button" class="media-source-pill active" id="pillSourceUrl" onclick="selectVideoSource('url')">
-                🔗 Link (YouTube / Shorts / Nuvem)
+                🔗 Link (YouTube / Shorts)
               </button>
               <button type="button" class="media-source-pill" id="pillSourceUpload" onclick="selectVideoSource('upload')">
-                📤 Arquivo (MP4 / Celular)
+                📤 Arquivo (MP4 Local)
               </button>
             </div>
           </div>
 
-          <!-- BLOCO 1: LINK DE VÍDEO (YOUTUBE / SHORTS / VIMEO / MP4) -->
           <div id="videoSourceUrlBox">
             <div class="form-group" style="margin-bottom: 6px;">
               <label for="mediaUrlInput" style="font-size: 12.5px; font-weight: 600;">Link do Vídeo (YouTube, YouTube Shorts, Vimeo ou link direto MP4):</label>
               <input type="url" id="mediaUrlInput" class="form-control" 
-                     placeholder="Ex: https://www.youtube.com/watch?v=... ou https://youtu.be/..."
+                     placeholder="Ex: https://www.youtube.com/watch?v=... ou https://youtu.be/..." 
                      oninput="handleVideoUrlChange(this.value)">
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 8px;">
+              <label style="font-size: 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="radio" name="videoProporcao" id="videoProporcaoHorizontal" value="horizontal" checked>
+                <span>🖥️ Horizontal (Widescreen)</span>
+              </label>
+              <label style="font-size: 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="radio" name="videoProporcao" id="videoProporcaoVertical" value="vertical">
+                <span>📱 Vertical (Shorts/Reels)</span>
+              </label>
             </div>
             <div id="videoUrlFeedback" style="display: none; margin-top: 8px; font-size: 12px; padding: 8px 12px; border-radius: 8px;"></div>
           </div>
 
-          <!-- BLOCO 2: ARQUIVO DO DISPOSITIVO (MP4 / CELULAR) -->
           <div id="videoSourceUploadBox" style="display: none;">
             <div class="media-dropzone" onclick="document.getElementById('mediaFileInput').click()">
               <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(138, 79, 38, 0.1); color: var(--wood-primary); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px;">
@@ -955,7 +1026,6 @@
             <input type="file" id="mediaFileInput" accept="video/mp4,video/quicktime,video/webm,video/*" style="display: none;" onchange="previewMediaFile(this)">
           </div>
 
-          <!-- PREVIEW DO VÍDEO COM PLAYER E FOTO DE CAPA -->
           <div id="mediaPreviewContainer" style="margin-top: 14px; display: none; background: #ffffff; border: 1px solid var(--border-soft); border-radius: 10px; padding: 12px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="font-size: 12px; font-weight: 700; color: #0f172a;" id="mediaPreviewLabel">Pré-visualização do Vídeo</span>
@@ -963,7 +1033,6 @@
             </div>
             <div id="mediaPreviewSlot" style="border-radius: 8px; overflow: hidden; background: #000; text-align: center;"></div>
             
-            <!-- CAPA / POSTER DO VÍDEO -->
             <div id="videoPosterContainer" style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-soft); display: none;">
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
                 <div>
@@ -976,15 +1045,25 @@
           </div>
         </div>
 
-        <!-- PAINEL EXCLUSIVO: OPÇÕES DE FOTO -->
+        <!-- 3. BLOCO DEDICADO: FOTOGRAFIA EM ALTA -->
         <div id="fotoSourceOptions" style="display: none; background: #fbf9f6; border: 1px solid var(--border-soft); border-radius: 12px; padding: 16px; margin-bottom: 18px;">
           <div class="form-group" style="margin-bottom: 12px;">
             <label for="fotoFileInput" style="font-size: 12.5px; font-weight: 600;">Selecione a fotografia do dispositivo:</label>
             <input type="file" id="fotoFileInput" accept="image/*" class="form-control" onchange="previewFotoFile(this)">
           </div>
-          <div class="form-group" style="margin-bottom: 0;">
+          <div class="form-group" style="margin-bottom: 10px;">
             <label for="fotoUrlInput" style="font-size: 12.5px; font-weight: 600;">Ou informe a URL direta da imagem:</label>
             <input type="url" id="fotoUrlInput" class="form-control" placeholder="https://exemplo.com/foto.jpg" oninput="handleFotoUrlChange(this.value)">
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <label style="font-size: 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="radio" name="fotoProporcao" id="fotoProporcaoHorizontal" value="horizontal" checked>
+              <span>🖥️ Horizontal (Paisagem / 16:9)</span>
+            </label>
+            <label style="font-size: 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="radio" name="fotoProporcao" id="fotoProporcaoVertical" value="vertical">
+              <span>📱 Vertical (Retrato / 3:4)</span>
+            </label>
           </div>
           <div id="fotoPreviewContainer" style="margin-top: 12px; display: none; text-align: center;">
             <div id="fotoPreviewSlot"></div>
@@ -1041,7 +1120,7 @@
         </div>
 
         <button type="submit" id="btnSubmitMedia" class="btn btn-primary" style="margin-top: 10px; width: 100%; padding: 14px; font-weight: 700; font-size: 14.5px;">
-          Publicar no Catálogo
+          Publicar no Portfólio
         </button>
       </form>
     </div>

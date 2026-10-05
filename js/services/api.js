@@ -76,15 +76,29 @@ async function fetchCloudData(showFeedback = false) {
     ]);
 
     if (pRes.data) {
-      db.portfolio = pRes.data.map(item => ({
+      const cloudItems = pRes.data.map(item => ({
         id: item.id,
         tipoMidia: item.tipo_midia,
+        proporcao: item.proporcao || 'horizontal',
+        gdriveId: item.gdrive_id || '',
+        gdriveLink: item.gdrive_link || '',
         titulo: item.titulo,
         categoria: item.categoria,
         descricao: item.descricao,
         midiaUrl: item.midia_url,
-        posterUrl: item.poster_url
+        posterUrl: item.poster_url,
+        tipoRegistro: item.tipo_registro || ''
       }));
+
+      const cloudGdriveIds = new Set(cloudItems.map(p => p.gdriveId).filter(Boolean));
+      const cloudTitles = new Set(cloudItems.map(p => p.titulo));
+      const seeds = (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' ? DEFAULT_REAL_PORTFOLIO : []);
+      
+      const missingSeeds = seeds.filter(s => 
+        (!s.gdriveId || !cloudGdriveIds.has(s.gdriveId)) && !cloudTitles.has(s.titulo)
+      );
+
+      db.portfolio = [...cloudItems, ...missingSeeds];
       saveCacheDB("portfolio", db.portfolio);
     }
 
