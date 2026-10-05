@@ -386,9 +386,10 @@ function renderPublicCatalog() {
       `;
     } else {
       const badgeFormat = isVertical ? '📱 VERTICAL' : '🖥️ PANORÂMICA';
+      const imgSrc = (item.midiaUrl && item.midiaUrl.endsWith('.pdf')) ? (item.posterUrl || 'assets/portfolio/pdf_page1.jpg') : item.midiaUrl;
       mediaTag = `
         <div class="project-media-wrapper-aspect ${isVertical ? 'aspect-vertical-9-16' : 'aspect-horizontal-16-11'}">
-          <img src="${item.midiaUrl}" alt="${item.titulo}" class="project-media" loading="lazy">
+          <img src="${imgSrc}" alt="${item.titulo}" class="project-media" loading="lazy">
           <span class="project-media-type-badge badge-photo-subtle">${badgeFormat}</span>
         </div>
       `;
@@ -459,14 +460,15 @@ function openProjectDetails(projectId) {
   const isVideo = isVideoMedia(project);
   const isVertical = project.proporcao === 'vertical';
 
-  // Ajusta a largura do modal de acordo com a proporção para ficar esteticamente perfeito
+  // Ajusta a largura e proporção do modal de forma totalmente responsiva
   const modalCard = modal.querySelector('.modal-content');
   if (modalCard) {
     if (isVertical) {
-      modalCard.style.maxWidth = '480px';
+      modalCard.classList.add('is-vertical-card');
     } else {
-      modalCard.style.maxWidth = '860px';
+      modalCard.classList.remove('is-vertical-card');
     }
+    modalCard.style.maxWidth = '';
   }
 
   if (specsEl) {
@@ -496,14 +498,18 @@ function openProjectDetails(projectId) {
     mediaContainer.innerHTML = '';
 
     if (isVideo) {
-      const vSource = parseVideoSource(project.midiaUrl);
+      let mediaSourceUrl = project.midiaUrl;
+      if (project.gdriveId && (!mediaSourceUrl || mediaSourceUrl.endsWith(".mp4"))) {
+        mediaSourceUrl = "https://drive.google.com/file/d/" + project.gdriveId + "/preview";
+      }
+      const vSource = parseVideoSource(mediaSourceUrl);
 
       if (vSource.type === 'gdrive') {
         // Player Oficial do Google Drive (Preview Embed)
         mediaContainer.innerHTML = `
-          <div style="position: relative; width: 100%; ${isVertical ? 'aspect-ratio: 9/16; max-height: 72vh; max-width: 420px; margin: 0 auto;' : 'aspect-ratio: 16/9; max-height: 60vh;'} overflow: hidden; border-radius: 12px; background: #000; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+          <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
             <iframe src="${vSource.embedUrl}" 
-                    style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+                    title="${project.titulo}"
                     allow="autoplay; encrypted-media; fullscreen" 
                     allowfullscreen>
             </iframe>
@@ -513,9 +519,9 @@ function openProjectDetails(projectId) {
         // Player do YouTube
         const isShorts = vSource.isShorts || isVertical;
         mediaContainer.innerHTML = `
-          <div style="position: relative; width: 100%; ${isShorts ? 'aspect-ratio: 9/16; max-height: 72vh; max-width: 420px; margin: 0 auto;' : 'padding-bottom: 56.25%; height: 0;'} overflow: hidden; border-radius: 12px; background: #000;">
+          <div class="project-modal-stage ${isShorts ? 'stage-vertical' : 'stage-horizontal'}">
             <iframe src="${vSource.embedUrl}" 
-                    style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+                    title="${project.titulo}"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowfullscreen>
             </iframe>
@@ -523,9 +529,9 @@ function openProjectDetails(projectId) {
         `;
       } else if (vSource.type === 'vimeo') {
         mediaContainer.innerHTML = `
-          <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000;">
+          <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
             <iframe src="${vSource.embedUrl}" 
-                    style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+                    title="${project.titulo}"
                     allow="autoplay; fullscreen; picture-in-picture" 
                     allowfullscreen>
             </iframe>
@@ -534,22 +540,32 @@ function openProjectDetails(projectId) {
       } else {
         // Vídeo Direto MP4
         mediaContainer.innerHTML = `
-          <div style="text-align: center; background: #000; border-radius: 12px; overflow: hidden;">
+          <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
             <video src="${project.midiaUrl}" 
                    ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
-                   controls autoplay playsinline 
-                   style="width: 100%; ${isVertical ? 'max-height: 70vh; max-width: 420px;' : 'max-height: 520px;'} object-fit: contain; margin: 0 auto; display: block;">
+                   controls autoplay playsinline>
             </video>
           </div>
         `;
       }
     } else {
-      // Fotografia
-      mediaContainer.innerHTML = `
-        <div style="text-align: center; background: #000; border-radius: 12px; overflow: hidden;">
-          <img src="${project.midiaUrl}" alt="${project.titulo}" style="width: 100%; ${isVertical ? 'max-height: 72vh; max-width: 440px;' : 'max-height: 520px;'} object-fit: contain; margin: 0 auto; display: block;">
-        </div>
-      `;
+      // Fotografia ou Documento
+      if (project.midiaUrl && project.midiaUrl.endsWith('.pdf')) {
+        mediaContainer.innerHTML = `
+          <div class="project-modal-stage stage-vertical" style="position: relative;">
+            <img src="${project.posterUrl || 'assets/portfolio/pdf_page1.jpg'}" alt="${project.titulo}">
+            <a href="${project.midiaUrl}" target="_blank" class="btn btn-primary btn-sm" style="position: absolute; bottom: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.5); z-index: 10;">
+              📄 Abrir Caderno Técnico PDF
+            </a>
+          </div>
+        `;
+      } else {
+        mediaContainer.innerHTML = `
+          <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
+            <img src="${project.midiaUrl}" alt="${project.titulo}">
+          </div>
+        `;
+      }
     }
   }
 

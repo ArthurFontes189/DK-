@@ -172,6 +172,11 @@
 
 
 
+        <!-- Barra de Filtros de Formato e Mídia -->
+        <div class="portfolio-format-bar-container" id="portfolioFormatBar">
+          <!-- Renderizado dinamicamente via portfolio.js -->
+        </div>
+
         <!-- Grade Dinâmica de Projetos Reais -->
         <div class="portfolio-projects-grid" id="portfolioCatalog">
           <!-- Renderizado dinamicamente via portfolio.js -->
@@ -1414,6 +1419,7 @@
   <!-- ============================================== -->
   <div class="modal-overlay" id="projectDetailModal">
     <div class="modal-content project-modal-card">
+      <button type="button" class="project-modal-floating-close" onclick="closeModal('projectDetailModal')" aria-label="Fechar" title="Fechar modal">&times;</button>
       <div class="project-modal-media-wrap" id="projectModalMediaContainer">
         <!-- Renderizado dinamicamente -->
       </div>
