@@ -716,12 +716,15 @@ function renderAdminPortfolio(portfolio) {
           <span class="badge badge-neutral" style="font-size: 11px;">${item.categoria || 'Geral'}</span>
         </div>
       </div>
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
         <button type="button" class="btn btn-outline btn-sm" onclick="openProjectDetails('${item.id}')" title="Assistir ou Inspecionar">
-          ${isVideo ? 'Assistir' : 'Ver'}
+          👁️ ${isVideo ? 'Assistir' : 'Ver'}
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="openEditProjectModal('${item.id}')" title="Editar Informações do Projeto" style="font-weight: 600;">
+          ✏️ Editar
         </button>
         <button type="button" class="btn btn-danger btn-sm" onclick="deletePortfolioItem('${item.id}')" title="Excluir Mídia">
-          Excluir
+          🗑️ Excluir
         </button>
       </div>
     `;
@@ -1360,6 +1363,237 @@ function syncGoogleDriveFolderMedia() {
 }
 
 // ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+// 9. EDIÇÃO DE INFORMAÇÕES DE MÍDIAS (VÍDEO / FOTO / GOOGLE DRIVE)
+// ----------------------------------------------------------------------------
+
+function openEditProjectModal(projectId) {
+  const allProjects = getAllPortfolioProjects();
+  const project = allProjects.find(p => String(p.id) === String(projectId));
+  if (!project) {
+    showToast('Projeto não encontrado para edição.', 'warning');
+    return;
+  }
+
+  const idInput = document.getElementById('editProjectId');
+  const tituloInput = document.getElementById('editProjectTitulo');
+  const catInput = document.getElementById('editProjectCategoria');
+  const tipoRegInput = document.getElementById('editProjectTipoRegistro');
+  const tipoMidiaInput = document.getElementById('editProjectTipoMidia');
+  const proporcaoInput = document.getElementById('editProjectProporcao');
+  const midiaUrlInput = document.getElementById('editProjectMidiaUrl');
+  const posterUrlInput = document.getElementById('editProjectPosterUrl');
+  const descInput = document.getElementById('editProjectDesc');
+
+  if (idInput) idInput.value = project.id;
+  if (tituloInput) tituloInput.value = project.titulo || '';
+  if (catInput) catInput.value = project.categoria || 'Marcenaria Sob Medida';
+  if (tipoRegInput) tipoRegInput.value = project.tipoRegistro || 'ambiente_finalizado';
+  if (tipoMidiaInput) tipoMidiaInput.value = isVideoMedia(project) ? 'video' : 'foto';
+  if (proporcaoInput) proporcaoInput.value = project.proporcao || 'horizontal';
+  if (midiaUrlInput) midiaUrlInput.value = project.midiaUrl || '';
+  if (posterUrlInput) posterUrlInput.value = project.posterUrl || '';
+  if (descInput) descInput.value = project.descricao || '';
+
+  updateEditMediaPreview();
+  openModal('editProjectModal');
+}
+
+function updateEditMediaPreview() {
+  const midiaUrl = document.getElementById('editProjectMidiaUrl') ? document.getElementById('editProjectMidiaUrl').value.trim() : '';
+  const posterUrl = document.getElementById('editProjectPosterUrl') ? document.getElementById('editProjectPosterUrl').value.trim() : '';
+  const tipoMidia = document.getElementById('editProjectTipoMidia') ? document.getElementById('editProjectTipoMidia').value : 'video';
+  const proporcao = document.getElementById('editProjectProporcao') ? document.getElementById('editProjectProporcao').value : 'horizontal';
+  const isVertical = proporcao === 'vertical';
+
+  const previewSlot = document.getElementById('editMediaPreviewSlot');
+  const typeTag = document.getElementById('editPreviewTypeTag');
+  const badge = document.getElementById('editMediaUrlBadge');
+
+  if (!previewSlot) return;
+
+  if (!midiaUrl) {
+    previewSlot.innerHTML = '<span style="color: #94a3b8; font-size: 12px;">Informe a URL da mídia para visualizar a prévia</span>';
+    if (typeTag) typeTag.textContent = '';
+    if (badge) badge.style.display = 'none';
+    return;
+  }
+
+  // Identifica origem da mídia
+  if (tipoMidia === 'video' || isVideoMedia({ midiaUrl })) {
+    const vSource = parseVideoSource(midiaUrl);
+    
+    if (vSource.type === 'gdrive') {
+      if (typeTag) typeTag.textContent = 'Transmissão Google Drive';
+      if (badge) {
+        badge.style.display = 'block';
+        badge.style.background = '#ecfdf5';
+        badge.style.color = '#065f46';
+        badge.style.border = '1px solid #a7f3d0';
+        badge.innerHTML = `<strong>✓ Google Drive:</strong> Link de streaming pronto (ID: <code>${vSource.id}</code>)`;
+      }
+      previewSlot.innerHTML = `
+        <div style="position: relative; width: 100%; ${isVertical ? 'aspect-ratio: 9/16; max-height: 240px; max-width: 150px; margin: 0 auto;' : 'aspect-ratio: 16/9; max-height: 200px;'} overflow: hidden; border-radius: 8px; background: #000;">
+          <iframe src="${vSource.embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
+        </div>
+      `;
+    } else if (vSource.type === 'youtube') {
+      if (typeTag) typeTag.textContent = vSource.isShorts ? 'YouTube Shorts' : 'YouTube';
+      if (badge) {
+        badge.style.display = 'block';
+        badge.style.background = '#ecfdf5';
+        badge.style.color = '#065f46';
+        badge.style.border = '1px solid #a7f3d0';
+        badge.innerHTML = `<strong>✓ YouTube:</strong> Vídeo reconhecido (ID: <code>${vSource.id}</code>)`;
+      }
+      previewSlot.innerHTML = `
+        <div style="position: relative; width: 100%; ${vSource.isShorts || isVertical ? 'aspect-ratio: 9/16; max-height: 240px; max-width: 150px; margin: 0 auto;' : 'aspect-ratio: 16/9; max-height: 200px;'} overflow: hidden; border-radius: 8px; background: #000;">
+          <iframe src="${vSource.embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
+        </div>
+      `;
+    } else if (vSource.type === 'vimeo') {
+      if (typeTag) typeTag.textContent = 'Vimeo';
+      if (badge) {
+        badge.style.display = 'block';
+        badge.style.background = '#ecfdf5';
+        badge.style.color = '#065f46';
+        badge.style.border = '1px solid #a7f3d0';
+        badge.innerHTML = '<strong>✓ Vimeo:</strong> Vídeo reconhecido';
+      }
+      previewSlot.innerHTML = `
+        <div style="position: relative; width: 100%; aspect-ratio: 16/9; max-height: 200px; overflow: hidden; border-radius: 8px; background: #000;">
+          <iframe src="${vSource.embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
+        </div>
+      `;
+    } else {
+      if (typeTag) typeTag.textContent = 'Vídeo Direto / CDN';
+      if (badge) {
+        badge.style.display = 'block';
+        badge.style.background = '#f0fdf4';
+        badge.style.color = '#15803d';
+        badge.style.border = '1px solid #bbf7d0';
+        badge.innerHTML = '<strong>✓ Link de Vídeo:</strong> Reprodução HTML5 nativa';
+      }
+      previewSlot.innerHTML = `
+        <div style="position: relative; width: 100%; ${isVertical ? 'aspect-ratio: 9/16; max-height: 240px; max-width: 150px; margin: 0 auto;' : 'aspect-ratio: 16/9; max-height: 200px;'} overflow: hidden; border-radius: 8px; background: #000;">
+          <video src="${midiaUrl}" ${posterUrl ? `poster="${posterUrl}"` : ''} controls playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
+        </div>
+      `;
+    }
+  } else {
+    // Fotografia / Imagem
+    if (typeTag) typeTag.textContent = 'Fotografia / Imagem';
+    if (badge) {
+      badge.style.display = 'block';
+      badge.style.background = '#f0fdf4';
+      badge.style.color = '#15803d';
+      badge.style.border = '1px solid #bbf7d0';
+      badge.innerHTML = '<strong>✓ Imagem:</strong> Carregamento direto';
+    }
+    previewSlot.innerHTML = `
+      <img src="${midiaUrl}" style="max-height: 200px; max-width: 100%; border-radius: 6px; object-fit: contain; margin: 0 auto; display: block;" onerror="this.parentElement.innerHTML='<span style=\'color:#ef4444; font-size:12px;\'>Não foi possível carregar a imagem deste link</span>';">
+    `;
+  }
+}
+
+async function handleSaveProjectEdits(e) {
+  e.preventDefault();
+
+  const id = document.getElementById('editProjectId').value;
+  const titulo = document.getElementById('editProjectTitulo').value.trim();
+  const categoria = document.getElementById('editProjectCategoria').value;
+  const tipoRegistro = document.getElementById('editProjectTipoRegistro').value;
+  const tipoMidia = document.getElementById('editProjectTipoMidia').value;
+  const proporcao = document.getElementById('editProjectProporcao').value;
+  let midiaUrl = document.getElementById('editProjectMidiaUrl').value.trim();
+  const posterUrl = document.getElementById('editProjectPosterUrl') ? document.getElementById('editProjectPosterUrl').value.trim() : '';
+  const descricao = document.getElementById('editProjectDesc') ? document.getElementById('editProjectDesc').value.trim() : '';
+
+  if (!titulo) {
+    showToast('O título do projeto é obrigatório.', 'warning');
+    return;
+  }
+  if (!midiaUrl) {
+    showToast('Informe o link ou URL da mídia.', 'warning');
+    return;
+  }
+
+  // Normalização automática de Google Drive
+  let gdriveId = extractGoogleDriveId(midiaUrl) || '';
+  let gdriveLink = '';
+  if (gdriveId) {
+    midiaUrl = 'https://drive.google.com/file/d/' + gdriveId + '/preview';
+    gdriveLink = 'https://drive.google.com/file/d/' + gdriveId + '/view?usp=sharing';
+  }
+
+  const allProjects = getAllPortfolioProjects();
+  let item = allProjects.find(p => String(p.id) === String(id));
+
+  if (!item) {
+    showToast('Projeto não encontrado para salvar.', 'danger');
+    return;
+  }
+
+  // Atualiza propriedades do objeto
+  item.titulo = titulo;
+  item.categoria = categoria;
+  item.tipoRegistro = tipoRegistro;
+  item.tipoMidia = tipoMidia;
+  item.proporcao = proporcao;
+  item.midiaUrl = midiaUrl;
+  item.posterUrl = posterUrl || (tipoMidia === 'foto' ? midiaUrl : item.posterUrl);
+  item.descricao = descricao;
+  if (gdriveId) {
+    item.gdriveId = gdriveId;
+    item.gdriveLink = gdriveLink;
+  }
+
+  // Atualiza no array db.portfolio
+  if (!Array.isArray(db.portfolio)) db.portfolio = [];
+  const pIndex = db.portfolio.findIndex(p => String(p.id) === String(id));
+  if (pIndex !== -1) {
+    db.portfolio[pIndex] = { ...item };
+  } else {
+    db.portfolio.push({ ...item });
+  }
+
+  // Atualiza em DEFAULT_REAL_PORTFOLIO se for um seed padrão
+  if (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' && Array.isArray(DEFAULT_REAL_PORTFOLIO)) {
+    const seedIndex = DEFAULT_REAL_PORTFOLIO.findIndex(p => String(p.id) === String(id));
+    if (seedIndex !== -1) {
+      DEFAULT_REAL_PORTFOLIO[seedIndex] = { ...item };
+    }
+  }
+
+  saveCacheDB('portfolio', db.portfolio);
+
+  // Sincroniza com Supabase se conectado
+  if (typeof sbClient !== 'undefined' && sbClient) {
+    try {
+      await sbClient.from('portfolio').update({
+        titulo: item.titulo,
+        categoria: item.categoria,
+        descricao: item.descricao,
+        midia_url: item.midiaUrl,
+        poster_url: item.posterUrl,
+        proporcao: item.proporcao,
+        tipo_midia: item.tipoMidia,
+        gdrive_id: item.gdriveId || null,
+        tipo_registro: item.tipoRegistro || null
+      }).eq('id', id);
+    } catch (err) {
+      console.warn('Erro ao atualizar projeto no Supabase:', err);
+    }
+  }
+
+  closeModal('editProjectModal');
+  showToast(`Projeto "${titulo}" atualizado com sucesso!`, 'success');
+
+  renderAdminPortfolio(db.portfolio);
+  renderPublicCatalog();
+}
+
 // EXPORTS GLOBAIS
 // ----------------------------------------------------------------------------
 window.extractGoogleDriveId = extractGoogleDriveId;
@@ -1390,3 +1624,7 @@ window.handleSaveMedia = handleSaveMedia;
 window.deletePortfolioItem = deletePortfolioItem;
 
 window.syncGoogleDriveFolderMedia = syncGoogleDriveFolderMedia;
+
+window.openEditProjectModal = openEditProjectModal;
+window.updateEditMediaPreview = updateEditMediaPreview;
+window.handleSaveProjectEdits = handleSaveProjectEdits;

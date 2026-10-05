@@ -1132,6 +1132,143 @@
   </div>
 
   <!-- ============================================== -->
+  <!-- MODAL: EDITAR INFORMAÇÕES DA MÍDIA (PORTFÓLIO) -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="editProjectModal">
+    <div class="modal-content" style="max-width: 620px;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--border-soft); padding-bottom: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 700; color: var(--wood-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px;">
+            Gerenciador de Mídias
+          </div>
+          <h4 class="modal-title" style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0;">
+            Editar Informações do Projeto
+          </h4>
+        </div>
+        <button type="button" class="close-modal" onclick="closeModal('editProjectModal')">&times;</button>
+      </div>
+
+      <form id="editProjectForm" onsubmit="handleSaveProjectEdits(event)">
+        <input type="hidden" id="editProjectId">
+
+        <!-- Título do Projeto -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="editProjectTitulo" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
+            Título do Projeto *
+          </label>
+          <input type="text" id="editProjectTitulo" class="form-control" required placeholder="Ex: Living Integrado com Painel Ripado">
+        </div>
+
+        <!-- Categoria e Destaque -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editProjectCategoria" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
+              Categoria *
+            </label>
+            <select id="editProjectCategoria" class="form-control" required>
+              <option value="Painéis & Revestimentos">Painéis & Revestimentos</option>
+              <option value="Salas & Livings">Salas & Livings</option>
+              <option value="Cozinhas & Gourmet">Cozinhas & Gourmet</option>
+              <option value="Dormitórios & Closets">Dormitórios & Closets</option>
+              <option value="Áreas Externas">Áreas Externas</option>
+              <option value="Marcenaria Sob Medida">Marcenaria Sob Medida</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editProjectTipoRegistro" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
+              Tipo de Registro / Destaque
+            </label>
+            <select id="editProjectTipoRegistro" class="form-control">
+              <option value="ambiente_finalizado">Ambiente Finalizado (Destaque)</option>
+              <option value="foto_ampla">Visão Ampla / Tour Panorâmico</option>
+              <option value="detalhe_acabamento">Detalhe de Acabamento & Marcenaria</option>
+              <option value="processo_fabricacao">Processo de Fabricação / Canteiro</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tipo de Mídia e Proporção -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editProjectTipoMidia" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
+              Tipo de Mídia *
+            </label>
+            <select id="editProjectTipoMidia" class="form-control" required onchange="updateEditMediaPreview()">
+              <option value="video">🎥 Vídeo (Google Drive / YouTube / Link)</option>
+              <option value="foto">📷 Fotografia / Imagem</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="editProjectProporcao" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
+              Proporção Visual *
+            </label>
+            <select id="editProjectProporcao" class="form-control" required onchange="updateEditMediaPreview()">
+              <option value="vertical">📱 Vertical (9:16 - Reels / Shorts / Retrato)</option>
+              <option value="horizontal">🖥️ Horizontal (16:9 - Widescreen / Paisagem)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Link / URL da Mídia -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="editProjectMidiaUrl" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
+            Link / URL da Mídia (Vídeo ou Foto) *
+          </label>
+          <input type="text" id="editProjectMidiaUrl" class="form-control" required 
+                 placeholder="Link do Google Drive, YouTube, Vimeo ou link direto"
+                 oninput="updateEditMediaPreview()">
+          <p style="font-size: 11.5px; color: var(--text-muted); margin: 4px 0 0 0;">
+            Suporta links do <strong>Google Drive</strong>, vídeos do <strong>YouTube / Shorts</strong>, <strong>Vimeo</strong> ou URLs externas.
+          </p>
+          <div id="editMediaUrlBadge" style="display: none; margin-top: 6px; font-size: 12px; padding: 6px 12px; border-radius: 6px;"></div>
+        </div>
+
+        <!-- URL da Capa / Poster -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label for="editProjectPosterUrl" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
+            URL da Foto de Capa (Thumbnail / Poster)
+          </label>
+          <input type="text" id="editProjectPosterUrl" class="form-control" 
+                 placeholder="assets/portfolio/poster_...jpg ou link de capa externo"
+                 oninput="updateEditMediaPreview()">
+        </div>
+
+        <!-- Descrição do Projeto -->
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label for="editProjectDesc" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
+            Descrição e Detalhamento da Marcenaria
+          </label>
+          <textarea id="editProjectDesc" class="form-control" rows="3" style="resize: vertical; font-family: inherit; font-size: 13px;" 
+                    placeholder="Descreva as soluções planejadas, materiais nobres utilizados e detalhes de acabamento..."></textarea>
+        </div>
+
+        <!-- Pré-visualização Dinâmica da Edição -->
+        <div id="editMediaPreviewContainer" style="margin-bottom: 18px; padding: 12px; background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 10px;">
+          <div style="font-size: 12px; font-weight: 700; color: #0f172a; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <span>Pré-visualização da Mídia</span>
+            <span id="editPreviewTypeTag" style="font-size: 11px; color: var(--text-muted); font-weight: 600;"></span>
+          </div>
+          <div id="editMediaPreviewSlot" style="border-radius: 8px; overflow: hidden; background: #000; text-align: center; min-height: 100px; display: flex; align-items: center; justify-content: center;">
+            <span style="color: #94a3b8; font-size: 12px;">Nenhuma prévia carregada</span>
+          </div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div style="display: flex; gap: 10px; justify-content: flex-end; border-top: 1px solid var(--border-soft); padding-top: 14px;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('editProjectModal')">
+            Cancelar
+          </button>
+          <button type="submit" id="btnSaveEditProject" class="btn btn-primary" style="font-weight: 700; padding: 10px 22px;">
+            Salvar Alterações
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
   <!-- MODAL: CADASTRAR / EDITAR FUNCIONÁRIO         -->
   <!-- ============================================== -->
   <div class="modal-overlay" id="employeeModal">
