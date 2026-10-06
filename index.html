@@ -23,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS Standalone Otimizado -->
-  <link rel="stylesheet" href="css/style.css?v=20261002_final_polish">
+  <link rel="stylesheet" href="css/style.css?v=20261006_premium_v1">
 </head>
 <body>
 
@@ -72,9 +72,9 @@
 
       <!-- Ações da Navbar -->
       <div class="nav-actions">
-        <a href="#contato" class="nav-wa-btn" title="Falar com Especialista">
+        <a href="#contato" class="nav-wa-btn" title="Solicitar Orçamento">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
-          <span>Falar com um Especialista</span>
+          <span>Solicitar Orçamento</span>
         </a>
         <button type="button" class="nav-admin-link" id="adminAccessBtn" onclick="handleAdminAccessClick()" title="Acesso Administrativo" aria-label="Acesso Administrativo">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -120,10 +120,11 @@
         </p>
         <div class="hero-editorial-actions">
           <a href="#projetos" class="btn btn-gold btn-lg">
-            <span>Conhecer nossos projetos</span>
+            <span>Ver Projetos</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </a>
           <a href="#contato" class="btn btn-outline-light btn-lg">
-            <span>Falar com um especialista</span>
+            <span>Solicitar Orçamento</span>
           </a>
         </div>
 
@@ -206,10 +207,14 @@
             <p class="portfolio-final-cta-desc">
               Da marcenaria sob medida às soluções em madeira para áreas externas, desenvolvemos projetos personalizados para cada espaço.
             </p>
-            <div class="portfolio-final-cta-actions">
+            <div class="portfolio-final-cta-actions" style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
               <a href="#contato" class="btn btn-primary" onclick="prefillBudget('Projeto Personalizado', 'Marcenaria & Revestimentos')">
-                <span>Falar com a DK Revestimentos</span>
+                <span>Solicitar Orçamento</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+              <a href="https://api.whatsapp.com/send?phone=5561999999999&text=Ol%C3%A1!%20Gostaria%20de%20conversar%20com%20a%20DK%20Revestimentos%20sobre%20um%20projeto%20personalizado." target="_blank" class="btn btn-whatsapp">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
+                <span>Falar pelo WhatsApp</span>
               </a>
             </div>
           </div>
@@ -232,32 +237,32 @@
         </div>
 
         <div class="solutions-grid">
-          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
+          <div class="solution-card" onclick="filterAndScrollPortfolio('MADEIRA & REVESTIMENTOS')">
             <div class="solution-number">01</div>
             <h3>Painéis & Revestimentos</h3>
             <p>Painéis ripados, revestimentos decorativos, portas mimetizadas e soluções integradas à arquitetura.</p>
-            <span class="solution-link">Conhecer solução →</span>
+            <span class="solution-link">Ver projetos relacionados →</span>
           </div>
 
-          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
+          <div class="solution-card" onclick="filterAndScrollPortfolio('MARCENARIA')">
             <div class="solution-number">02</div>
             <h3>Marcenaria Sob Medida</h3>
             <p>Mobiliário desenvolvido para aproveitar o espaço com precisão e criar ambientes únicos.</p>
-            <span class="solution-link">Conhecer solução →</span>
+            <span class="solution-link">Ver projetos relacionados →</span>
           </div>
 
-          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
+          <div class="solution-card" onclick="filterAndScrollPortfolio('MÓVEIS SOB MEDIDA')">
             <div class="solution-number">03</div>
             <h3>Cozinhas, Closets & Suítes</h3>
             <p>Projetos personalizados com atenção especial à organização, funcionalidade e acabamento.</p>
-            <span class="solution-link">Conhecer solução →</span>
+            <span class="solution-link">Ver projetos relacionados →</span>
           </div>
 
-          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
+          <div class="solution-card" onclick="filterAndScrollPortfolio('ÁREAS EXTERNAS')">
             <div class="solution-number">04</div>
             <h3>Ambientes Externos</h3>
             <p>Decks, pergolados e soluções em madeira para áreas externas residenciais e corporativas.</p>
-            <span class="solution-link">Conhecer solução →</span>
+            <span class="solution-link">Ver projetos relacionados →</span>
           </div>
         </div>
       </div>
@@ -407,7 +412,7 @@
 
               <button type="submit" class="btn btn-whatsapp" style="width: 100%; margin-top: 8px; padding: 14px; font-size: 14.5px; font-weight: 700;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
-                <span>Quero conversar com a DK</span>
+                <span>Solicitar Orçamento no WhatsApp</span>
               </button>
               <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 10px; margin-bottom: 0;">Atendimento direto com nossa equipe via WhatsApp.</p>
             </form>
@@ -1338,27 +1343,27 @@
   <!-- ====================================================================== -->
   
   <!-- 1. Configurações Globais & Credenciais Supabase -->
-  <script src="js/config.js?v=20261002_emp_resilient"></script>
+  <script src="js/config.js?v=20261006_premium_v1"></script>
 
   <!-- 2. Serviços de Persistência e Rede -->
-  <script src="js/services/storage.js?v=20261002_emp_resilient"></script>
-  <script src="js/services/api.js?v=20261002_emp_resilient"></script>
+  <script src="js/services/storage.js?v=20261006_premium_v1"></script>
+  <script src="js/services/api.js?v=20261006_premium_v1"></script>
 
   <!-- 3. Componentes de Interface do Usuário (UI) -->
-  <script src="js/ui/toast.js?v=20261002_emp_resilient"></script>
-  <script src="js/ui/modals.js?v=20261002_emp_resilient"></script>
+  <script src="js/ui/toast.js?v=20261006_premium_v1"></script>
+  <script src="js/ui/modals.js?v=20261006_premium_v1"></script>
 
   <!-- 4. Módulos de Regras de Negócio e Domínio -->
-  <script src="js/modules/auth.js?v=20261002_emp_resilient"></script>
-  <script src="js/modules/leads.js?v=20261002_emp_resilient"></script>
-  <script src="js/modules/clients.js?v=20261002_emp_resilient"></script>
-  <script src="js/modules/employees.js?v=20261002_emp_resilient"></script>
-  <script src="js/modules/services.js?v=20261002_emp_resilient"></script>
-  <script src="js/modules/finance.js?v=20261002_emp_resilient"></script>
-  <script src="js/modules/portfolio.js?v=20261002_emp_resilient"></script>
+  <script src="js/modules/auth.js?v=20261006_premium_v1"></script>
+  <script src="js/modules/leads.js?v=20261006_premium_v1"></script>
+  <script src="js/modules/clients.js?v=20261006_premium_v1"></script>
+  <script src="js/modules/employees.js?v=20261006_premium_v1"></script>
+  <script src="js/modules/services.js?v=20261006_premium_v1"></script>
+  <script src="js/modules/finance.js?v=20261006_premium_v1"></script>
+  <script src="js/modules/portfolio.js?v=20261006_premium_v1"></script>
 
   <!-- 5. Bootstrap e Orquestrador da Aplicação -->
-  <script src="js/app.js?v=20261002_emp_resilient"></script>
+  <script src="js/app.js?v=20261006_premium_v1"></script>
 
   <!-- ============================================== -->
   <!-- MODAL: LIGHTBOX / INSPEÇÃO DO PROJETO         -->
@@ -1383,12 +1388,18 @@
         <div class="modal-interest-box">
           <div class="modal-interest-title">GOSTOU DESTE PROJETO?</div>
           <p class="modal-interest-desc">
-            Fale com a DK Revestimentos e desenvolva uma solução sob medida para o seu espaço.
+            Fale com a DK Revestimentos e desenvolva uma solução sob medida inspirada neste trabalho.
           </p>
-          <button type="button" class="btn btn-primary btn-modal-budget" id="projectModalActionBtn">
-            <span>Solicitar Orçamento</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
+          <div class="modal-interest-actions" style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <a href="#" target="_blank" class="btn btn-whatsapp" id="projectModalWhatsAppBtn" style="flex: 1.2; min-width: 200px; padding: 13px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
+              <span>Falar pelo WhatsApp</span>
+            </a>
+            <button type="button" class="btn btn-outline" id="projectModalActionBtn" style="flex: 1; min-width: 170px; padding: 13px;">
+              <span>Solicitar Orçamento</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>

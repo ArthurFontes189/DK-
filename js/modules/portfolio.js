@@ -161,9 +161,8 @@ function renderFeaturedHighlights() {
           <img src="${poster}" alt="${item.titulo}" class="featured-card-img" loading="lazy">
           <div class="featured-card-hover-overlay"></div>
           ${isVideo ? `
-            <span class="card-video-indicator">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-              <span>VER VÍDEO</span>
+            <span class="card-play-indicator" aria-label="Vídeo do projeto" title="Vídeo do projeto">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
             </span>
           ` : ''}
           <div class="featured-card-meta">
@@ -172,7 +171,7 @@ function renderFeaturedHighlights() {
             ${item.subtitulo ? `<p class="featured-card-desc">${item.subtitulo}</p>` : ''}
             <div class="featured-card-cta">
               <span>VER PROJETO</span>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+              <span class="arrow">→</span>
             </div>
           </div>
         </div>
@@ -191,9 +190,8 @@ function renderFeaturedHighlights() {
         <div class="featured-card-hover-overlay"></div>
         <span class="featured-spotlight-pill">★ Obra em Destaque</span>
         ${isPrimaryVideo ? `
-          <span class="card-video-indicator">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>VER VÍDEO</span>
+          <span class="card-play-indicator" aria-label="Vídeo do projeto" title="Vídeo do projeto">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
           </span>
         ` : ''}
         <div class="featured-card-meta">
@@ -202,7 +200,7 @@ function renderFeaturedHighlights() {
           <p class="featured-card-desc">${primaryProject.subtitulo || primaryProject.descricao}</p>
           <div class="featured-card-cta">
             <span>VER PROJETO</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+            <span class="arrow">→</span>
           </div>
         </div>
       </div>
@@ -225,30 +223,45 @@ function setPortfolioCategoryFilter(catId, btnEl) {
   if (wrap) {
     wrap.querySelectorAll('.portfolio-cat-btn').forEach(btn => btn.classList.remove('active'));
   }
-  if (btnEl) btnEl.classList.add('active');
+  if (btnEl) {
+    btnEl.classList.add('active');
+  } else if (wrap) {
+    const targetBtn = wrap.querySelector(`.portfolio-cat-btn[onclick*="'${catId}'"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+  }
+
+  // Bloco de destaques visível apenas na visão geral ('TODOS') para evitar sobreposição ou redundância
+  const highlightsBlock = document.getElementById('portfolioHighlightsBlock');
+  if (highlightsBlock) {
+    if (catId === 'all') {
+      highlightsBlock.style.display = 'block';
+    } else {
+      highlightsBlock.style.display = 'none';
+    }
+  }
+
   renderPublicCatalog();
 }
+
+function filterAndScrollPortfolio(catId) {
+  setPortfolioCategoryFilter(catId);
+  const target = document.getElementById('catalogo') || document.getElementById('projetos');
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+window.filterAndScrollPortfolio = filterAndScrollPortfolio;
 
 function renderCategoryFilterBar() {
   const barWrap = document.getElementById('portfolioCategoryBar');
   if (!barWrap) return;
 
-  const allProjects = getAllPortfolioProjects();
-
   let html = '<div class="portfolio-category-bar">';
   PORTFOLIO_CATEGORIES.forEach(cat => {
-    let count = 0;
-    if (cat.id === 'all') {
-      count = allProjects.length;
-    } else {
-      count = allProjects.filter(p => p.categoria === cat.id).length;
-    }
-
     const isActive = (currentCategoryFilter === cat.id) ? 'active' : '';
     html += `
       <button type="button" class="portfolio-cat-btn ${isActive}" onclick="setPortfolioCategoryFilter('${cat.id}', this)">
         <span>${cat.label}</span>
-        <span class="cat-count-pill">${count}</span>
       </button>
     `;
   });
@@ -301,9 +314,8 @@ function renderPublicCatalog() {
         <img src="${imgSrc}" alt="${item.titulo}" class="project-media" loading="lazy">
         <div class="card-hover-overlay"></div>
         ${isVideo ? `
-          <span class="card-video-indicator">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>VER VÍDEO</span>
+          <span class="card-play-indicator" aria-label="Vídeo do projeto" title="Vídeo do projeto">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
           </span>
         ` : ''}
       </div>
@@ -314,7 +326,7 @@ function renderPublicCatalog() {
         ${item.subtitulo ? `<p class="project-subtitle">${item.subtitulo}</p>` : ''}
         <div class="project-card-action">
           <span>VER PROJETO</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+          <span class="arrow">→</span>
         </div>
       </div>
     `;
@@ -376,32 +388,62 @@ function openProjectDetails(projectId) {
         </div>
       `;
     } else if (isVideo) {
-      // Inicia com capa nítida e botão discreto para assistir vídeo
       const vSource = parseVideoSource(project.midiaUrl);
-      const poster = project.posterUrl || vSource.posterUrl || '';
+      const isDirectFile = vSource.type === 'direct' || (project.midiaUrl && project.midiaUrl.endsWith('.mp4'));
+      const gdriveId = project.gdriveId || extractGoogleDriveId(project.midiaUrl);
 
-      mediaContainer.innerHTML = `
-        <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}" id="modalVideoPlayerSlot" style="position: relative; cursor: pointer;" onclick="playActiveModalVideo()">
-          ${poster ? `
-            <img src="${poster}" alt="${project.titulo}">
-          ` : `
-            <div style="color: #fff; font-size: 36px;">🎥</div>
-          `}
-          <div class="modal-play-overlay">
-            <div class="modal-play-circle">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            </div>
-            <span class="modal-play-text">▶ VER VÍDEO</span>
+      const stageClass = isVertical ? 'stage-vertical' : 'stage-horizontal';
+      const stageStyle = isVertical 
+        ? 'position: relative; width: min(100%, 380px); height: min(54vh, 520px); min-height: 320px; aspect-ratio: 9/16; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;'
+        : 'position: relative; width: 100%; height: min(48vh, 460px); min-height: 240px; aspect-ratio: 16/9; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;';
+
+      if (isDirectFile) {
+        const fallback = gdriveId ? `https://drive.google.com/file/d/${gdriveId}/preview` : '';
+        mediaContainer.innerHTML = `
+          <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
+            <video src="${project.midiaUrl}" 
+                   ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
+                   controls autoplay playsinline 
+                   style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"
+                   onerror="if ('${fallback}') { this.parentElement.innerHTML = '<iframe src=\'${fallback}\' style=\'width:100%;height:100%;border:0;display:block;\' allow=\'autoplay; encrypted-media; fullscreen\' allowfullscreen></iframe>'; }">
+            </video>
           </div>
-        </div>
-      `;
+        `;
+      } else if (vSource.type === 'gdrive' || gdriveId) {
+        const embedUrl = vSource.embedUrl || `https://drive.google.com/file/d/${gdriveId}/preview`;
+        mediaContainer.innerHTML = `
+          <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
+            <iframe src="${embedUrl}" 
+                    style="width: 100%; height: 100%; border: 0; display: block;" 
+                    allow="autoplay; encrypted-media; fullscreen" 
+                    allowfullscreen>
+            </iframe>
+          </div>
+        `;
+      } else if (vSource.type === 'youtube') {
+        mediaContainer.innerHTML = `
+          <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
+            <iframe src="${vSource.embedUrl}" 
+                    style="width: 100%; height: 100%; border: 0; display: block;" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+            </iframe>
+          </div>
+        `;
+      } else {
+        mediaContainer.innerHTML = `
+          <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
+            <video src="${project.midiaUrl}" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"></video>
+          </div>
+        `;
+      }
 
       if (videoActionEl) {
         videoActionEl.style.display = 'block';
         videoActionEl.innerHTML = `
           <button type="button" class="btn btn-outline btn-sm" onclick="playActiveModalVideo()" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; font-size: 13px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>▶ VER VÍDEO</span>
+            <span>▶ REINICIAR VÍDEO</span>
           </button>
         `;
       }
@@ -415,11 +457,18 @@ function openProjectDetails(projectId) {
     }
   }
 
-  // Ação do Botão [ SOLICITAR ORÇAMENTO ]
+  // Ação dos Botões de Conversão Comercial
   if (actionBtn) {
     actionBtn.onclick = () => {
       handleProjectModalBudget(project.titulo, project.categoria);
     };
+  }
+
+  const modalWaBtn = document.getElementById('projectModalWhatsAppBtn');
+  if (modalWaBtn) {
+    const waText = encodeURIComponent(`Olá! Vi o projeto *${project.titulo}* (${project.categoria || 'Marcenaria'}) no site da DK Revestimentos e gostaria de solicitar um orçamento.`);
+    const waPhone = (typeof MARANARIA_WHATSAPP !== 'undefined') ? MARANARIA_WHATSAPP : '5561999999999';
+    modalWaBtn.href = `https://api.whatsapp.com/send?phone=${waPhone}&text=${waText}`;
   }
 
   openModal('projectDetailModal');
@@ -432,29 +481,38 @@ function playActiveModalVideo() {
   if (!project || !isVideoMedia(project)) return;
 
   const slot = document.getElementById('modalVideoPlayerSlot');
-  const videoActionEl = document.getElementById('projectModalVideoAction');
   if (!slot) return;
 
-  currentModalVideoActive = true;
-  if (videoActionEl) videoActionEl.style.display = 'none';
-
+  const isVertical = project.proporcao === 'vertical';
   const vSource = parseVideoSource(project.midiaUrl);
+  const isDirectFile = vSource.type === 'direct' || (project.midiaUrl && project.midiaUrl.endsWith('.mp4'));
   const gdriveId = project.gdriveId || extractGoogleDriveId(project.midiaUrl);
 
-  if (vSource.type === 'direct' || (project.midiaUrl && project.midiaUrl.endsWith('.mp4'))) {
+  const stageClass = isVertical ? 'stage-vertical' : 'stage-horizontal';
+  const stageStyle = isVertical 
+    ? 'position: relative; width: min(100%, 380px); height: min(54vh, 520px); min-height: 320px; aspect-ratio: 9/16; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;'
+    : 'position: relative; width: 100%; height: min(48vh, 460px); min-height: 240px; aspect-ratio: 16/9; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;';
+
+  slot.className = `project-modal-stage ${stageClass}`;
+  slot.setAttribute('style', stageStyle);
+
+  if (isDirectFile) {
     const fallback = gdriveId ? `https://drive.google.com/file/d/${gdriveId}/preview` : '';
     slot.innerHTML = `
       <video src="${project.midiaUrl}" 
+             ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
              controls autoplay playsinline 
-             style="width: 100%; height: 100%; object-fit: contain; background: #000;"
-             onerror="if ('${fallback}') { this.parentElement.innerHTML = '<iframe src=\\'${fallback}\\' style=\\'position:absolute;top:0;left:0;width:100%;height:100%;border:0;\\' allow=\\'autoplay; encrypted-media; fullscreen\\' allowfullscreen></iframe>'; }">
+             style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"
+             onerror="if ('${fallback}') { this.parentElement.innerHTML = '<iframe src=\'${fallback}\' style=\'width:100%;height:100%;border:0;display:block;\' allow=\'autoplay; encrypted-media; fullscreen\' allowfullscreen></iframe>'; }">
       </video>
     `;
+    const vid = slot.querySelector('video');
+    if (vid) vid.play().catch(e => console.log('Autoplay prevented:', e));
   } else if (vSource.type === 'gdrive' || gdriveId) {
     const embedUrl = vSource.embedUrl || `https://drive.google.com/file/d/${gdriveId}/preview`;
     slot.innerHTML = `
       <iframe src="${embedUrl}" 
-              style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+              style="width: 100%; height: 100%; border: 0; display: block;" 
               allow="autoplay; encrypted-media; fullscreen" 
               allowfullscreen>
       </iframe>
@@ -462,14 +520,14 @@ function playActiveModalVideo() {
   } else if (vSource.type === 'youtube') {
     slot.innerHTML = `
       <iframe src="${vSource.embedUrl}" 
-              style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+              style="width: 100%; height: 100%; border: 0; display: block;" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
               allowfullscreen>
       </iframe>
     `;
   } else {
     slot.innerHTML = `
-      <video src="${project.midiaUrl}" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
+      <video src="${project.midiaUrl}" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"></video>
     `;
   }
 }
@@ -608,7 +666,7 @@ function renderAdminPortfolio(portfolio) {
         </div>
         <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
           <span class="badge ${originClass}" style="font-size: 11px;">${originLabel}</span>
-          <span class="badge badge-neutral" style="font-size: 11px;">${isVideo ? '🎥 Vídeo' : '📷 Foto'} • ${isVertical ? '📱 Vertical' : '🖥️ Horizontal'}</span>
+          <span class="badge badge-neutral" style="font-size: 11px;">${isVideo ? 'Vídeo' : 'Foto'}</span>
           <span class="badge badge-neutral" style="font-size: 11px; font-weight: 700;">${item.categoria || 'Geral'}</span>
         </div>
       </div>
