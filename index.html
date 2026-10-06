@@ -157,30 +157,64 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- 2. PROJETOS (MOSTRAMOS RESULTADOS — CORAÇÃO DO SITE)         -->
+    <!-- 2. CATÁLOGO VISUAL DE TRABALHOS REALIZADOS (ALTO PADRÃO)     -->
     <!-- ============================================================ -->
     <section id="projetos" class="portfolio-section-editorial" style="scroll-margin-top: 100px;">
       <div id="catalogo"></div>
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Portfólio</span>
-          <h2 class="section-title">Projetos que ganharam forma</h2>
+        
+        <!-- Cabeçalho da Seção -->
+        <div class="section-header" style="text-align: center; max-width: 760px; margin: 0 auto 38px auto;">
+          <span class="section-tag">Trabalhos Realizados</span>
+          <h2 class="section-title">Projetos que Ganharam Forma</h2>
           <p class="section-desc">
-            Conheça alguns dos ambientes executados pela DK e veja como cada detalhe é pensado para integrar estética, funcionalidade e acabamento.
+            Conheça alguns dos trabalhos executados pela DK Revestimentos. Cada obra expressa o cuidado artesanal, a precisão da marcenaria e a sofisticação da madeira aplicada a cada espaço.
           </p>
         </div>
 
+        <!-- 7. PROJETOS EM DESTAQUE (COMPOSIÇÃO DE ALTO IMPACTO VISUAL) -->
+        <div class="portfolio-featured-block" id="portfolioHighlightsBlock">
+          <div class="portfolio-featured-header">
+            <span class="portfolio-featured-tag">Seleção Especial</span>
+            <h3 class="portfolio-featured-title">Destaques</h3>
+          </div>
+          <div class="portfolio-featured-grid" id="portfolioHighlightsGrid">
+            <!-- Renderizado dinamicamente via portfolio.js -->
+          </div>
+        </div>
 
+        <!-- Título da Galeria Completa -->
+        <div class="portfolio-gallery-header">
+          <h3 class="portfolio-gallery-title">Galeria de Trabalhos</h3>
+        </div>
 
-        <!-- Barra de Filtros de Formato e Mídia -->
-        <div class="portfolio-format-bar-container" id="portfolioFormatBar">
+        <!-- 3. BARRA DE FILTROS MINIMALISTA POR CATEGORIAS -->
+        <div class="portfolio-category-bar-wrap" id="portfolioCategoryBar">
           <!-- Renderizado dinamicamente via portfolio.js -->
         </div>
 
-        <!-- Grade Dinâmica de Projetos Reais -->
+        <!-- 4. GRADE COMPLETA DE CARDS ELEGANTES -->
         <div class="portfolio-projects-grid" id="portfolioCatalog">
           <!-- Renderizado dinamicamente via portfolio.js -->
         </div>
+
+        <!-- 11. CTA COMERCIAL ELEGANTE FINAL -->
+        <div class="portfolio-final-cta-card">
+          <div class="portfolio-final-cta-content">
+            <span class="portfolio-final-cta-tag">Atendimento Personalizado</span>
+            <h3 class="portfolio-final-cta-title">Tem um projeto em mente?</h3>
+            <p class="portfolio-final-cta-desc">
+              Da marcenaria sob medida às soluções em madeira para áreas externas, desenvolvemos projetos personalizados para cada espaço.
+            </p>
+            <div class="portfolio-final-cta-actions">
+              <a href="#contato" class="btn btn-primary" onclick="prefillBudget('Projeto Personalizado', 'Marcenaria & Revestimentos')">
+                <span>Falar com a DK Revestimentos</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -943,13 +977,11 @@
               Categoria do Ambiente *
             </label>
             <select id="editorProjectCategoria" class="form-control" style="font-size: 13.5px;">
-              <option value="Marcenaria Sob Medida">Marcenaria Sob Medida</option>
-              <option value="Cozinhas & Gourmet">Cozinhas & Gourmet</option>
-              <option value="Dormitórios & Closets">Dormitórios & Closets</option>
-              <option value="Painéis & Revestimentos">Painéis & Revestimentos</option>
-              <option value="Salas & Livings">Salas & Livings</option>
-              <option value="Áreas Externas">Áreas Externas</option>
-              <option value="Banheiros & Lavabos">Banheiros & Lavabos</option>
+              <option value="MARCENARIA">MARCENARIA</option>
+              <option value="MÓVEIS SOB MEDIDA">MÓVEIS SOB MEDIDA</option>
+              <option value="ÁREAS EXTERNAS">ÁREAS EXTERNAS</option>
+              <option value="MADEIRA & REVESTIMENTOS">MADEIRA & REVESTIMENTOS</option>
+              <option value="PROJETOS ESPECIAIS">PROJETOS ESPECIAIS</option>
             </select>
           </div>
 
@@ -1338,21 +1370,25 @@
         <!-- Renderizado dinamicamente -->
       </div>
       <div class="project-modal-body">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 12px;">
-          <div>
-            <div id="projectModalLocation" style="font-size: 12px; font-weight: 700; color: var(--wood-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;"></div>
-            <h3 id="projectModalTitle" style="font-size: 22px; font-weight: 800; color: #0f172a; margin: 0; letter-spacing: -0.02em;"></h3>
-          </div>
-          <button type="button" class="close-modal" onclick="closeModal('projectDetailModal')">&times;</button>
+        <div class="modal-project-header">
+          <div id="projectModalLocation" class="modal-project-category"></div>
+          <h3 id="projectModalTitle" class="modal-project-title"></h3>
+          <p id="projectModalDesc" class="modal-project-desc"></p>
         </div>
 
-        <p id="projectModalDesc" style="font-size: 14.5px; color: #475569; line-height: 1.65; margin-bottom: 20px;"></p>
+        <!-- Se tiver vídeo, opção clara para assistir -->
+        <div id="projectModalVideoAction" style="margin-bottom: 22px; display: none;"></div>
 
-        <div id="projectModalSpecs" style="margin-bottom: 24px;"></div>
-
-        <div style="display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap;">
-          <button type="button" class="btn btn-outline" onclick="closeModal('projectDetailModal')">Fechar</button>
-          <button type="button" class="btn btn-primary" id="projectModalActionBtn">Solicitar Projeto Semelhante</button>
+        <!-- 6. Bloco Comercial: GOSTOU DESTE PROJETO? -->
+        <div class="modal-interest-box">
+          <div class="modal-interest-title">GOSTOU DESTE PROJETO?</div>
+          <p class="modal-interest-desc">
+            Fale com a DK Revestimentos e desenvolva uma solução sob medida para o seu espaço.
+          </p>
+          <button type="button" class="btn btn-primary btn-modal-budget" id="projectModalActionBtn">
+            <span>Solicitar Orçamento</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
         </div>
       </div>
     </div>
