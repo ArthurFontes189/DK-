@@ -1204,3 +1204,101 @@
   border-radius: 6px;
   z-index: 2;
 }
+
+/* Reprodução Dinâmica de Vídeos no Card (Sem Modal) */
+.project-card.is-playing-inline {
+  border-color: var(--wood-primary) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16) !important;
+}
+
+.project-card.is-playing-inline .video-play-indicator {
+  display: none !important;
+}
+
+.project-card.is-playing-inline .project-media-type-badge {
+  display: none !important;
+}
+
+.project-card.is-playing-inline .project-media-overlay {
+  display: none !important;
+}
+
+.btn-close-inline-video {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.88);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 30;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.btn-close-inline-video:hover {
+  background: #dc2626;
+  border-color: #ef4444;
+  transform: scale(1.1);
+}
+
+/* Rodapé Minimalista dos Cards (Apenas Título + Opção de Edição) */
+.project-card-minimal-footer {
+  padding: 14px 18px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  background: #ffffff;
+  border-top: 1px solid var(--border-soft);
+}
+
+.project-card-minimal-footer .project-title {
+  margin: 0 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  line-height: 1.35 !important;
+  flex: 1 !important;
+  transition: color 0.2s ease;
+}
+
+.project-card-minimal-footer .project-title:hover {
+  color: var(--wood-primary);
+}
+
+.btn-card-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-card-edit:hover {
+  background: var(--wood-dark, #3a1f0f);
+  color: #ffffff;
+  border-color: var(--wood-dark, #3a1f0f);
+  box-shadow: 0 2px 8px rgba(58, 31, 15, 0.2);
+}

@@ -1,14 +1,27 @@
 // ============================================================================
-// MÓDULO DE PORTFÓLIO & GALERIA ARQUITETÔNICA MULTIFORMATO (ALTO PADRÃO)
-// DK Revestimentos - Ateliê de Marcenaria & Revestimentos
-// Suporte Completo a Vídeos e Fotos Verticais (9:16/Reels) e Horizontais (16:9/Widescreen)
-// Integração Nativa com Google Drive, YouTube, Vimeo e Arquivos Locais
+// MÓDULO DE PORTFÓLIO & CATÁLOGO MULTIMÍDIA MODERNO (REATORADO & TECNOLÓGICO)
+// DK Revestimentos - Ateliê de Marcenaria Fina & Revestimentos Arquitetônicos
+// ============================================================================
+// Recursos:
+// 1. Site Público: Totalmente limpo, responsivo, sem opções administrativas.
+//    - Cards com visual minimalista (apenas mídia + título elegante).
+//    - Play instantâneo de vídeo diretamente no card com 1 clique (sem abrir modais).
+// 2. Painel Administrativo: Gestão completa e centralizada (criação e edição NADA fora dele).
+//    - Adição por Link inteligente (Google Drive, YouTube, Shorts, Vimeo, Web) ou Upload do Aparelho.
+//    - Detecção automática de plataforma e proporção (📱 Vertical / 🖥️ Horizontal).
 // ============================================================================
 
 let currentPortfolioFilter = 'all';
+let currentAdminPortfolioFilter = 'all';
+let currentAdminSearchTerm = '';
+let currentlyPlayingVideoId = null;
+
+let editorCurrentMode = 'create'; // 'create' | 'edit'
+let editorSelectedFile = null;
+let editorGeneratedPoster = null;
 
 // ----------------------------------------------------------------------------
-// 1. PARSERS E IDENTIFICADORES INTELIGENTES DE VÍDEO & GOOGLE DRIVE
+// 1. IDENTIFICADORES INTELIGENTES DE VÍDEO (GOOGLE DRIVE, YOUTUBE, VIMEO)
 // ----------------------------------------------------------------------------
 
 function extractGoogleDriveId(url) {
@@ -46,23 +59,21 @@ function parseVideoSource(url) {
       type: 'gdrive',
       id: driveId,
       embedUrl: 'https://drive.google.com/file/d/' + driveId + '/preview',
-      viewUrl: 'https://drive.google.com/file/d/' + driveId + '/view?usp=sharing',
-      posterUrl: 'https://lh3.googleusercontent.com/u/0/d/' + driveId,
+      posterUrl: null,
       originalUrl: url
     };
   }
 
-  // 2. YouTube / Shorts
+  // 2. YouTube & YouTube Shorts
   const ytId = extractYouTubeId(url);
   if (ytId) {
     const isShorts = url.toLowerCase().includes('/shorts/');
     return {
       type: 'youtube',
-      isShorts: isShorts,
       id: ytId,
-      embedUrl: 'https://www.youtube-nocookie.com/embed/' + ytId + '?autoplay=1&rel=0&modestbranding=1&playsinline=1',
+      embedUrl: 'https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0&modestbranding=1',
       posterUrl: 'https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg',
-      maxPosterUrl: 'https://img.youtube.com/vi/' + ytId + '/maxresdefault.jpg',
+      isShorts: isShorts,
       originalUrl: url
     };
   }
@@ -73,34 +84,24 @@ function parseVideoSource(url) {
     return {
       type: 'vimeo',
       id: vimeoId,
-      embedUrl: 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1',
-      posterUrl: 'https://vumbnail.com/' + vimeoId + '.jpg',
-      originalUrl: url
-    };
-  }
-
-  // 4. Vídeo Nativo / Direto (MP4, MOV, WebM, Cloud Storage, Blob, Base64)
-  const lower = url.toLowerCase();
-  if (
-    lower.startsWith('data:video') || 
-    lower.startsWith('blob:') || 
-    lower.endsWith('.mp4') || 
-    lower.endsWith('.mov') || 
-    lower.endsWith('.webm') || 
-    lower.includes('/video/') || 
-    lower.includes('.mp4?') ||
-    lower.includes('storage/v1/object/public')
-  ) {
-    return {
-      type: 'direct',
-      id: null,
-      embedUrl: null,
+      embedUrl: 'https://player.vimeo.com/video/' + vimeoId + '?autoplay=1&color=8a4f26',
       posterUrl: null,
       originalUrl: url
     };
   }
 
-  return { type: 'unknown', id: null, embedUrl: null, posterUrl: null, originalUrl: url };
+  // 4. Arquivo Direto MP4/WebM ou Blob local
+  if (url.startsWith('data:video') || url.startsWith('blob:') || url.match(/\.(mp4|mov|webm|m4v)($|\?)/i)) {
+    return {
+      type: 'direct',
+      id: null,
+      embedUrl: url,
+      posterUrl: null,
+      originalUrl: url
+    };
+  }
+
+  return { type: 'unknown', id: null, embedUrl: url, posterUrl: null, originalUrl: url };
 }
 
 function isVideoMedia(item) {
@@ -122,151 +123,34 @@ function isVideoMedia(item) {
   );
 }
 
-// Extrai automaticamente um frame em alta resolução de arquivo de vídeo para usar como poster
-function extractVideoThumbnail(file) {
-  return new Promise((resolve) => {
-    try {
-      const video = document.createElement('video');
-      const url = URL.createObjectURL(file);
-      video.src = url;
-      video.muted = true;
-      video.playsInline = true;
-      video.crossOrigin = 'anonymous';
-
-      let resolved = false;
-
-      video.onloadeddata = function() {
-        video.currentTime = Math.min(1.0, video.duration > 0.5 ? 0.5 : 0.1);
-      };
-
-      video.onseeked = function() {
-        if (resolved) return;
-        resolved = true;
-        try {
-          const canvas = document.createElement('canvas');
-          canvas.width = video.videoWidth || 640;
-          canvas.height = video.videoHeight || 360;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-          URL.revokeObjectURL(url);
-          resolve(dataUrl);
-        } catch (e) {
-          URL.revokeObjectURL(url);
-          resolve(null);
-        }
-      };
-
-      video.onerror = function() {
-        if (!resolved) {
-          resolved = true;
-          URL.revokeObjectURL(url);
-          resolve(null);
-        }
-      };
-
-      setTimeout(() => {
-        if (!resolved) {
-          resolved = true;
-          URL.revokeObjectURL(url);
-          resolve(null);
-        }
-      }, 4000);
-    } catch (e) {
-      resolve(null);
-    }
-  });
-}
-
-function formatBytes(bytes) {
-  if (!bytes || bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-}
-
 // ----------------------------------------------------------------------------
-// 2. HIERARQUIA VISUAL E ORDENAÇÃO DE PROJETOS
+// 2. RECUPERAÇÃO DO ESTADO DE PROJETOS
 // ----------------------------------------------------------------------------
-
-function getProjectHierarchyScore(item) {
-  let score = 70;
-  const isVideo = isVideoMedia(item);
-  const tipoReg = (item.tipoRegistro || item.tipo_registro || '').toLowerCase();
-  const text = ((item.titulo || '') + ' ' + (item.descricao || '') + ' ' + (item.categoria || '') + ' ' + tipoReg).toLowerCase();
-
-  // 1. Ambientes finalizados (Vídeos e fotos de ambientes concluídos são prioridade)
-  if (tipoReg === 'ambiente_finalizado' || text.includes('finalizado') || text.includes('concluído') || text.includes('concluido')) {
-    return isVideo ? 110 : 100;
-  }
-
-  // 2. Fotos amplas e tours pelo espaço
-  if (tipoReg === 'foto_ampla' || text.includes('amplo') || text.includes('geral') || text.includes('tour') || text.includes('visão')) {
-    return isVideo ? 95 : 85;
-  }
-
-  // 3. Detalhes de acabamento e marcenaria fina
-  if (tipoReg === 'detalhe_acabamento' || text.includes('detalhe') || text.includes('puxador') || text.includes('ripa') || text.includes('iluminação')) {
-    return 65;
-  }
-
-  // 4. Processo / fabricação / oficina
-  if (tipoReg === 'processo_fabricacao' || text.includes('processo') || text.includes('oficina') || text.includes('usinagem') || text.includes('canteiro')) {
-    return 40;
-  }
-
-  return score;
-}
 
 function getAllPortfolioProjects() {
-  const sourceList = (db.portfolio && db.portfolio.length > 0) ? db.portfolio : (window.DEFAULT_REAL_PORTFOLIO || []);
-
-  const items = sourceList.map(item => {
-    const isVideo = isVideoMedia(item);
-    let prop = item.proporcao || 'horizontal';
-    
-    // Auto-detecta proporção se não estiver explícito
-    if (!item.proporcao) {
-      const vSource = parseVideoSource(item.midiaUrl || item.midia_url || '');
-      if (vSource.isShorts) {
-        prop = 'vertical';
-      } else if (item.midiaUrl && (item.midiaUrl.includes('WA0053') || item.midiaUrl.includes('WA0024') || item.midiaUrl.includes('WA0006') || item.midiaUrl.includes('WA0015') || item.midiaUrl.includes('WA0016') || item.midiaUrl.includes('WA0019') || item.midiaUrl.includes('WA0020') || item.midiaUrl.includes('WA0022'))) {
-        prop = 'vertical';
+  if (typeof db !== 'undefined' && db.portfolio && Array.isArray(db.portfolio) && db.portfolio.length > 0) {
+    return db.portfolio;
+  }
+  try {
+    const cached = localStorage.getItem('marcenaria_portfolio');
+    if (cached) {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        if (typeof db !== 'undefined') db.portfolio = parsed;
+        return parsed;
       }
     }
+  } catch (e) {}
 
-    return {
-      id: item.id,
-      titulo: item.titulo || 'Ambiente Sob Medida',
-      categoria: item.categoria || 'Marcenaria Sob Medida',
-      ambiente: item.categoria || 'Ambiente Personalizado',
-      descricao: item.descricao || '',
-      midiaUrl: item.midiaUrl || item.midia_url || '',
-      posterUrl: item.posterUrl || item.poster_url || '',
-      gdriveId: item.gdriveId || item.gdrive_id || extractGoogleDriveId(item.midiaUrl || item.midia_url || ''),
-      gdriveLink: item.gdriveLink || item.gdrive_link || '',
-      proporcao: prop,
-      tipoMidia: isVideo ? 'video' : 'foto',
-      tipoRegistro: item.tipoRegistro || item.tipo_registro || ''
-    };
-  });
-
-  // Ordena por hierarquia visual e ID decrescente
-  items.sort((a, b) => {
-    const scoreA = getProjectHierarchyScore(a);
-    const scoreB = getProjectHierarchyScore(b);
-    if (scoreB !== scoreA) {
-      return scoreB - scoreA;
-    }
-    return Number(b.id) - Number(a.id);
-  });
-
-  return items;
+  if (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' && Array.isArray(DEFAULT_REAL_PORTFOLIO)) {
+    if (typeof db !== 'undefined') db.portfolio = [...DEFAULT_REAL_PORTFOLIO];
+    return DEFAULT_REAL_PORTFOLIO;
+  }
+  return [];
 }
 
 // ----------------------------------------------------------------------------
-// 3. RENDERIZAÇÃO DO CATÁLOGO PÚBLICO (MASONRY MODULAR & FILTROS DE FORMATO)
+// 3. CATÁLOGO PÚBLICO (SIMPLES, TECNOLÓGICO, RESPONSIVO, SEM NADA DE ADMIN)
 // ----------------------------------------------------------------------------
 
 function setPortfolioFormatFilter(filterType, btnEl) {
@@ -285,13 +169,12 @@ function renderPublicCatalog() {
 
   const allProjects = getAllPortfolioProjects();
 
-  // Calcula contadores para a barra de formatos
+  // Contadores
   const totalCount = allProjects.length;
   const videoCount = allProjects.filter(p => isVideoMedia(p)).length;
-  const verticalCount = allProjects.filter(p => p.proporcao === 'vertical').length;
-  const horizontalCount = allProjects.filter(p => p.proporcao === 'horizontal').length;
+  const photoCount = totalCount - videoCount;
 
-  // Renderiza barra de filtros de formato harmoniosa
+  // Barra de filtros do site público
   let formatBar = document.getElementById('portfolioFormatBar');
   if (!formatBar) {
     formatBar = document.createElement('div');
@@ -303,51 +186,46 @@ function renderPublicCatalog() {
   formatBar.innerHTML = `
     <div class="portfolio-format-bar">
       <button type="button" class="portfolio-format-btn ${currentPortfolioFilter === 'all' ? 'active' : ''}" onclick="setPortfolioFormatFilter('all', this)">
-        <span>✨ Todos os Projetos</span>
+        <span>✨ Todos</span>
         <span class="count-pill">${totalCount}</span>
       </button>
       <button type="button" class="portfolio-format-btn ${currentPortfolioFilter === 'video' ? 'active' : ''}" onclick="setPortfolioFormatFilter('video', this)">
         <span>🎥 Vídeos & Tours</span>
         <span class="count-pill">${videoCount}</span>
       </button>
-      <button type="button" class="portfolio-format-btn ${currentPortfolioFilter === 'vertical' ? 'active' : ''}" onclick="setPortfolioFormatFilter('vertical', this)">
-        <span>📱 Verticais (Reels)</span>
-        <span class="count-pill">${verticalCount}</span>
-      </button>
-      <button type="button" class="portfolio-format-btn ${currentPortfolioFilter === 'horizontal' ? 'active' : ''}" onclick="setPortfolioFormatFilter('horizontal', this)">
-        <span>🖥️ Panorâmicas</span>
-        <span class="count-pill">${horizontalCount}</span>
+      <button type="button" class="portfolio-format-btn ${currentPortfolioFilter === 'foto' ? 'active' : ''}" onclick="setPortfolioFormatFilter('foto', this)">
+        <span>📷 Fotografias</span>
+        <span class="count-pill">${photoCount}</span>
       </button>
     </div>
   `;
 
-  // Aplica o filtro selecionado
+  // Aplicação do filtro selecionado
   let filteredProjects = allProjects;
   if (currentPortfolioFilter === 'video') {
     filteredProjects = allProjects.filter(p => isVideoMedia(p));
-  } else if (currentPortfolioFilter === 'vertical') {
-    filteredProjects = allProjects.filter(p => p.proporcao === 'vertical');
-  } else if (currentPortfolioFilter === 'horizontal') {
-    filteredProjects = allProjects.filter(p => p.proporcao === 'horizontal');
+  } else if (currentPortfolioFilter === 'foto') {
+    filteredProjects = allProjects.filter(p => !isVideoMedia(p));
   }
 
   if (filteredProjects.length === 0) {
     container.innerHTML = `
       <div style="grid-column: 1 / -1; width: 100%; text-align: center; padding: 60px 24px; background: #ffffff; border: 1px solid var(--border-soft); border-radius: var(--radius); box-shadow: var(--shadow-subtle);">
-        <h3 style="font-size: 19px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Nenhum projeto encontrado nesta categoria</h3>
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Selecione outra opção acima para visualizar os projetos da marcenaria.</p>
+        <h3 style="font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Nenhum projeto encontrado nesta categoria</h3>
+        <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px;">Selecione outra opção acima para visualizar as mídias da marcenaria.</p>
         <button type="button" class="btn btn-outline btn-sm" onclick="setPortfolioFormatFilter('all')">Ver Todos os Trabalhos</button>
       </div>
     `;
     return;
   }
 
-  // Renderiza cada card com sua proporção natural no layout Masonry
+  // Renderiza cada card: APENAS MÍDIA + TÍTULO DO PROJETO (NADA DE EDIÇÃO OU BOTÕES FORA DO ADMIN)
   filteredProjects.forEach(item => {
     const isVideo = isVideoMedia(item);
     const isVertical = item.proporcao === 'vertical';
     const card = document.createElement('div');
     card.className = `project-card ${isVertical ? 'card-proporcao-vertical' : 'card-proporcao-horizontal'} ${isVideo ? 'card-tipo-video' : 'card-tipo-foto'}`;
+    card.setAttribute('data-project-id', item.id);
 
     let mediaTag = '';
     let badgeText = '';
@@ -357,77 +235,59 @@ function renderPublicCatalog() {
       const posterImg = item.posterUrl || vSource.posterUrl || '';
 
       if (vSource.type === 'gdrive') {
-        badgeText = isVertical ? '📁 DRIVE • REELS' : '📁 DRIVE • VÍDEO';
+        badgeText = isVertical ? '📁 REELS' : '📁 VÍDEO';
       } else if (vSource.type === 'youtube' && vSource.isShorts) {
-        badgeText = '▶ YOUTUBE SHORTS';
+        badgeText = '▶ SHORTS';
       } else if (vSource.type === 'youtube') {
-        badgeText = '▶ YOUTUBE';
+        badgeText = '▶ VÍDEO';
       } else {
-        badgeText = isVertical ? '▶ REELS VERTICAL' : '▶ TOUR WIDESCREEN';
+        badgeText = isVertical ? '▶ REELS' : '▶ TOUR HD';
       }
 
       mediaTag = `
-        <div class="project-media-wrapper-aspect ${isVertical ? 'aspect-vertical-9-16' : 'aspect-horizontal-16-11'}">
+        <div class="project-media-wrapper-aspect ${isVertical ? 'aspect-vertical-9-16' : 'aspect-horizontal-16-11'}" id="mediaSlot_${item.id}">
           ${posterImg ? `
             <img src="${posterImg}" alt="${item.titulo}" class="project-media" loading="lazy">
           ` : `
-            <video class="project-media" muted loop playsinline preload="metadata">
-              <source src="${item.midiaUrl}">
-            </video>
+            <div style="width:100%; height:100%; background:#090a0f; display:flex; align-items:center; justify-content:center; color:#fff; font-size:32px;">🎥</div>
           `}
           <div class="video-play-indicator">
             <div class="video-play-btn" title="Assistir Vídeo">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
             </div>
             <span class="video-play-label">Assistir Vídeo</span>
           </div>
           <span class="project-media-type-badge">${badgeText}</span>
         </div>
       `;
+
+      card.innerHTML = `
+        <div class="project-media-wrap" onclick="togglePlayInlineVideo('${item.id}', this)" style="cursor: pointer;" title="Clique para reproduzir o vídeo no card">
+          ${mediaTag}
+        </div>
+        <div class="project-info project-card-minimal-footer">
+          <h3 class="project-title" onclick="togglePlayInlineVideo('${item.id}', this)" style="cursor: pointer;" title="Clique para reproduzir">${item.titulo}</h3>
+        </div>
+      `;
     } else {
       const badgeFormat = isVertical ? '📱 VERTICAL' : '🖥️ PANORÂMICA';
       const imgSrc = (item.midiaUrl && item.midiaUrl.endsWith('.pdf')) ? (item.posterUrl || 'assets/portfolio/pdf_page1.jpg') : item.midiaUrl;
+      
       mediaTag = `
         <div class="project-media-wrapper-aspect ${isVertical ? 'aspect-vertical-9-16' : 'aspect-horizontal-16-11'}">
           <img src="${imgSrc}" alt="${item.titulo}" class="project-media" loading="lazy">
           <span class="project-media-type-badge badge-photo-subtle">${badgeFormat}</span>
         </div>
       `;
-    }
 
-    card.innerHTML = `
-      <div class="project-media-wrap" onclick="openProjectDetails('${item.id}')" style="cursor: pointer;">
-        ${mediaTag}
-        <div class="project-media-overlay">
-          <button type="button" class="btn btn-outline-light btn-sm" style="background: rgba(14, 15, 19, 0.7); border-color: rgba(255, 255, 255, 0.35); font-size: 12px;">
-            ${isVideo ? '▶ Reproduzir Vídeo' : 'Inspecionar Projeto'}
-          </button>
+      card.innerHTML = `
+        <div class="project-media-wrap" onclick="openProjectDetails('${item.id}')" style="cursor: pointer;" title="Clique para ampliar fotografia">
+          ${mediaTag}
         </div>
-      </div>
-
-      <div class="project-info">
-        <h3 class="project-title" onclick="openProjectDetails('${item.id}')" style="cursor: pointer;">${item.titulo}</h3>
-        ${item.descricao ? `<p class="project-desc">${item.descricao}</p>` : ''}
-
-        <div class="project-footer" style="margin-top: auto; padding-top: 14px;">
-          <button type="button" class="btn-inspect-project" onclick="openProjectDetails('${item.id}')">
-            <span>${isVideo ? 'Assistir Vídeo do Projeto' : 'Ver Detalhes do Projeto'}</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-          <button type="button" class="btn btn-outline btn-sm" onclick="prefillBudget('${item.titulo}', '${item.categoria}')" style="font-size: 12px; padding: 6px 14px;">
-            Consultar Semelhante
-          </button>
+        <div class="project-info project-card-minimal-footer">
+          <h3 class="project-title" onclick="openProjectDetails('${item.id}')" style="cursor: pointer;" title="Ampliar imagem">${item.titulo}</h3>
         </div>
-      </div>
-    `;
-
-    // Preview sutil de vídeo local direto no hover (desktop)
-    if (isVideo && !item.midiaUrl.includes('drive.google.com') && !item.midiaUrl.includes('youtube.com')) {
-      const vid = card.querySelector('video');
-      if (vid) {
-        card.addEventListener('mouseenter', () => vid.play().catch(() => {}));
-        card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
-      }
+      `;
     }
 
     container.appendChild(card);
@@ -435,7 +295,137 @@ function renderPublicCatalog() {
 }
 
 // ----------------------------------------------------------------------------
-// 4. MODAL LIGHTBOX COM PLAYER ADAPTATIVO (GOOGLE DRIVE, YOUTUBE, MP4)
+// 4. REPRODUÇÃO INTELIGENTE DE VÍDEO DIRETO NO CARD (1 CLIQUE)
+// ----------------------------------------------------------------------------
+
+function togglePlayInlineVideo(projectId, triggerEl) {
+  const allProjects = getAllPortfolioProjects();
+  const project = allProjects.find(p => String(p.id) === String(projectId));
+  if (!project || !isVideoMedia(project)) return;
+
+  const card = triggerEl ? triggerEl.closest('.project-card') : document.querySelector(`.project-card[data-project-id="${projectId}"]`);
+  const slot = document.getElementById(`mediaSlot_${projectId}`);
+  if (!slot || !card) return;
+
+  // Se já está reproduzindo este mesmo vídeo, para e volta ao poster
+  if (currentlyPlayingVideoId === projectId && card.classList.contains('is-playing-inline')) {
+    stopInlineVideo(projectId);
+    return;
+  }
+
+  // Para qualquer outro vídeo que esteja tocando no momento
+  if (currentlyPlayingVideoId && currentlyPlayingVideoId !== projectId) {
+    stopInlineVideo(currentlyPlayingVideoId);
+  }
+
+  currentlyPlayingVideoId = projectId;
+  card.classList.add('is-playing-inline');
+
+  const vSource = parseVideoSource(project.midiaUrl);
+  const isVertical = project.proporcao === 'vertical';
+  const gdriveId = project.gdriveId || extractGoogleDriveId(project.midiaUrl);
+
+  let playerHtml = '';
+
+  // 1. Arquivo direto MP4 / WebM / Local (Máxima qualidade nativa)
+  if (vSource.type === 'direct' || (project.midiaUrl && project.midiaUrl.endsWith('.mp4'))) {
+    const fallbackEmbed = gdriveId ? `https://drive.google.com/file/d/${gdriveId}/preview` : '';
+    playerHtml = `
+      <div style="position: relative; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center;">
+        <video src="${project.midiaUrl}" 
+               ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
+               controls autoplay playsinline 
+               style="width: 100%; height: 100%; object-fit: contain; background: #000;"
+               onerror="if ('${fallbackEmbed}') { this.parentElement.innerHTML = '<iframe src=\\'${fallbackEmbed}\\' style=\\'position:absolute;top:0;left:0;width:100%;height:100%;border:0;\\' allow=\\'autoplay; encrypted-media; fullscreen\\' allowfullscreen></iframe>'; }">
+        </video>
+        <button type="button" class="btn-stop-inline-video" onclick="event.stopPropagation(); stopInlineVideo('${projectId}')" title="Fechar reprodução">&times;</button>
+      </div>
+    `;
+  }
+  // 2. Google Drive Player
+  else if (vSource.type === 'gdrive' || gdriveId) {
+    const embedUrl = vSource.embedUrl || `https://drive.google.com/file/d/${gdriveId}/preview`;
+    playerHtml = `
+      <div style="position: relative; width: 100%; height: 100%; background: #000;">
+        <iframe src="${embedUrl}" 
+                style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+                allow="autoplay; encrypted-media; fullscreen" 
+                allowfullscreen>
+        </iframe>
+        <button type="button" class="btn-stop-inline-video" onclick="event.stopPropagation(); stopInlineVideo('${projectId}')" title="Fechar reprodução">&times;</button>
+      </div>
+    `;
+  }
+  // 3. YouTube Player
+  else if (vSource.type === 'youtube') {
+    playerHtml = `
+      <div style="position: relative; width: 100%; height: 100%; background: #000;">
+        <iframe src="${vSource.embedUrl}" 
+                style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+        </iframe>
+        <button type="button" class="btn-stop-inline-video" onclick="event.stopPropagation(); stopInlineVideo('${projectId}')" title="Fechar reprodução">&times;</button>
+      </div>
+    `;
+  }
+  // 4. Vimeo Player
+  else if (vSource.type === 'vimeo') {
+    playerHtml = `
+      <div style="position: relative; width: 100%; height: 100%; background: #000;">
+        <iframe src="${vSource.embedUrl}" 
+                style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" 
+                allow="autoplay; fullscreen; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
+        <button type="button" class="btn-stop-inline-video" onclick="event.stopPropagation(); stopInlineVideo('${projectId}')" title="Fechar reprodução">&times;</button>
+      </div>
+    `;
+  }
+
+  slot.innerHTML = playerHtml;
+}
+
+function stopInlineVideo(projectId) {
+  const card = document.querySelector(`.project-card[data-project-id="${projectId}"]`);
+  const slot = document.getElementById(`mediaSlot_${projectId}`);
+  if (!card || !slot) return;
+
+  card.classList.remove('is-playing-inline');
+  if (currentlyPlayingVideoId === projectId) {
+    currentlyPlayingVideoId = null;
+  }
+
+  const allProjects = getAllPortfolioProjects();
+  const project = allProjects.find(p => String(p.id) === String(projectId));
+  if (!project) return;
+
+  const vSource = parseVideoSource(project.midiaUrl);
+  const posterImg = project.posterUrl || vSource.posterUrl || '';
+  const isVertical = project.proporcao === 'vertical';
+
+  let badgeText = isVertical ? '▶ REELS' : '▶ TOUR HD';
+  if (vSource.type === 'gdrive') badgeText = isVertical ? '📁 REELS' : '📁 VÍDEO';
+  if (vSource.type === 'youtube') badgeText = vSource.isShorts ? '▶ SHORTS' : '▶ VÍDEO';
+
+  slot.innerHTML = `
+    ${posterImg ? `
+      <img src="${posterImg}" alt="${project.titulo}" class="project-media" loading="lazy">
+    ` : `
+      <div style="width:100%; height:100%; background:#090a0f; display:flex; align-items:center; justify-content:center; color:#fff; font-size:32px;">🎥</div>
+    `}
+    <div class="video-play-indicator">
+      <div class="video-play-btn" title="Assistir Vídeo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      </div>
+      <span class="video-play-label">Assistir Vídeo</span>
+    </div>
+    <span class="project-media-type-badge">${badgeText}</span>
+  `;
+}
+
+// ----------------------------------------------------------------------------
+// 5. INSPEÇÃO DE FOTOGRAFIA (MODAL LIGHTBOX SUAVE)
 // ----------------------------------------------------------------------------
 
 function openProjectDetails(projectId) {
@@ -450,1076 +440,477 @@ function openProjectDetails(projectId) {
   const mediaContainer = document.getElementById('projectModalMediaContainer');
   const locationEl = document.getElementById('projectModalLocation');
   const descEl = document.getElementById('projectModalDesc');
-  const specsEl = document.getElementById('projectModalSpecs');
-  const actionBtn = document.getElementById('projectModalActionBtn');
 
   if (titleEl) titleEl.textContent = project.titulo;
   if (locationEl) locationEl.textContent = project.categoria || 'Marcenaria Sob Medida';
-  if (descEl) descEl.textContent = project.descricao || 'Projeto executado sob medida pela DK Revestimentos.';
+  if (descEl) descEl.textContent = project.descricao || '';
 
-  const isVideo = isVideoMedia(project);
   const isVertical = project.proporcao === 'vertical';
-
-  // Ajusta a largura e proporção do modal de forma totalmente responsiva
   const modalCard = modal.querySelector('.modal-content');
   if (modalCard) {
-    if (isVertical) {
-      modalCard.classList.add('is-vertical-card');
-    } else {
-      modalCard.classList.remove('is-vertical-card');
-    }
-    modalCard.style.maxWidth = '';
-  }
-
-  if (specsEl) {
-    const driveBtnHtml = project.gdriveLink ? `
-      <a href="${project.gdriveLink}" target="_blank" class="btn btn-outline btn-sm" style="font-size: 11.5px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 4px;">
-        <span>📁 Abrir no Google Drive</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-      </a>
-    ` : '';
-
-    specsEl.innerHTML = `
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px;">
-        <div style="background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-soft);">
-          <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block;">Categoria</span>
-          <strong style="font-size: 13.5px; color: #0f172a;">${project.categoria}</strong>
-        </div>
-        <div style="background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-soft);">
-          <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); display: block;">Proporção & Formato</span>
-          <strong style="font-size: 13.5px; color: #0f172a;">${isVideo ? '🎥 Vídeo' : '📷 Foto'} • ${isVertical ? '📱 Vertical (9:16)' : '🖥️ Horizontal (16:9)'}</strong>
-        </div>
-      </div>
-      ${driveBtnHtml ? `<div style="text-align: right; margin-top: 4px;">${driveBtnHtml}</div>` : ''}
-    `;
+    if (isVertical) modalCard.classList.add('is-vertical-card');
+    else modalCard.classList.remove('is-vertical-card');
   }
 
   if (mediaContainer) {
-    mediaContainer.innerHTML = '';
-
-    if (isVideo) {
-      const isDirectFile = project.midiaUrl && (project.midiaUrl.endsWith('.mp4') || project.midiaUrl.endsWith('.mov') || project.midiaUrl.endsWith('.webm') || project.midiaUrl.startsWith('blob:') || project.midiaUrl.startsWith('data:'));
-      const gdriveFallbackUrl = project.gdriveId ? ('https://drive.google.com/file/d/' + project.gdriveId + '/preview') : '';
-
-      if (isDirectFile) {
-        // Player HTML5 Nativo em Alta Resolucao Original (Sem compressao secundaria de 360p do Google Drive)
-        mediaContainer.innerHTML = `
-          <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
-            <video src="${project.midiaUrl}" 
-                   ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
-                   controls autoplay playsinline 
-                   style="width: 100%; height: 100%; object-fit: contain;"
-                   onerror="if ('${gdriveFallbackUrl}') { this.style.display='none'; this.parentElement.innerHTML = '<iframe src=\'${gdriveFallbackUrl}\' title=\'${project.titulo}\' style=\'position:absolute;top:0;left:0;width:100%;height:100%;border:0;\' allow=\'autoplay; encrypted-media; fullscreen\' allowfullscreen></iframe>'; }">
-            </video>
-          </div>
-        `;
-      } else {
-        const vSource = parseVideoSource(project.midiaUrl || gdriveFallbackUrl);
-
-        if (vSource.type === 'gdrive') {
-          // Player Oficial do Google Drive (Preview Embed)
-          mediaContainer.innerHTML = `
-            <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
-              <iframe src="${vSource.embedUrl}" 
-                      title="${project.titulo}"
-                      allow="autoplay; encrypted-media; fullscreen" 
-                      allowfullscreen>
-              </iframe>
-            </div>
-          `;
-        } else if (vSource.type === 'youtube') {
-          // Player Oficial do YouTube (Full HD / 4K / Shorts)
-          const isShorts = vSource.isShorts || isVertical;
-          mediaContainer.innerHTML = `
-            <div class="project-modal-stage ${isShorts ? 'stage-vertical' : 'stage-horizontal'}">
-              <iframe src="${vSource.embedUrl}" 
-                      title="${project.titulo}"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                      allowfullscreen>
-              </iframe>
-            </div>
-          `;
-        } else if (vSource.type === 'vimeo') {
-          mediaContainer.innerHTML = `
-            <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
-              <iframe src="${vSource.embedUrl}" 
-                      title="${project.titulo}"
-                      allow="autoplay; fullscreen; picture-in-picture" 
-                      allowfullscreen>
-              </iframe>
-            </div>
-          `;
-        } else {
-          mediaContainer.innerHTML = `
-            <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
-              <video src="${project.midiaUrl}" 
-                     ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
-                     controls autoplay playsinline>
-              </video>
-            </div>
-          `;
-        }
-      }
+    const isPdf = project.midiaUrl && project.midiaUrl.endsWith('.pdf');
+    if (isPdf) {
+      mediaContainer.innerHTML = `
+        <div class="project-modal-stage stage-vertical" style="position: relative;">
+          <img src="${project.posterUrl || 'assets/portfolio/pdf_page1.jpg'}" alt="${project.titulo}">
+          <a href="${project.midiaUrl}" target="_blank" class="btn btn-primary btn-sm" style="position: absolute; bottom: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.5);">
+            📄 Abrir Caderno Técnico PDF
+          </a>
+        </div>
+      `;
     } else {
-      // Fotografia ou Documento
-      if (project.midiaUrl && project.midiaUrl.endsWith('.pdf')) {
-        mediaContainer.innerHTML = `
-          <div class="project-modal-stage stage-vertical" style="position: relative;">
-            <img src="${project.posterUrl || 'assets/portfolio/pdf_page1.jpg'}" alt="${project.titulo}">
-            <a href="${project.midiaUrl}" target="_blank" class="btn btn-primary btn-sm" style="position: absolute; bottom: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.5); z-index: 10;">
-              📄 Abrir Caderno Técnico PDF
-            </a>
-          </div>
-        `;
-      } else {
-        mediaContainer.innerHTML = `
-          <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
-            <img src="${project.midiaUrl}" alt="${project.titulo}">
-          </div>
-        `;
-      }
+      mediaContainer.innerHTML = `
+        <div class="project-modal-stage ${isVertical ? 'stage-vertical' : 'stage-horizontal'}">
+          <img src="${project.midiaUrl}" alt="${project.titulo}">
+        </div>
+      `;
     }
-  }
-
-  if (actionBtn) {
-    actionBtn.onclick = () => {
-      closeProjectDetailsModal();
-      prefillBudget(project.titulo, project.categoria);
-    };
   }
 
   openModal('projectDetailModal');
 }
 
-function closeProjectDetailsModal() {
-  const mediaContainer = document.getElementById('projectModalMediaContainer');
-  if (mediaContainer) {
-    mediaContainer.innerHTML = '';
+// ----------------------------------------------------------------------------
+// 6. GESTÃO COMPLETA NO PAINEL ADMINISTRATIVO (CRIAÇÃO & EDIÇÃO NADA FORA DELE)
+// ----------------------------------------------------------------------------
+
+function setAdminPortfolioFilter(type, btn) {
+  currentAdminPortfolioFilter = type;
+  if (btn && btn.parentElement) {
+    btn.parentElement.querySelectorAll('.admin-pfilter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
   }
-  closeModal('projectDetailModal');
+  renderAdminPortfolio();
 }
 
-function prefillBudget(titulo, categoria) {
-  const section = document.getElementById('contato') || document.getElementById('solicitar');
-  if (section) section.scrollIntoView({ behavior: 'smooth' });
-
-  const nomeInput = document.getElementById('leadNome');
-  if (nomeInput) {
-    setTimeout(() => nomeInput.focus(), 300);
-  }
-
-  const tipoSelect = document.getElementById('leadTipo');
-  if (tipoSelect && categoria) {
-    const catLower = categoria.toLowerCase();
-    if (catLower.includes('cozinha') || catLower.includes('closet') || catLower.includes('dormit') || catLower.includes('suíte') || catLower.includes('suite')) {
-      tipoSelect.value = 'Cozinhas, Closets & Suítes';
-    } else if (catLower.includes('pain') || catLower.includes('revest')) {
-      tipoSelect.value = 'Painéis & Revestimentos';
-    } else if (catLower.includes('deck') || catLower.includes('extern') || catLower.includes('pergol')) {
-      tipoSelect.value = 'Ambientes Externos';
-    } else {
-      tipoSelect.value = 'Marcenaria Sob Medida';
-    }
-  }
-
-  const msgInput = document.getElementById('leadMensagem');
-  if (msgInput && titulo) {
-    msgInput.value = `Gostaria de um projeto com referência semelhante a: ${titulo}`;
-  }
-
-  showToast('Projeto selecionado para referência.', 'info');
+function handleAdminPortfolioSearch(text) {
+  currentAdminSearchTerm = (text || '').toLowerCase().trim();
+  renderAdminPortfolio();
 }
-
-// ----------------------------------------------------------------------------
-// 5. GESTÃO NO PAINEL ADMINISTRATIVO (ADMINISTRAÇÃO DO CATÁLOGO DE MÍDIAS)
-// ----------------------------------------------------------------------------
 
 function renderAdminPortfolio(portfolio) {
   const container = document.getElementById('adminPortfolioList');
   if (!container) return;
   container.innerHTML = '';
 
-  const list = (portfolio && portfolio.length > 0) ? portfolio : getAllPortfolioProjects();
+  const all = (portfolio && portfolio.length > 0) ? portfolio : getAllPortfolioProjects();
 
-  if (list.length === 0) {
+  // Atualiza badge de contagem
+  const countBadge = document.getElementById('adminMediaCountBadge');
+  if (countBadge) {
+    const vids = all.filter(p => isVideoMedia(p)).length;
+    countBadge.textContent = `${all.length} projetos (${vids} vídeos, ${all.length - vids} fotos)`;
+  }
+
+  // Filtragem administrativa
+  let filtered = all;
+  if (currentAdminPortfolioFilter === 'video') {
+    filtered = all.filter(p => isVideoMedia(p));
+  } else if (currentAdminPortfolioFilter === 'foto') {
+    filtered = all.filter(p => !isVideoMedia(p));
+  }
+
+  if (currentAdminSearchTerm) {
+    filtered = filtered.filter(p => 
+      (p.titulo || '').toLowerCase().includes(currentAdminSearchTerm) ||
+      (p.categoria || '').toLowerCase().includes(currentAdminSearchTerm)
+    );
+  }
+
+  if (filtered.length === 0) {
     container.innerHTML = `
-      <div style="text-align: center; padding: 40px 20px; color: var(--text-muted); background: #fff; border-radius: var(--radius); border: 1px dashed var(--border-soft);">
-        <div style="font-size: 32px; margin-bottom: 8px;">🎥</div>
-        <p style="font-weight: 700; color: #0f172a; margin-bottom: 4px; font-size: 15px;">Nenhum vídeo ou foto cadastrado ainda.</p>
-        <p style="font-size: 13px; max-width: 440px; margin: 0 auto 16px auto;">Adicione vídeos diretamente pelo Google Drive (Links de compartilhamento), YouTube ou upload direto.</p>
-        <button type="button" class="btn btn-primary btn-sm" onclick="openNewMediaModal('gdrive')">+ Adicionar Vídeo do Google Drive</button>
+      <div style="text-align: center; padding: 48px 20px; color: var(--text-muted); background: #ffffff; border-radius: var(--radius); border: 1px dashed var(--border-soft);">
+        <div style="font-size: 32px; margin-bottom: 8px;">📂</div>
+        <p style="font-weight: 700; color: #0f172a; margin-bottom: 4px; font-size: 15px;">Nenhuma mídia encontrada no filtro.</p>
+        <p style="font-size: 13px; max-width: 440px; margin: 0 auto 16px auto;">Adicione novos vídeos ou fotos através de link ou upload direto.</p>
+        <button type="button" class="btn btn-primary btn-sm" onclick="openPortfolioEditorModal()">➕ Adicionar Nova Mídia</button>
       </div>
     `;
     return;
   }
 
-  list.forEach(item => {
+  filtered.forEach(item => {
     const isVideo = isVideoMedia(item);
     const isVertical = item.proporcao === 'vertical';
     const row = document.createElement('div');
-    row.style.display = 'flex';
-    row.style.alignItems = 'center';
-    row.style.gap = '14px';
-    row.style.background = '#fff';
-    row.style.padding = '14px 18px';
-    row.style.borderRadius = '10px';
-    row.style.marginBottom = '10px';
-    row.style.border = '1px solid var(--border-soft)';
+    row.className = 'admin-media-card';
 
-    let thumbHtml = '';
-    let typeBadgeHtml = '';
+    let originLabel = 'Arquivo Local / Direto';
+    let originClass = 'badge-neutral';
+    const urlLower = (item.midiaUrl || '').toLowerCase();
 
-    if (isVideo) {
-      const vSource = parseVideoSource(item.midiaUrl || item.midia_url || '');
-      const poster = item.posterUrl || item.poster_url || vSource.posterUrl || '';
-      
-      let platformLabel = 'Vídeo MP4';
-      if (vSource.type === 'gdrive' || (item.midiaUrl && item.midiaUrl.includes('drive.google.com'))) {
-        platformLabel = 'Google Drive';
-      } else if (vSource.type === 'youtube' && vSource.isShorts) {
-        platformLabel = 'YouTube Shorts';
-      } else if (vSource.type === 'youtube') {
-        platformLabel = 'YouTube';
-      } else if (vSource.type === 'vimeo') {
-        platformLabel = 'Vimeo';
-      }
-
-      typeBadgeHtml = `
-        <span class="badge badge-warning" style="font-size: 11px;">▶ ${platformLabel}</span>
-        <span class="badge badge-neutral" style="font-size: 11px;">${isVertical ? '📱 Vertical' : '🖥️ Horizontal'}</span>
-      `;
-
-      thumbHtml = `
-        <div style="width: 58px; height: 75px; border-radius: 8px; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0;">
-          ${poster ? `<img src="${poster}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="color:#fff; font-size: 20px;">🎥</div>`}
-          <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.75); color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px;">▶</div>
-        </div>
-      `;
-    } else {
-      typeBadgeHtml = `
-        <span class="badge badge-neutral" style="font-size: 11px;">📷 Fotografia</span>
-        <span class="badge badge-neutral" style="font-size: 11px;">${isVertical ? '📱 Vertical' : '🖥️ Horizontal'}</span>
-      `;
-      thumbHtml = `
-        <div style="width: 58px; height: 75px; border-radius: 8px; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-          <img src="${item.midiaUrl || item.midia_url}" style="width:100%; height:100%; object-fit:cover;">
-        </div>
-      `;
+    if (item.gdriveId || urlLower.includes('drive.google.com')) {
+      originLabel = 'Google Drive';
+      originClass = 'badge-primary';
+    } else if (urlLower.includes('youtube.com') || urlLower.includes('youtu.be')) {
+      originLabel = urlLower.includes('/shorts/') ? 'YouTube Shorts' : 'YouTube';
+      originClass = 'badge-danger';
+    } else if (urlLower.includes('vimeo.com')) {
+      originLabel = 'Vimeo';
+      originClass = 'badge-warning';
+    } else if (urlLower.startsWith('data:') || urlLower.startsWith('blob:')) {
+      originLabel = 'Upload Local (Base64)';
+      originClass = 'badge-success';
     }
 
+    const posterThumb = item.posterUrl || (isVideo ? parseVideoSource(item.midiaUrl).posterUrl : item.midiaUrl) || '';
+
     row.innerHTML = `
-      ${thumbHtml}
+      <div style="width: 60px; height: 75px; border-radius: 8px; background: #0b0c10; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+        ${posterThumb ? `
+          <img src="${posterThumb}" style="width:100%; height:100%; object-fit: cover;">
+        ` : `
+          <div style="color: #fff; font-size: 22px;">${isVideo ? '🎥' : '📷'}</div>
+        `}
+        ${isVideo ? `<div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.75); color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px;">▶</div>` : ''}
+      </div>
+
       <div style="flex: 1; min-width: 0;">
-        <div style="font-weight: 700; font-size: 15px; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.titulo}</div>
-        <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap;">
-          ${typeBadgeHtml}
+        <div style="font-weight: 700; font-size: 15px; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          ${item.titulo}
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+          <span class="badge ${originClass}" style="font-size: 11px;">${originLabel}</span>
+          <span class="badge badge-neutral" style="font-size: 11px;">${isVideo ? '🎥 Vídeo' : '📷 Foto'} • ${isVertical ? '📱 Vertical' : '🖥️ Horizontal'}</span>
           <span class="badge badge-neutral" style="font-size: 11px;">${item.categoria || 'Geral'}</span>
         </div>
       </div>
-      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-        <button type="button" class="btn btn-outline btn-sm" onclick="openProjectDetails('${item.id}')" title="Assistir ou Inspecionar">
-          👁️ ${isVideo ? 'Assistir' : 'Ver'}
+
+      <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
+        <button type="button" class="btn btn-outline btn-sm" onclick="openPortfolioEditorModal('${item.id}')" title="Editar este projeto" style="display: inline-flex; align-items: center; gap: 4px; font-weight: 600;">
+          <span>✏️ Editar</span>
         </button>
-        <button type="button" class="btn btn-primary btn-sm" onclick="openEditProjectModal('${item.id}')" title="Editar Informações do Projeto" style="font-weight: 600;">
-          ✏️ Editar
-        </button>
-        <button type="button" class="btn btn-danger btn-sm" onclick="deletePortfolioItem('${item.id}')" title="Excluir Mídia">
-          🗑️ Excluir
+        <button type="button" class="btn btn-danger btn-sm" onclick="deletePortfolioItem('${item.id}')" title="Excluir projeto" style="display: inline-flex; align-items: center; gap: 4px;">
+          <span>🗑️ Excluir</span>
         </button>
       </div>
     `;
+
     container.appendChild(row);
   });
 }
 
 // ----------------------------------------------------------------------------
-// 6. MODAL DE CADASTRO EMBUTIDO (COM SUPORTE DEDICADO AO GOOGLE DRIVE)
+// 7. MODAL UNIFICADO DE CRIAÇÃO E EDIÇÃO (CENTRALIZADO NO ADMIN)
 // ----------------------------------------------------------------------------
 
-let currentSelectedFile = null;
-let currentGeneratedPoster = null;
-
-function openNewMediaModal(initialType = 'gdrive') {
-  const form = document.getElementById('photoForm');
-  if (form) form.reset();
-
-  currentSelectedFile = null;
-  currentGeneratedPoster = null;
-
-  const base64Input = document.getElementById('mediaBase64');
-  if (base64Input) base64Input.value = '';
-
-  const posterBase64Input = document.getElementById('mediaPosterBase64');
-  if (posterBase64Input) posterBase64Input.value = '';
-
-  const progress = document.getElementById('mediaUploadProgress');
-  if (progress) progress.style.display = 'none';
-
-  selectMediaType(initialType);
-  clearSelectedMedia();
-
-  openModal('photoModal');
-}
-
-function openNewPhotoModal() {
-  openNewMediaModal('gdrive');
-}
-
-function selectMediaType(tipo) {
-  const mediaTipoInput = document.getElementById('mediaTipo');
-  if (mediaTipoInput) mediaTipoInput.value = (tipo === 'foto') ? 'foto' : 'video';
-
-  const tabGdrive = document.getElementById('tabSelectGdrive');
-  const tabVideo = document.getElementById('tabSelectVideo');
-  const tabFoto = document.getElementById('tabSelectFoto');
-
-  const gdriveBox = document.getElementById('gdriveSourceOptions');
-  const otherVideoBox = document.getElementById('videoSourceOptions');
-  const fotoBox = document.getElementById('fotoSourceOptions');
-
-  // Remove active de todas as abas
-  if (tabGdrive) tabGdrive.classList.remove('active');
-  if (tabVideo) tabVideo.classList.remove('active');
-  if (tabFoto) tabFoto.classList.remove('active');
-
-  // Esconde todas as seções
-  if (gdriveBox) gdriveBox.style.display = 'none';
-  if (otherVideoBox) otherVideoBox.style.display = 'none';
-  if (fotoBox) fotoBox.style.display = 'none';
-
-  if (tipo === 'gdrive') {
-    if (tabGdrive) tabGdrive.classList.add('active');
-    if (gdriveBox) gdriveBox.style.display = 'block';
-  } else if (tipo === 'video' || tipo === 'outro_video') {
-    if (tabVideo) tabVideo.classList.add('active');
-    if (otherVideoBox) otherVideoBox.style.display = 'block';
-    selectVideoSource('url');
-  } else {
-    if (tabFoto) tabFoto.classList.add('active');
-    if (fotoBox) fotoBox.style.display = 'block';
-  }
-}
-
-function selectVideoSource(source) {
-  const pillUrl = document.getElementById('pillSourceUrl');
-  const pillUpload = document.getElementById('pillSourceUpload');
-  const urlBox = document.getElementById('videoSourceUrlBox');
-  const uploadBox = document.getElementById('videoSourceUploadBox');
-
-  if (source === 'url') {
-    if (pillUrl) pillUrl.classList.add('active');
-    if (pillUpload) pillUpload.classList.remove('active');
-    if (urlBox) urlBox.style.display = 'block';
-    if (uploadBox) uploadBox.style.display = 'none';
-  } else {
-    if (pillUrl) pillUrl.classList.remove('active');
-    if (pillUpload) pillUpload.classList.add('active');
-    if (urlBox) urlBox.style.display = 'none';
-    if (uploadBox) uploadBox.style.display = 'block';
-  }
-}
-
-// Detecção e preview automático ao colar link do Google Drive
-function handleGdriveUrlChange(url) {
-  const feedback = document.getElementById('gdriveUrlFeedback');
-  const previewContainer = document.getElementById('gdrivePreviewContainer');
-  const previewSlot = document.getElementById('gdrivePreviewSlot');
-
-  if (!url || !url.trim()) {
-    if (feedback) feedback.style.display = 'none';
-    if (previewContainer) previewContainer.style.display = 'none';
+function openPortfolioEditorModal(projectId = null) {
+  if (typeof isUserAdmin === 'function' && !isUserAdmin()) {
+    showToast('Apenas administradores autenticados podem gerenciar o portfólio.', 'warning');
+    if (typeof openModal === 'function') openModal('loginModal');
     return;
   }
 
-  const driveId = extractGoogleDriveId(url);
+  const modal = document.getElementById('portfolioEditorModal');
+  if (!modal) return;
 
-  if (driveId) {
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.style.background = '#ecfdf5';
-      feedback.style.color = '#065f46';
-      feedback.style.border = '1px solid #a7f3d0';
-      feedback.innerHTML = `<strong>✓ Vídeo do Google Drive Reconhecido:</strong> ID do Arquivo: <code>${driveId}</code>`;
+  const form = document.getElementById('portfolioEditorForm');
+  if (form) form.reset();
+
+  editorSelectedFile = null;
+  editorGeneratedPoster = null;
+
+  const idInput = document.getElementById('editorProjectId');
+  const titleInput = document.getElementById('editorProjectTitulo');
+  const catInput = document.getElementById('editorProjectCategoria');
+  const propVertical = document.getElementById('editorPropVertical');
+  const propHorizontal = document.getElementById('editorPropHorizontal');
+  const urlInput = document.getElementById('editorMidiaUrl');
+  const posterInput = document.getElementById('editorPosterUrl');
+  const modalTitle = document.getElementById('editorModalTitle');
+  const modalSub = document.getElementById('editorModalSub');
+  const submitBtn = document.getElementById('btnSubmitPortfolioEditor');
+  const fileInfo = document.getElementById('editorFileSelectedInfo');
+
+  if (fileInfo) fileInfo.style.display = 'none';
+
+  if (projectId) {
+    // MODO EDIÇÃO
+    editorCurrentMode = 'edit';
+    const all = getAllPortfolioProjects();
+    const item = all.find(p => String(p.id) === String(projectId));
+    if (!item) {
+      showToast('Projeto não encontrado para edição.', 'danger');
+      return;
     }
 
-    const embedUrl = 'https://drive.google.com/file/d/' + driveId + '/preview';
-    const isVertical = document.getElementById('gdriveProporcaoVertical') && document.getElementById('gdriveProporcaoVertical').checked;
-
-    if (previewContainer && previewSlot) {
-      previewContainer.style.display = 'block';
-      previewSlot.innerHTML = `
-        <div style="position: relative; width: 100%; ${isVertical ? 'aspect-ratio: 9/16; max-height: 320px; max-width: 240px; margin: 0 auto;' : 'aspect-ratio: 16/9; max-height: 240px;'} overflow: hidden; border-radius: 8px; background: #000;">
-          <iframe src="${embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
-        </div>
-      `;
+    if (idInput) idInput.value = item.id;
+    if (titleInput) titleInput.value = item.titulo || '';
+    if (catInput) catInput.value = item.categoria || 'Marcenaria Sob Medida';
+    if (item.proporcao === 'horizontal') {
+      if (propHorizontal) propHorizontal.checked = true;
+    } else {
+      if (propVertical) propVertical.checked = true;
     }
+    if (urlInput) urlInput.value = item.midiaUrl || '';
+    if (posterInput) posterInput.value = item.posterUrl || '';
+
+    if (modalTitle) modalTitle.textContent = 'Editar Informações da Mídia';
+    if (modalSub) modalSub.textContent = `ID #${item.id} • ${item.categoria}`;
+    if (submitBtn) submitBtn.textContent = 'Salvar Alterações';
+
+    switchEditorSourceTab('link');
+    handleEditorUrlInput(item.midiaUrl || '');
   } else {
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.style.background = '#fffbeb';
-      feedback.style.color = '#92400e';
-      feedback.style.border = '1px solid #fde68a';
-      feedback.innerHTML = `Link não reconhecido. Certifique-se de colar um link no formato: <code>https://drive.google.com/file/d/SEU_ID/view...</code>`;
-    }
-    if (previewContainer) previewContainer.style.display = 'none';
+    // MODO CRIAÇÃO
+    editorCurrentMode = 'create';
+    if (idInput) idInput.value = '';
+    if (modalTitle) modalTitle.textContent = 'Adicionar Nova Mídia ao Catálogo';
+    if (modalSub) modalSub.textContent = 'Publicação de Vídeo ou Fotografia';
+    if (submitBtn) submitBtn.textContent = 'Publicar no Catálogo';
+
+    switchEditorSourceTab('link');
+    updateEditorLivePreview();
+  }
+
+  openModal('portfolioEditorModal');
+}
+
+function switchEditorSourceTab(tab) {
+  const tabLink = document.getElementById('tabSourceLink');
+  const tabUpload = document.getElementById('tabSourceUpload');
+  const panelLink = document.getElementById('panelSourceLink');
+  const panelUpload = document.getElementById('panelSourceUpload');
+
+  if (tab === 'link') {
+    if (tabLink) tabLink.classList.add('active');
+    if (tabUpload) tabUpload.classList.remove('active');
+    if (panelLink) panelLink.style.display = 'block';
+    if (panelUpload) panelUpload.style.display = 'none';
+  } else {
+    if (tabLink) tabLink.classList.remove('active');
+    if (tabUpload) tabUpload.classList.add('active');
+    if (panelLink) panelLink.style.display = 'none';
+    if (panelUpload) panelUpload.style.display = 'block';
   }
 }
 
-function updateGdriveProportionPreview() {
-  const gdriveInput = document.getElementById('gdriveUrlInput');
-  if (gdriveInput && gdriveInput.value) {
-    handleGdriveUrlChange(gdriveInput.value);
-  }
+function updateEditorProportion(val) {
+  updateEditorLivePreview();
 }
 
-// Detecção e preview de YouTube / Shorts / Vimeo / MP4
-function handleVideoUrlChange(url) {
-  const feedback = document.getElementById('videoUrlFeedback');
-  const previewContainer = document.getElementById('mediaPreviewContainer');
-  const previewSlot = document.getElementById('mediaPreviewSlot');
-  const posterContainer = document.getElementById('videoPosterContainer');
-  const posterSlot = document.getElementById('posterMiniPreview');
-  const posterNote = document.getElementById('posterSourceNote');
+function handleEditorUrlInput(url) {
+  const badge = document.getElementById('editorUrlDetectionBadge');
+  if (!badge) return;
 
   if (!url || !url.trim()) {
-    if (feedback) feedback.style.display = 'none';
-    if (previewContainer) previewContainer.style.display = 'none';
+    badge.style.display = 'none';
+    updateEditorLivePreview();
     return;
   }
 
   const vSource = parseVideoSource(url);
+  badge.style.display = 'block';
 
-  if (vSource.type === 'youtube') {
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.style.background = '#ecfdf5';
-      feedback.style.color = '#065f46';
-      feedback.style.border = '1px solid #a7f3d0';
-      feedback.innerHTML = `<strong>✓ Vídeo do YouTube Identificado:</strong> ID: <code>${vSource.id}</code> ${vSource.isShorts ? '(Formato Shorts Vertical)' : ''}`;
+  if (vSource.type === 'gdrive') {
+    badge.style.background = '#e0f2fe';
+    badge.style.color = '#0369a1';
+    badge.innerHTML = `<strong>✓ Google Drive Detectado:</strong> ID extraído (<code>${vSource.id}</code>). Transmissão automática configurada.`;
+  } else if (vSource.type === 'youtube') {
+    badge.style.background = '#fef2f2';
+    badge.style.color = '#b91c1c';
+    badge.innerHTML = `<strong>✓ YouTube Detectado:</strong> ID (<code>${vSource.id}</code>)${vSource.isShorts ? ' • Formato Shorts' : ''}`;
+    if (vSource.isShorts) {
+      const propV = document.getElementById('editorPropVertical');
+      if (propV) propV.checked = true;
     }
-
-    if (previewContainer && previewSlot) {
-      previewContainer.style.display = 'block';
-      previewSlot.innerHTML = `
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
-          <iframe src="${vSource.embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
-        </div>
-      `;
-    }
-
-    if (posterContainer && posterSlot) {
-      posterContainer.style.display = 'block';
-      posterSlot.innerHTML = `<img src="${vSource.posterUrl}" style="width:100%; height:100%; object-fit:cover;">`;
-      if (posterNote) posterNote.textContent = 'Capa em alta resolução capturada do YouTube';
-    }
-
-    const posterField = document.getElementById('mediaPosterBase64');
-    if (posterField) posterField.value = vSource.posterUrl;
-
   } else if (vSource.type === 'vimeo') {
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.style.background = '#ecfdf5';
-      feedback.style.color = '#065f46';
-      feedback.style.border = '1px solid #a7f3d0';
-      feedback.innerHTML = `<strong>✓ Vídeo do Vimeo Identificado:</strong> ID: <code>${vSource.id}</code>`;
-    }
-    if (previewContainer && previewSlot) {
-      previewContainer.style.display = 'block';
-      previewSlot.innerHTML = `
-        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
-          <iframe src="${vSource.embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
-        </div>
-      `;
-    }
-    if (posterContainer && posterSlot) {
-      posterContainer.style.display = 'block';
-      posterSlot.innerHTML = `<img src="${vSource.posterUrl}" style="width:100%; height:100%; object-fit:cover;">`;
-      if (posterNote) posterNote.textContent = 'Capa obtida do Vimeo';
-    }
-    const posterField = document.getElementById('mediaPosterBase64');
-    if (posterField) posterField.value = vSource.posterUrl;
-
+    badge.style.background = '#f0fdf4';
+    badge.style.color = '#15803d';
+    badge.innerHTML = `<strong>✓ Vimeo Detectado:</strong> ID (<code>${vSource.id}</code>)`;
   } else if (vSource.type === 'direct') {
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.style.background = '#f0fdf4';
-      feedback.style.color = '#15803d';
-      feedback.style.border = '1px solid #bbf7d0';
-      feedback.innerHTML = `<strong>✓ Link direto de vídeo reconhecido</strong>`;
-    }
-    if (previewContainer && previewSlot) {
-      previewContainer.style.display = 'block';
-      previewSlot.innerHTML = `
-        <video src="${vSource.originalUrl}" controls playsinline style="width: 100%; max-height: 280px; object-fit: contain; background: #000; border-radius: 8px;"></video>
-      `;
-    }
-    if (posterContainer) posterContainer.style.display = 'none';
+    badge.style.background = '#f0fdf4';
+    badge.style.color = '#15803d';
+    badge.innerHTML = `<strong>✓ Vídeo Direto (MP4/WebM):</strong> Reprodução de alta performance`;
   } else {
-    if (feedback) {
-      feedback.style.display = 'block';
-      feedback.style.background = '#fffbeb';
-      feedback.style.color = '#92400e';
-      feedback.style.border = '1px solid #fde68a';
-      feedback.innerHTML = `Insira um link do YouTube, YouTube Shorts, Vimeo ou link direto .mp4`;
-    }
-    if (previewContainer) previewContainer.style.display = 'none';
-    if (posterContainer) posterContainer.style.display = 'none';
+    badge.style.background = '#f8fafc';
+    badge.style.color = '#475569';
+    badge.innerHTML = `<strong>✓ Link Direto:</strong> Imagem ou mídia externa`;
   }
+
+  updateEditorLivePreview();
 }
 
-// Upload direto de arquivo com extração automática de poster
-async function previewMediaFile(input) {
-  if (input.files && input.files[0]) {
-    const file = input.files[0];
-    currentSelectedFile = file;
+function handleEditorFileSelect(input) {
+  if (!input.files || input.files.length === 0) return;
+  const file = input.files[0];
+  editorSelectedFile = file;
 
-    const previewContainer = document.getElementById('mediaPreviewContainer');
-    const previewSlot = document.getElementById('mediaPreviewSlot');
-    const previewLabel = document.getElementById('mediaPreviewLabel');
-    const posterContainer = document.getElementById('videoPosterContainer');
-    const posterSlot = document.getElementById('posterMiniPreview');
-    const posterNote = document.getElementById('posterSourceNote');
-
-    if (previewContainer) previewContainer.style.display = 'block';
-    if (previewLabel) {
-      previewLabel.textContent = `Arquivo Selecionado: ${file.name} (${formatBytes(file.size)})`;
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    if (previewSlot) {
-      previewSlot.innerHTML = `
-        <video src="${objectUrl}" controls playsinline style="width: 100%; max-height: 280px; object-fit: contain; background: #000; border-radius: 8px;"></video>
-      `;
-    }
-
-    if (file.size > 25 * 1024 * 1024) {
-      showToast('Vídeo grande selecionado (' + formatBytes(file.size) + '). Para vídeos longos, recomendamos usar o link do Google Drive.', 'info');
-    }
-
-    if (posterContainer) {
-      posterContainer.style.display = 'block';
-      if (posterSlot) posterSlot.innerHTML = `<span style="color:#64748b; font-size:10px;">Gerando...</span>`;
-    }
-
-    const posterDataUrl = await extractVideoThumbnail(file);
-    if (posterDataUrl) {
-      currentGeneratedPoster = posterDataUrl;
-      const posterField = document.getElementById('mediaPosterBase64');
-      if (posterField) posterField.value = posterDataUrl;
-      if (posterSlot) {
-        posterSlot.innerHTML = `<img src="${posterDataUrl}" style="width:100%; height:100%; object-fit:cover;">`;
-      }
-      if (posterNote) {
-        posterNote.textContent = '✓ Foto de capa extraída automaticamente do vídeo';
-      }
-    } else {
-      if (posterNote) {
-        posterNote.textContent = 'Capa padrão será utilizada';
-      }
-    }
-  }
-}
-
-function previewFotoFile(input) {
-  if (input.files && input.files[0]) {
-    const file = input.files[0];
-    currentSelectedFile = file;
-
-    const container = document.getElementById('fotoPreviewContainer');
-    const slot = document.getElementById('fotoPreviewSlot');
-    if (container) container.style.display = 'block';
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const base64Input = document.getElementById('mediaBase64');
-      if (base64Input) base64Input.value = e.target.result;
-      if (slot) {
-        slot.innerHTML = `<img src="${e.target.result}" style="max-height: 240px; border-radius: 8px; object-fit: contain; max-width: 100%; border: 1px solid var(--border-soft);">`;
-      }
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function handleFotoUrlChange(url) {
-  const container = document.getElementById('fotoPreviewContainer');
-  const slot = document.getElementById('fotoPreviewSlot');
-  if (!url || !url.trim()) {
-    if (container) container.style.display = 'none';
-    return;
-  }
-  if (container) container.style.display = 'block';
-  if (slot) {
-    slot.innerHTML = `<img src="${url.trim()}" style="max-height: 240px; border-radius: 8px; object-fit: contain; max-width: 100%; border: 1px solid var(--border-soft);" onerror="this.style.display='none'">`;
-  }
-}
-
-function clearSelectedMedia() {
-  currentSelectedFile = null;
-  currentGeneratedPoster = null;
-
-  const gdriveInput = document.getElementById('gdriveUrlInput');
-  if (gdriveInput) gdriveInput.value = '';
-
-  const gdrivePosterInput = document.getElementById('gdrivePosterInput');
-  if (gdrivePosterInput) gdrivePosterInput.value = '';
-
-  const fileInput = document.getElementById('mediaFileInput');
-  if (fileInput) fileInput.value = '';
-
-  const fotoInput = document.getElementById('fotoFileInput');
-  if (fotoInput) fotoInput.value = '';
-
-  const urlInput = document.getElementById('mediaUrlInput');
-  if (urlInput) urlInput.value = '';
-
-  const fotoUrlInput = document.getElementById('fotoUrlInput');
-  if (fotoUrlInput) fotoUrlInput.value = '';
-
-  const base64Input = document.getElementById('mediaBase64');
-  if (base64Input) base64Input.value = '';
-
-  const posterBase64Input = document.getElementById('mediaPosterBase64');
-  if (posterBase64Input) posterBase64Input.value = '';
-
-  const gdrivePreview = document.getElementById('gdrivePreviewContainer');
-  if (gdrivePreview) gdrivePreview.style.display = 'none';
-
-  const previewContainer = document.getElementById('mediaPreviewContainer');
-  if (previewContainer) previewContainer.style.display = 'none';
-
-  const previewSlot = document.getElementById('mediaPreviewSlot');
-  if (previewSlot) previewSlot.innerHTML = '';
-
-  const fotoPreviewContainer = document.getElementById('fotoPreviewContainer');
-  if (fotoPreviewContainer) fotoPreviewContainer.style.display = 'none';
-
-  const gdriveFeedback = document.getElementById('gdriveUrlFeedback');
-  if (gdriveFeedback) gdriveFeedback.style.display = 'none';
-
-  const videoFeedback = document.getElementById('videoUrlFeedback');
-  if (videoFeedback) videoFeedback.style.display = 'none';
-}
-
-// ----------------------------------------------------------------------------
-// 7. SALVAR MÍDIA (GOOGLE DRIVE, YOUTUBE OU ARQUIVO)
-// ----------------------------------------------------------------------------
-
-async function handleSaveMedia(e) {
-  e.preventDefault();
-
-  const titulo = document.getElementById('photoTitulo').value.trim();
-  const cat = document.getElementById('photoCategoria').value;
-  const desc = document.getElementById('photoDesc').value.trim();
-  const tipoMidia = document.getElementById('mediaTipo').value || 'video';
-  const tipoRegEl = document.getElementById('photoTipoRegistro');
-  const tipoRegistro = tipoRegEl ? tipoRegEl.value : '';
-
-  let finalMediaUrl = '';
-  let finalPosterUrl = (document.getElementById('mediaPosterBase64') ? document.getElementById('mediaPosterBase64').value : '') || '';
-  let finalProporcao = 'horizontal';
-  let gdriveId = '';
-  let gdriveLink = '';
-
-  const submitBtn = document.getElementById('btnSubmitMedia');
-  const progressBox = document.getElementById('mediaUploadProgress');
-  const progressBar = document.getElementById('uploadProgressBar');
-  const progressText = document.getElementById('uploadProgressText');
-  const progressPercent = document.getElementById('uploadProgressPercent');
-
-  const setProgress = (text, percent) => {
-    if (progressBox) progressBox.style.display = 'block';
-    if (progressText) progressText.textContent = text;
-    if (progressPercent) progressPercent.textContent = `${percent}%`;
-    if (progressBar) progressBar.style.width = `${percent}%`;
-  };
-
-  // 1. Google Drive
-  const activeGdriveTab = document.getElementById('tabSelectGdrive') && document.getElementById('tabSelectGdrive').classList.contains('active');
-  if (activeGdriveTab) {
-    const rawGdriveUrl = document.getElementById('gdriveUrlInput') ? document.getElementById('gdriveUrlInput').value.trim() : '';
-    gdriveId = extractGoogleDriveId(rawGdriveUrl);
-
-    if (!gdriveId) {
-      showToast('Por favor, informe um link válido do Google Drive.', 'warning');
-      return;
-    }
-
-    finalMediaUrl = 'https://drive.google.com/file/d/' + gdriveId + '/preview';
-    gdriveLink = 'https://drive.google.com/file/d/' + gdriveId + '/view?usp=sharing';
-
-    const propVertical = document.getElementById('gdriveProporcaoVertical') && document.getElementById('gdriveProporcaoVertical').checked;
-    finalProporcao = propVertical ? 'vertical' : 'horizontal';
-
-    const customPoster = document.getElementById('gdrivePosterInput') ? document.getElementById('gdrivePosterInput').value.trim() : '';
-    if (customPoster) {
-      finalPosterUrl = customPoster;
-    } else if (!finalPosterUrl) {
-      finalPosterUrl = 'https://lh3.googleusercontent.com/u/0/d/' + gdriveId;
-    }
-  } 
-  // 2. Outros Vídeos (YouTube / MP4)
-  else if (tipoMidia === 'video') {
-    const videoUrl = document.getElementById('mediaUrlInput') ? document.getElementById('mediaUrlInput').value.trim() : '';
-    if (videoUrl) {
-      finalMediaUrl = videoUrl;
-      const vSource = parseVideoSource(videoUrl);
-      if (!finalPosterUrl && vSource.posterUrl) {
-        finalPosterUrl = vSource.posterUrl;
-      }
-      if (vSource.isShorts) {
-        finalProporcao = 'vertical';
-      } else {
-        const propVertical = document.getElementById('videoProporcaoVertical') && document.getElementById('videoProporcaoVertical').checked;
-        finalProporcao = propVertical ? 'vertical' : 'horizontal';
-      }
-    }
-  } 
-  // 3. Foto
-  else {
-    const fotoUrl = document.getElementById('fotoUrlInput') ? document.getElementById('fotoUrlInput').value.trim() : '';
-    const fotoBase64 = document.getElementById('mediaBase64') ? document.getElementById('mediaBase64').value : '';
-    finalMediaUrl = fotoUrl || fotoBase64;
-    finalPosterUrl = finalMediaUrl;
-
-    const propVertical = document.getElementById('fotoProporcaoVertical') && document.getElementById('fotoProporcaoVertical').checked;
-    finalProporcao = propVertical ? 'vertical' : 'horizontal';
+  const fileInfo = document.getElementById('editorFileSelectedInfo');
+  if (fileInfo) {
+    fileInfo.style.display = 'block';
+    fileInfo.textContent = `Arquivo selecionado: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
   }
 
-  if (!finalMediaUrl && !currentSelectedFile) {
-    showToast('Por favor, informe o link do Google Drive / vídeo ou selecione um arquivo.', 'warning');
-    return;
-  }
+  const isVideo = file.type.startsWith('video');
 
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Publicando projeto...';
-  }
+  // Leitura do arquivo para DataURL
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    const urlInput = document.getElementById('editorMidiaUrl');
+    if (urlInput) urlInput.value = dataUrl;
 
-  try {
-    // Upload de arquivo local para Supabase Storage se houver arquivo físico selecionado
-    if (currentSelectedFile && typeof sbClient !== 'undefined' && sbClient && sbClient.storage) {
-      setProgress('Enviando mídia para o servidor...', 30);
-
-      const isVid = currentSelectedFile.type.startsWith('video');
-      const fileExt = currentSelectedFile.name.split('.').pop() || (isVid ? 'mp4' : 'jpg');
-      const cleanFileName = `midia_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
-      const filePath = `uploads/${isVid ? 'videos' : 'fotos'}/${cleanFileName}`;
-
-      const { data: uploadRes, error: uploadErr } = await sbClient.storage
-        .from('portfolio')
-        .upload(filePath, currentSelectedFile, { cacheControl: '3600', upsert: true });
-
-      if (!uploadErr && uploadRes) {
-        const { data: pubData } = sbClient.storage.from('portfolio').getPublicUrl(filePath);
-        if (pubData && pubData.publicUrl) {
-          finalMediaUrl = pubData.publicUrl;
-        }
-      }
-
-      if (currentGeneratedPoster && currentGeneratedPoster.startsWith('data:image')) {
-        setProgress('Otimizando foto de capa do vídeo...', 70);
-        try {
-          const res = await fetch(currentGeneratedPoster);
-          const blob = await res.blob();
-          const posterPath = `uploads/posters/poster_${Date.now()}.jpg`;
-          const { data: pUploadRes } = await sbClient.storage
-            .from('portfolio')
-            .upload(posterPath, blob, { contentType: 'image/jpeg', upsert: true });
-
-          if (pUploadRes) {
-            const { data: pPubData } = sbClient.storage.from('portfolio').getPublicUrl(posterPath);
-            if (pPubData && pPubData.publicUrl) {
-              finalPosterUrl = pPubData.publicUrl;
-            }
+    if (isVideo) {
+      // Extração automática de poster para vídeo local
+      extractVideoFrame(file).then(thumb => {
+        if (thumb) {
+          editorGeneratedPoster = thumb;
+          const posterInput = document.getElementById('editorPosterUrl');
+          if (posterInput && !posterInput.value) {
+            posterInput.value = thumb;
           }
-        } catch (ePoster) {
-          console.warn('Erro ao salvar poster na nuvem:', ePoster);
         }
-      }
-    } else if (currentSelectedFile && !finalMediaUrl) {
-      setProgress('Processando mídia localmente...', 50);
-      const isVid = currentSelectedFile.type.startsWith('video');
-      if (isVid && currentSelectedFile.size > 4 * 1024 * 1024) {
-        finalMediaUrl = URL.createObjectURL(currentSelectedFile);
-      } else {
-        finalMediaUrl = await new Promise((res) => {
-          const reader = new FileReader();
-          reader.onload = e => res(e.target.result);
-          reader.readAsDataURL(currentSelectedFile);
-        });
-      }
-      if (!finalPosterUrl && currentGeneratedPoster) {
-        finalPosterUrl = currentGeneratedPoster;
-      }
+        updateEditorLivePreview();
+      });
+    } else {
+      updateEditorLivePreview();
     }
-
-    setProgress('Gravando dados do projeto...', 90);
-
-    const newMedia = {
-      id: Date.now(),
-      tipoMidia: activeGdriveTab ? 'video' : tipoMidia,
-      titulo: titulo,
-      categoria: cat,
-      descricao: desc,
-      midiaUrl: finalMediaUrl,
-      posterUrl: finalPosterUrl,
-      proporcao: finalProporcao,
-      gdriveId: gdriveId,
-      gdriveLink: gdriveLink,
-      tipoRegistro: tipoRegistro
-    };
-
-    if (typeof sbClient !== 'undefined' && sbClient) {
-      try {
-        const { data: resData, error: mErr } = await safeDbInsert('portfolio', {
-          tipo_midia: newMedia.tipoMidia,
-          titulo: titulo,
-          categoria: cat,
-          descricao: desc,
-          midia_url: finalMediaUrl,
-          poster_url: finalPosterUrl,
-          proporcao: finalProporcao,
-          gdrive_id: gdriveId
-        });
-
-        if (!mErr && resData && resData[0]) {
-          newMedia.id = resData[0].id;
-        }
-      } catch (e) {
-        console.warn('Erro ao inserir no Supabase:', e);
-      }
-    }
-
-    db.portfolio.unshift(newMedia);
-    saveCacheDB('portfolio', db.portfolio);
-
-    setProgress('Publicado com sucesso!', 100);
-
-    setTimeout(() => {
-      closeModal('photoModal');
-      showToast(newMedia.tipoMidia === 'video' ? 'Vídeo publicado no portfólio com sucesso!' : 'Fotografia publicada no portfólio com sucesso!', 'success');
-      renderAdminPortfolio(db.portfolio);
-      renderPublicCatalog();
-    }, 400);
-
-  } catch (err) {
-    console.error('Erro ao salvar projeto:', err);
-    showToast('Ocorreu um erro ao processar o projeto. Tente novamente.', 'danger');
-  } finally {
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Publicar no Catálogo';
-    }
-  }
+  };
+  reader.readAsDataURL(file);
 }
 
-// ----------------------------------------------------------------------------
-// 8. EXCLUIR MÍDIA DO PORTFÓLIO
-// ----------------------------------------------------------------------------
+function handleEditorPosterFileSelect(input) {
+  if (!input.files || input.files.length === 0) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const posterInput = document.getElementById('editorPosterUrl');
+    if (posterInput) posterInput.value = e.target.result;
+    updateEditorLivePreview();
+  };
+  reader.readAsDataURL(file);
+}
 
-async function deletePortfolioItem(id) {
-  const allProjects = getAllPortfolioProjects();
-  const item = allProjects.find(p => String(p.id) === String(id));
-  const isVid = item ? isVideoMedia(item) : false;
-
-  const confirmado = await customConfirm(
-    `Deseja realmente remover este ${isVid ? 'vídeo' : 'projeto'} do catálogo público?`, 
-    isVid ? 'Remover Vídeo do Portfólio' : 'Remover Projeto', 
-    { danger: true, confirmText: 'Sim, Remover' }
-  );
-  if (!confirmado) return;
-
-  db.portfolio = db.portfolio.filter(p => String(p.id) !== String(id));
-  saveCacheDB('portfolio', db.portfolio);
-  showToast(isVid ? 'Vídeo removido do catálogo.' : 'Projeto removido do catálogo.', 'info');
-  renderAdminPortfolio(db.portfolio);
-  renderPublicCatalog();
-
-  if (typeof sbClient !== 'undefined' && sbClient) {
+function extractVideoFrame(file) {
+  return new Promise((resolve) => {
     try {
-      await sbClient.from('portfolio').delete().eq('id', id);
+      const url = URL.createObjectURL(file);
+      const video = document.createElement('video');
+      video.preload = 'metadata';
+      video.src = url;
+      video.muted = true;
+      video.playsInline = true;
+
+      video.onloadeddata = () => {
+        video.currentTime = Math.min(0.5, video.duration / 2);
+      };
+
+      video.onseeked = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth || 640;
+          canvas.height = video.videoHeight || 360;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          URL.revokeObjectURL(url);
+          resolve(dataUrl);
+        } catch (e) {
+          URL.revokeObjectURL(url);
+          resolve(null);
+        }
+      };
+
+      video.onerror = () => {
+        URL.revokeObjectURL(url);
+        resolve(null);
+      };
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        resolve(null);
+      }, 3500);
     } catch (e) {
-      console.error('Erro ao excluir no Supabase:', e);
+      resolve(null);
     }
-  }
+  });
 }
 
+function updateEditorLivePreview() {
+  const container = document.getElementById('editorLivePreviewContainer');
+  const slot = document.getElementById('editorLivePreviewSlot');
+  const typeTag = document.getElementById('editorPreviewTypeTag');
+  const urlInput = document.getElementById('editorMidiaUrl');
+  const posterInput = document.getElementById('editorPosterUrl');
+  const propVertical = document.getElementById('editorPropVertical');
 
-// Sincroniza todas as mídias da pasta oficial do Google Drive
-function syncGoogleDriveFolderMedia() {
-  const seeds = (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' ? DEFAULT_REAL_PORTFOLIO : []);
-  if (seeds.length === 0) return;
+  if (!container || !slot) return;
 
-  const existingGdriveIds = new Set(seeds.map(p => p.gdriveId).filter(Boolean));
-  const userAddedItems = (db.portfolio || []).filter(p => !p.gdriveId || !existingGdriveIds.has(p.gdriveId));
+  const url = (urlInput ? urlInput.value : '').trim();
+  const poster = (posterInput ? posterInput.value : '').trim();
+  const isVertical = propVertical ? propVertical.checked : true;
 
-  db.portfolio = [...seeds, ...userAddedItems];
-  saveCacheDB('portfolio', db.portfolio);
-  showToast('Todas as 16 mídias da pasta do Google Drive foram sincronizadas no catálogo!', 'success');
-  renderAdminPortfolio(db.portfolio);
-  renderPublicCatalog();
-}
-
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// 9. EDIÇÃO DE INFORMAÇÕES DE MÍDIAS (VÍDEO / FOTO / GOOGLE DRIVE)
-// ----------------------------------------------------------------------------
-
-function openEditProjectModal(projectId) {
-  const allProjects = getAllPortfolioProjects();
-  const project = allProjects.find(p => String(p.id) === String(projectId));
-  if (!project) {
-    showToast('Projeto não encontrado para edição.', 'warning');
+  if (!url) {
+    container.style.display = 'none';
+    slot.innerHTML = '';
     return;
   }
 
-  const idInput = document.getElementById('editProjectId');
-  const tituloInput = document.getElementById('editProjectTitulo');
-  const catInput = document.getElementById('editProjectCategoria');
-  const tipoRegInput = document.getElementById('editProjectTipoRegistro');
-  const tipoMidiaInput = document.getElementById('editProjectTipoMidia');
-  const proporcaoInput = document.getElementById('editProjectProporcao');
-  const midiaUrlInput = document.getElementById('editProjectMidiaUrl');
-  const posterUrlInput = document.getElementById('editProjectPosterUrl');
-  const descInput = document.getElementById('editProjectDesc');
+  container.style.display = 'block';
+  const vSource = parseVideoSource(url);
+  const isVideo = isVideoMedia({ midiaUrl: url, tipoMidia: vSource.type !== 'unknown' ? 'video' : 'foto' });
 
-  if (idInput) idInput.value = project.id;
-  if (tituloInput) tituloInput.value = project.titulo || '';
-  if (catInput) catInput.value = project.categoria || 'Marcenaria Sob Medida';
-  if (tipoRegInput) tipoRegInput.value = project.tipoRegistro || 'ambiente_finalizado';
-  if (tipoMidiaInput) tipoMidiaInput.value = isVideoMedia(project) ? 'video' : 'foto';
-  if (proporcaoInput) proporcaoInput.value = project.proporcao || 'horizontal';
-  if (midiaUrlInput) midiaUrlInput.value = project.midiaUrl || '';
-  if (posterUrlInput) posterUrlInput.value = project.posterUrl || '';
-  if (descInput) descInput.value = project.descricao || '';
+  if (isVideo) {
+    if (typeTag) typeTag.textContent = `Vídeo • ${isVertical ? 'Vertical (9:16)' : 'Horizontal (16:9)'}`;
 
-  updateEditMediaPreview();
-  openModal('editProjectModal');
-}
-
-function updateEditMediaPreview() {
-  const midiaUrl = document.getElementById('editProjectMidiaUrl') ? document.getElementById('editProjectMidiaUrl').value.trim() : '';
-  const posterUrl = document.getElementById('editProjectPosterUrl') ? document.getElementById('editProjectPosterUrl').value.trim() : '';
-  const tipoMidia = document.getElementById('editProjectTipoMidia') ? document.getElementById('editProjectTipoMidia').value : 'video';
-  const proporcao = document.getElementById('editProjectProporcao') ? document.getElementById('editProjectProporcao').value : 'horizontal';
-  const isVertical = proporcao === 'vertical';
-
-  const previewSlot = document.getElementById('editMediaPreviewSlot');
-  const typeTag = document.getElementById('editPreviewTypeTag');
-  const badge = document.getElementById('editMediaUrlBadge');
-
-  if (!previewSlot) return;
-
-  if (!midiaUrl) {
-    previewSlot.innerHTML = '<span style="color: #94a3b8; font-size: 12px;">Informe a URL da mídia para visualizar a prévia</span>';
-    if (typeTag) typeTag.textContent = '';
-    if (badge) badge.style.display = 'none';
-    return;
-  }
-
-  // Identifica origem da mídia
-  if (tipoMidia === 'video' || isVideoMedia({ midiaUrl })) {
-    const vSource = parseVideoSource(midiaUrl);
-    
     if (vSource.type === 'gdrive') {
-      if (typeTag) typeTag.textContent = 'Transmissão Google Drive';
-      if (badge) {
-        badge.style.display = 'block';
-        badge.style.background = '#ecfdf5';
-        badge.style.color = '#065f46';
-        badge.style.border = '1px solid #a7f3d0';
-        badge.innerHTML = `<strong>✓ Google Drive:</strong> Link de streaming pronto (ID: <code>${vSource.id}</code>)`;
-      }
-      previewSlot.innerHTML = `
-        <div style="position: relative; width: 100%; ${isVertical ? 'aspect-ratio: 9/16; max-height: 240px; max-width: 150px; margin: 0 auto;' : 'aspect-ratio: 16/9; max-height: 200px;'} overflow: hidden; border-radius: 8px; background: #000;">
+      slot.innerHTML = `
+        <div style="position: relative; width: 100%; ${isVertical ? 'aspect-ratio: 9/16; max-height: 220px; max-width: 130px;' : 'aspect-ratio: 16/9; max-height: 180px;'} overflow: hidden; border-radius: 8px; background: #000;">
           <iframe src="${vSource.embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
         </div>
       `;
     } else if (vSource.type === 'youtube') {
-      if (typeTag) typeTag.textContent = vSource.isShorts ? 'YouTube Shorts' : 'YouTube';
-      if (badge) {
-        badge.style.display = 'block';
-        badge.style.background = '#ecfdf5';
-        badge.style.color = '#065f46';
-        badge.style.border = '1px solid #a7f3d0';
-        badge.innerHTML = `<strong>✓ YouTube:</strong> Vídeo reconhecido (ID: <code>${vSource.id}</code>)`;
-      }
-      previewSlot.innerHTML = `
-        <div style="position: relative; width: 100%; ${vSource.isShorts || isVertical ? 'aspect-ratio: 9/16; max-height: 240px; max-width: 150px; margin: 0 auto;' : 'aspect-ratio: 16/9; max-height: 200px;'} overflow: hidden; border-radius: 8px; background: #000;">
-          <iframe src="${vSource.embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
-        </div>
-      `;
-    } else if (vSource.type === 'vimeo') {
-      if (typeTag) typeTag.textContent = 'Vimeo';
-      if (badge) {
-        badge.style.display = 'block';
-        badge.style.background = '#ecfdf5';
-        badge.style.color = '#065f46';
-        badge.style.border = '1px solid #a7f3d0';
-        badge.innerHTML = '<strong>✓ Vimeo:</strong> Vídeo reconhecido';
-      }
-      previewSlot.innerHTML = `
-        <div style="position: relative; width: 100%; aspect-ratio: 16/9; max-height: 200px; overflow: hidden; border-radius: 8px; background: #000;">
+      slot.innerHTML = `
+        <div style="position: relative; width: 100%; ${vSource.isShorts || isVertical ? 'aspect-ratio: 9/16; max-height: 220px; max-width: 130px;' : 'aspect-ratio: 16/9; max-height: 180px;'} overflow: hidden; border-radius: 8px; background: #000;">
           <iframe src="${vSource.embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen></iframe>
         </div>
       `;
     } else {
-      if (typeTag) typeTag.textContent = 'Vídeo Direto / CDN';
-      if (badge) {
-        badge.style.display = 'block';
-        badge.style.background = '#f0fdf4';
-        badge.style.color = '#15803d';
-        badge.style.border = '1px solid #bbf7d0';
-        badge.innerHTML = '<strong>✓ Link de Vídeo:</strong> Reprodução HTML5 nativa';
-      }
-      previewSlot.innerHTML = `
-        <div style="position: relative; width: 100%; ${isVertical ? 'aspect-ratio: 9/16; max-height: 240px; max-width: 150px; margin: 0 auto;' : 'aspect-ratio: 16/9; max-height: 200px;'} overflow: hidden; border-radius: 8px; background: #000;">
-          <video src="${midiaUrl}" ${posterUrl ? `poster="${posterUrl}"` : ''} controls playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
+      slot.innerHTML = `
+        <div style="position: relative; width: 100%; ${isVertical ? 'aspect-ratio: 9/16; max-height: 220px; max-width: 130px;' : 'aspect-ratio: 16/9; max-height: 180px;'} overflow: hidden; border-radius: 8px; background: #000;">
+          <video src="${url}" ${poster ? `poster="${poster}"` : ''} controls playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>
         </div>
       `;
     }
   } else {
-    // Fotografia / Imagem
     if (typeTag) typeTag.textContent = 'Fotografia / Imagem';
-    if (badge) {
-      badge.style.display = 'block';
-      badge.style.background = '#f0fdf4';
-      badge.style.color = '#15803d';
-      badge.style.border = '1px solid #bbf7d0';
-      badge.innerHTML = '<strong>✓ Imagem:</strong> Carregamento direto';
-    }
-    previewSlot.innerHTML = `
-      <img src="${midiaUrl}" style="max-height: 200px; max-width: 100%; border-radius: 6px; object-fit: contain; margin: 0 auto; display: block;" onerror="this.parentElement.innerHTML='<span style=\'color:#ef4444; font-size:12px;\'>Não foi possível carregar a imagem deste link</span>';">
+    slot.innerHTML = `
+      <img src="${url}" style="max-height: 180px; max-width: 100%; border-radius: 6px; object-fit: contain;" onerror="this.parentElement.innerHTML='<span style=\\'color:#ef4444; font-size:12px;\\'>Não foi possível carregar a imagem deste link</span>';">
     `;
   }
 }
 
-async function handleSaveProjectEdits(e) {
+async function handleSavePortfolioMedia(e) {
   e.preventDefault();
 
-  const id = document.getElementById('editProjectId').value;
-  const titulo = document.getElementById('editProjectTitulo').value.trim();
-  const categoria = document.getElementById('editProjectCategoria').value;
-  const tipoRegistro = document.getElementById('editProjectTipoRegistro').value;
-  const tipoMidia = document.getElementById('editProjectTipoMidia').value;
-  const proporcao = document.getElementById('editProjectProporcao').value;
-  let midiaUrl = document.getElementById('editProjectMidiaUrl').value.trim();
-  const posterUrl = document.getElementById('editProjectPosterUrl') ? document.getElementById('editProjectPosterUrl').value.trim() : '';
-  const descricao = document.getElementById('editProjectDesc') ? document.getElementById('editProjectDesc').value.trim() : '';
+  if (typeof isUserAdmin === 'function' && !isUserAdmin()) {
+    showToast('Ação não autorizada. Apenas administradores podem salvar mídias.', 'danger');
+    return;
+  }
+
+  const id = document.getElementById('editorProjectId').value;
+  const titulo = document.getElementById('editorProjectTitulo').value.trim();
+  const categoria = document.getElementById('editorProjectCategoria').value;
+  const proporcao = document.getElementById('editorPropVertical').checked ? 'vertical' : 'horizontal';
+  let midiaUrl = document.getElementById('editorMidiaUrl').value.trim();
+  const posterUrl = document.getElementById('editorPosterUrl') ? document.getElementById('editorPosterUrl').value.trim() : '';
 
   if (!titulo) {
     showToast('O título do projeto é obrigatório.', 'warning');
     return;
   }
   if (!midiaUrl) {
-    showToast('Informe o link ou URL da mídia.', 'warning');
+    showToast('Informe o link ou selecione um arquivo para a mídia.', 'warning');
     return;
   }
 
-  // Normalização automática de Google Drive
+  // Tratamento inteligente do Google Drive
   let gdriveId = extractGoogleDriveId(midiaUrl) || '';
   let gdriveLink = '';
   if (gdriveId) {
@@ -1527,104 +918,158 @@ async function handleSaveProjectEdits(e) {
     gdriveLink = 'https://drive.google.com/file/d/' + gdriveId + '/view?usp=sharing';
   }
 
-  const allProjects = getAllPortfolioProjects();
-  let item = allProjects.find(p => String(p.id) === String(id));
+  const vSource = parseVideoSource(midiaUrl);
+  const tipoMidia = (vSource.type !== 'unknown' || isVideoMedia({ midiaUrl })) ? 'video' : 'foto';
 
-  if (!item) {
-    showToast('Projeto não encontrado para salvar.', 'danger');
-    return;
-  }
+  const all = getAllPortfolioProjects();
 
-  // Atualiza propriedades do objeto
-  item.titulo = titulo;
-  item.categoria = categoria;
-  item.tipoRegistro = tipoRegistro;
-  item.tipoMidia = tipoMidia;
-  item.proporcao = proporcao;
-  item.midiaUrl = midiaUrl;
-  item.posterUrl = posterUrl || (tipoMidia === 'foto' ? midiaUrl : item.posterUrl);
-  item.descricao = descricao;
-  if (gdriveId) {
-    item.gdriveId = gdriveId;
-    item.gdriveLink = gdriveLink;
-  }
-
-  // Atualiza no array db.portfolio
-  if (!Array.isArray(db.portfolio)) db.portfolio = [];
-  const pIndex = db.portfolio.findIndex(p => String(p.id) === String(id));
-  if (pIndex !== -1) {
-    db.portfolio[pIndex] = { ...item };
-  } else {
-    db.portfolio.push({ ...item });
-  }
-
-  // Atualiza em DEFAULT_REAL_PORTFOLIO se for um seed padrão
-  if (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' && Array.isArray(DEFAULT_REAL_PORTFOLIO)) {
-    const seedIndex = DEFAULT_REAL_PORTFOLIO.findIndex(p => String(p.id) === String(id));
-    if (seedIndex !== -1) {
-      DEFAULT_REAL_PORTFOLIO[seedIndex] = { ...item };
+  if (editorCurrentMode === 'edit' && id) {
+    // ATUALIZAÇÃO
+    let item = all.find(p => String(p.id) === String(id));
+    if (!item) {
+      showToast('Projeto não encontrado para salvar.', 'danger');
+      return;
     }
+
+    item.titulo = titulo;
+    item.categoria = categoria;
+    item.tipoMidia = tipoMidia;
+    item.proporcao = proporcao;
+    item.midiaUrl = midiaUrl;
+    if (posterUrl) item.posterUrl = posterUrl;
+    if (gdriveId) {
+      item.gdriveId = gdriveId;
+      item.gdriveLink = gdriveLink;
+    }
+
+    showToast('Projeto atualizado com sucesso!', 'success');
+  } else {
+    // CRIAÇÃO DE NOVO ITEM
+    const maxId = all.reduce((max, p) => Math.max(max, parseInt(p.id) || 0), 0);
+    const newId = maxId + 1;
+
+    const newItem = {
+      id: newId,
+      titulo: titulo,
+      categoria: categoria,
+      tipoMidia: tipoMidia,
+      proporcao: proporcao,
+      midiaUrl: midiaUrl,
+      posterUrl: posterUrl || (tipoMidia === 'foto' ? midiaUrl : ''),
+      gdriveId: gdriveId || null,
+      gdriveLink: gdriveLink || (gdriveId ? `https://drive.google.com/file/d/${gdriveId}/view` : ''),
+      descricao: `Projeto executado sob medida pela DK Revestimentos.`
+    };
+
+    all.unshift(newItem);
+    showToast('Nova mídia publicada com sucesso!', 'success');
   }
 
-  saveCacheDB('portfolio', db.portfolio);
+  // Persistência local no banco de dados e cache
+  if (typeof db !== 'undefined') db.portfolio = all;
+  if (typeof saveCacheDB === 'function') saveCacheDB('portfolio', all);
 
-  // Sincroniza com Supabase se conectado
+  // Sincronização em nuvem com Supabase se disponível
   if (typeof sbClient !== 'undefined' && sbClient) {
     try {
-      await sbClient.from('portfolio').update({
-        titulo: item.titulo,
-        categoria: item.categoria,
-        descricao: item.descricao,
-        midia_url: item.midiaUrl,
-        poster_url: item.posterUrl,
-        proporcao: item.proporcao,
-        tipo_midia: item.tipoMidia,
-        gdrive_id: item.gdriveId || null,
-        tipo_registro: item.tipoRegistro || null
-      }).eq('id', id);
+      const payload = {
+        id: editorCurrentMode === 'edit' ? parseInt(id) : undefined,
+        titulo: titulo,
+        categoria: categoria,
+        tipo_midia: tipoMidia,
+        proporcao: proporcao,
+        midia_url: midiaUrl,
+        poster_url: posterUrl || (tipoMidia === 'foto' ? midiaUrl : null),
+        gdrive_id: gdriveId || null
+      };
+      await sbClient.from('portfolio').upsert(payload);
     } catch (err) {
-      console.warn('Erro ao atualizar projeto no Supabase:', err);
+      console.warn('Sync Supabase portfolio:', err);
     }
   }
 
-  closeModal('editProjectModal');
-  showToast(`Projeto "${titulo}" atualizado com sucesso!`, 'success');
-
-  renderAdminPortfolio(db.portfolio);
+  closeModal('portfolioEditorModal');
+  renderAdminPortfolio();
   renderPublicCatalog();
 }
 
+async function deletePortfolioItem(id) {
+  if (typeof isUserAdmin === 'function' && !isUserAdmin()) {
+    showToast('Apenas administradores podem excluir projetos.', 'warning');
+    return;
+  }
+
+  const all = getAllPortfolioProjects();
+  const item = all.find(p => String(p.id) === String(id));
+  const isVid = item ? isVideoMedia(item) : false;
+
+  const confirmado = await customConfirm(
+    `Deseja realmente excluir "${item ? item.titulo : 'este item'}" do portfólio?`, 
+    isVid ? 'Excluir Vídeo' : 'Excluir Fotografia', 
+    { danger: true, confirmText: 'Sim, Excluir' }
+  );
+  if (!confirmado) return;
+
+  if (typeof db !== 'undefined') {
+    db.portfolio = db.portfolio.filter(p => String(p.id) !== String(id));
+    if (typeof saveCacheDB === 'function') saveCacheDB('portfolio', db.portfolio);
+  }
+
+  showToast('Item removido com sucesso.', 'info');
+  renderAdminPortfolio();
+  renderPublicCatalog();
+
+  if (typeof sbClient !== 'undefined' && sbClient) {
+    try {
+      await sbClient.from('portfolio').delete().eq('id', id);
+    } catch (e) {
+      console.warn('Erro ao excluir no Supabase:', e);
+    }
+  }
+}
+
+function syncGoogleDriveFolderMedia() {
+  if (typeof isUserAdmin === 'function' && !isUserAdmin()) {
+    showToast('Apenas administradores podem sincronizar o Google Drive.', 'warning');
+    return;
+  }
+
+  if (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' && Array.isArray(DEFAULT_REAL_PORTFOLIO)) {
+    if (typeof db !== 'undefined') {
+      db.portfolio = [...DEFAULT_REAL_PORTFOLIO];
+      if (typeof saveCacheDB === 'function') saveCacheDB('portfolio', db.portfolio);
+    }
+    showToast('Pasta do Google Drive sincronizada (16 mídias ativas).', 'success');
+    renderAdminPortfolio();
+    renderPublicCatalog();
+  }
+}
+
+// ----------------------------------------------------------------------------
 // EXPORTS GLOBAIS
 // ----------------------------------------------------------------------------
 window.extractGoogleDriveId = extractGoogleDriveId;
-window.parseVideoSource = parseVideoSource;
 window.extractYouTubeId = extractYouTubeId;
-window.extractVimeoId = extractVimeoId;
-window.extractVideoThumbnail = extractVideoThumbnail;
+window.parseVideoSource = parseVideoSource;
 window.isVideoMedia = isVideoMedia;
 window.getAllPortfolioProjects = getAllPortfolioProjects;
 window.setPortfolioFormatFilter = setPortfolioFormatFilter;
 window.renderPublicCatalog = renderPublicCatalog;
+window.togglePlayInlineVideo = togglePlayInlineVideo;
+window.stopInlineVideo = stopInlineVideo;
 window.openProjectDetails = openProjectDetails;
-window.closeProjectDetailsModal = closeProjectDetailsModal;
-window.prefillBudget = prefillBudget;
+window.setAdminPortfolioFilter = setAdminPortfolioFilter;
+window.handleAdminPortfolioSearch = handleAdminPortfolioSearch;
 window.renderAdminPortfolio = renderAdminPortfolio;
-window.openNewMediaModal = openNewMediaModal;
-window.openNewPhotoModal = openNewPhotoModal;
-window.selectMediaType = selectMediaType;
-window.selectVideoSource = selectVideoSource;
-window.handleGdriveUrlChange = handleGdriveUrlChange;
-window.updateGdriveProportionPreview = updateGdriveProportionPreview;
-window.handleVideoUrlChange = handleVideoUrlChange;
-window.previewMediaFile = previewMediaFile;
-window.previewFotoFile = previewFotoFile;
-window.handleFotoUrlChange = handleFotoUrlChange;
-window.clearSelectedMedia = clearSelectedMedia;
-window.handleSaveMedia = handleSaveMedia;
+window.openPortfolioEditorModal = openPortfolioEditorModal;
+window.openEditProjectModal = openPortfolioEditorModal; // retrocompatibilidade
+window.openNewMediaModal = openPortfolioEditorModal;    // retrocompatibilidade
+window.switchEditorSourceTab = switchEditorSourceTab;
+window.updateEditorProportion = updateEditorProportion;
+window.handleEditorUrlInput = handleEditorUrlInput;
+window.handleEditorFileSelect = handleEditorFileSelect;
+window.handleEditorPosterFileSelect = handleEditorPosterFileSelect;
+window.updateEditorLivePreview = updateEditorLivePreview;
+window.handleSavePortfolioMedia = handleSavePortfolioMedia;
 window.deletePortfolioItem = deletePortfolioItem;
-
 window.syncGoogleDriveFolderMedia = syncGoogleDriveFolderMedia;
-
-window.openEditProjectModal = openEditProjectModal;
-window.updateEditMediaPreview = updateEditMediaPreview;
-window.handleSaveProjectEdits = handleSaveProjectEdits;

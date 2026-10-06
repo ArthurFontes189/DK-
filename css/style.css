@@ -1775,6 +1775,104 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
   z-index: 2;
 }
 
+/* Reprodução Dinâmica de Vídeos no Card (Sem Modal) */
+.project-card.is-playing-inline {
+  border-color: var(--wood-primary) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16) !important;
+}
+
+.project-card.is-playing-inline .video-play-indicator {
+  display: none !important;
+}
+
+.project-card.is-playing-inline .project-media-type-badge {
+  display: none !important;
+}
+
+.project-card.is-playing-inline .project-media-overlay {
+  display: none !important;
+}
+
+.btn-close-inline-video {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.88);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 30;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.btn-close-inline-video:hover {
+  background: #dc2626;
+  border-color: #ef4444;
+  transform: scale(1.1);
+}
+
+/* Rodapé Minimalista dos Cards (Apenas Título + Opção de Edição) */
+.project-card-minimal-footer {
+  padding: 14px 18px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  background: #ffffff;
+  border-top: 1px solid var(--border-soft);
+}
+
+.project-card-minimal-footer .project-title {
+  margin: 0 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  line-height: 1.35 !important;
+  flex: 1 !important;
+  transition: color 0.2s ease;
+}
+
+.project-card-minimal-footer .project-title:hover {
+  color: var(--wood-primary);
+}
+
+.btn-card-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-card-edit:hover {
+  background: var(--wood-dark, #3a1f0f);
+  color: #ffffff;
+  border-color: var(--wood-dark, #3a1f0f);
+  box-shadow: 0 2px 8px rgba(58, 31, 15, 0.2);
+}
+
 
 /* --- admin.css --- */
 /* ==========================================================================
@@ -2196,6 +2294,147 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
   border: 1px solid var(--border-soft);
   border-radius: 12px;
   padding: 18px;
+}
+
+/* ==========================================================================
+   PAINEL ADMINISTRATIVO: GESTÃO DO PORTFÓLIO E MÍDIAS (ALTO PADRÃO)
+   ========================================================================== */
+.admin-portfolio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.admin-portfolio-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-soft);
+}
+
+.admin-portfolio-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-pfilter-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.admin-pfilter-btn:hover {
+  background: #f1f5f9;
+  color: var(--wood-primary);
+}
+
+.admin-pfilter-btn.active {
+  background: var(--wood-dark, #3a1f0f);
+  color: #ffffff;
+}
+
+.admin-portfolio-search-box input {
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-soft);
+  font-size: 13px;
+  width: 260px;
+  max-width: 100%;
+  font-family: inherit;
+  outline: none;
+}
+
+.admin-portfolio-search-box input:focus {
+  border-color: var(--wood-primary);
+  box-shadow: 0 0 0 3px rgba(138, 79, 38, 0.15);
+}
+
+.admin-media-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-soft);
+  transition: all 0.2s ease;
+}
+
+.admin-media-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-subtle);
+}
+
+.media-input-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.media-input-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-soft);
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.media-input-tab:hover {
+  background: #f1f5f9;
+  color: var(--wood-primary);
+}
+
+.media-input-tab.active {
+  background: #ffffff;
+  color: var(--wood-primary);
+  border-color: var(--wood-primary);
+  box-shadow: 0 2px 8px rgba(138, 79, 38, 0.12);
+}
+
+.proportion-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  background: #ffffff;
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.proportion-choice:hover {
+  border-color: var(--wood-primary);
 }
 
 

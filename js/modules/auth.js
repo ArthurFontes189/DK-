@@ -4,6 +4,11 @@
 
 let isAdminLoggedIn = localStorage.getItem("marcenaria_admin_logged") === "true";
 
+function isUserAdmin() {
+  return localStorage.getItem("marcenaria_admin_logged") === "true";
+}
+window.isUserAdmin = isUserAdmin;
+
 function updateAdminButton() {
   const btnText = document.getElementById("adminBtnText");
   if (btnText) {
@@ -30,6 +35,7 @@ function handleAdminLogin(e) {
     closeModal("loginModal");
     updateAdminButton();
     showToast("Login realizado com sucesso!", "success");
+    if (typeof renderPublicCatalog === "function") renderPublicCatalog();
     goToAdminPanel();
   } else {
     showToast("Usuário ou senha incorretos. Padrão: admin / 1234", "error");
@@ -40,6 +46,7 @@ function adminLogout() {
   isAdminLoggedIn = false;
   localStorage.removeItem("marcenaria_admin_logged");
   updateAdminButton();
+  if (typeof renderPublicCatalog === "function") renderPublicCatalog();
   showToast("Você saiu do painel administrativo.", "info");
   goToClientSite();
 }

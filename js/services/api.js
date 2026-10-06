@@ -29,15 +29,14 @@ function updateSyncIndicator(isConnected) {
   const el = document.getElementById("syncIndicator");
   if (!el) return;
   if (isConnected) {
+    el.style.display = "inline-flex";
     el.style.color = "#4ade80";
     el.style.background = "rgba(34, 197, 94, 0.15)";
     el.style.borderColor = "rgba(34, 197, 94, 0.3)";
     el.innerHTML = '<span style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block;"></span> Banco Sincronizado';
   } else {
-    el.style.color = "#f59e0b";
-    el.style.background = "rgba(245, 158, 11, 0.15)";
-    el.style.borderColor = "rgba(245, 158, 11, 0.3)";
-    el.innerHTML = '<span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span> Modo Offline';
+    // Oculta o indicador de modo offline para manter a barra limpa e discreta
+    el.style.display = "none";
   }
 }
 
