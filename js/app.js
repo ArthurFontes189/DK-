@@ -16,3 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
     renderPublicCatalog();
   }
 });
+
+
+function toggleMobileMenu() {
+  const m = document.getElementById("mobileMenu");
+  if (m) m.classList.toggle("open");
+}
+window.toggleMobileMenu = toggleMobileMenu;
+
+function goToClientSite() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+window.goToClientSite = goToClientSite;

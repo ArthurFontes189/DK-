@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261006_v3">
+  <link rel="stylesheet" href="css/style.css?v=20261007_v5">
   
   <style>
     /* Estilos da Tela de Login In-Page */
@@ -189,7 +189,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
           <div>
             <h3 style="font-size: 18px; font-weight: 700;">Solicitações de Orçamento</h3>
-            <span style="font-size: 13px; color: var(--text-muted);" id="leadsTotalTxt">Carregando contatos...</span>
+            <span style="font-size: 13px; color: var(--text-muted);" id="leadsTotalTxt">0 solicitações de orçamento</span>
           </div>
 
           <!-- Filtros de Status -->
@@ -979,55 +979,21 @@
   <!-- ============================================== -->
   <!-- JAVASCRIPT: LÓGICA E DADOS LOCAIS -->
   <!-- ============================================== -->
-  <!-- ====================================================================== -->
-  <!-- ARQUITETURA MODULAR JAVASCRIPT (ENTERPRISE CLEAN ARCHITECTURE)         -->
-  <!-- ====================================================================== -->
-  
-  <!-- 1. Configurações Globais & Credenciais Supabase -->
+    <!-- 4. SCRIPTS DO SISTEMA ADMINISTRATIVO -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js?v=20261006_video_fix_v7"></script>
-
-  <!-- 2. Serviços de Persistência e Rede -->
-  <script src="js/services/storage.js?v=20261006_video_fix_v7"></script>
-  <script src="js/services/api.js?v=20261006_video_fix_v7"></script>
-
-  <!-- 3. Componentes de Interface do Usuário (UI) -->
-  <script src="js/ui/toast.js?v=20261006_video_fix_v7"></script>
-  <script src="js/ui/modals.js?v=20261006_video_fix_v7"></script>
-
-  <!-- 4. Módulos de Regras de Negócio e Domínio -->
-  <script src="js/modules/auth.js?v=20261006_video_fix_v7"></script>
-  <script src="js/modules/leads.js?v=20261006_video_fix_v7"></script>
-  <script src="js/modules/clients.js?v=20261006_video_fix_v7"></script>
-  <script src="js/modules/employees.js?v=20261006_video_fix_v7"></script>
-  <script src="js/modules/services.js?v=20261006_video_fix_v7"></script>
-  <script src="js/modules/finance.js?v=20261006_video_fix_v7"></script>
-  <script src="js/modules/portfolio.js?v=20261006_video_fix_v7"></script>
-
-  <!-- 5. Bootstrap e Orquestrador da Aplicação -->
-  <script src="js/app.js?v=20261006_video_fix_v7"></script>
-
-  <!-- ============================================== -->
-  <!-- MODAL: LIGHTBOX / INSPEÇÃO DO PROJETO         -->
-  <!-- ============================================== -->
-  
-
-  
-
-  <!-- 4. SCRIPTS DO SISTEMA ADMINISTRATIVO -->
-  <script src="js/config.js?v=20261006_v3"></script>
-  <script src="js/services/storage.js?v=20261006_v3"></script>
-  <script src="js/services/api.js?v=20261006_v3"></script>
-  <script src="js/ui/toast.js?v=20261006_v3"></script>
-  <script src="js/ui/modals.js?v=20261006_v3"></script>
-  <script src="js/modules/auth.js?v=20261006_v3"></script>
-  <script src="js/modules/leads.js?v=20261006_v3"></script>
-  <script src="js/modules/clients.js?v=20261006_v3"></script>
-  <script src="js/modules/employees.js?v=20261006_v3"></script>
-  <script src="js/modules/services.js?v=20261006_v3"></script>
-  <script src="js/modules/finance.js?v=20261006_v3"></script>
-  <script src="js/modules/portfolio.js?v=20261006_v3"></script>
-  <script src="js/admin_app.js?v=20261006_v3"></script>
+  <script src="js/config.js?v=20261007_v6"></script>
+  <script src="js/services/storage.js?v=20261007_v6"></script>
+  <script src="js/services/api.js?v=20261007_v6"></script>
+  <script src="js/ui/toast.js?v=20261007_v6"></script>
+  <script src="js/ui/modals.js?v=20261007_v6"></script>
+  <script src="js/modules/auth.js?v=20261007_v6"></script>
+  <script src="js/modules/leads.js?v=20261007_v6"></script>
+  <script src="js/modules/clients.js?v=20261007_v6"></script>
+  <script src="js/modules/employees.js?v=20261007_v6"></script>
+  <script src="js/modules/services.js?v=20261007_v6"></script>
+  <script src="js/modules/finance.js?v=20261007_v6"></script>
+  <script src="js/modules/portfolio.js?v=20261007_v6"></script>
+  <script src="js/admin_app.js?v=20261007_v6"></script>
 
   <script>
     // Inicialização Imediata In-line (Garante que nunca fique tela preta)

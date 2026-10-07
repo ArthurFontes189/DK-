@@ -97,7 +97,7 @@ async function fetchCloudData(showFeedback = false) {
           // Preserva sempre o arquivo local MP4 quando existir localmente
           midiaUrl: (localMatch && localMatch.midiaUrl.endsWith('.mp4')) ? localMatch.midiaUrl : (item.midia_url || (localMatch ? localMatch.midiaUrl : '')),
           posterUrl: (localMatch && localMatch.posterUrl) ? localMatch.posterUrl : (item.poster_url || ''),
-          destaque: item.destaque || (localMatch ? localMatch.destaque : False)
+          destaque: item.destaque || (localMatch ? localMatch.destaque : false)
         };
       });
 
@@ -194,12 +194,15 @@ async function fetchCloudData(showFeedback = false) {
       saveCacheDB("employees", db.employees);
     }
 
-    renderPublicCatalog();
-    if (isAdminLoggedIn) renderAdmin();
-    if (showFeedback) showToast("Dados atualizados com sucesso!");
+    if (typeof renderPublicCatalog === "function") renderPublicCatalog();
+    if (typeof renderAdmin === "function") renderAdmin();
+    if (showFeedback) showToast("Dados atualizados com sucesso!", "success");
   } catch (err) {
-    console.error("Erro ao sincronizar banco:", err);
-    if (showFeedback) alert("Erro ao sincronizar dados: " + err.message);
+    console.warn("Aviso na sincronização do Supabase:", err);
+    // Garante que o painel mostre os dados em cache mesmo se o Supabase falhar ou estiver bloqueado por adblocker!
+    if (typeof renderAdmin === "function") renderAdmin();
+    if (typeof updateSyncIndicator === "function") updateSyncIndicator(false);
+    if (showFeedback) showToast("Operando com dados locais em cache.", "info");
   }
 }
 

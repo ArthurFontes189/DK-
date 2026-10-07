@@ -194,3 +194,22 @@ async function deleteClient(cliId) {
     }
   }
 }
+
+
+function openNewClientModal() {
+  const idEl = document.getElementById("cliId");
+  const nomeEl = document.getElementById("cliNome");
+  const telEl = document.getElementById("cliTelefone");
+  const endEl = document.getElementById("cliEndereco");
+  const obsEl = document.getElementById("cliObs");
+  const titleEl = document.getElementById("clientModalTitle");
+
+  if (idEl) idEl.value = "";
+  if (nomeEl) nomeEl.value = "";
+  if (telEl) telEl.value = "";
+  if (endEl) endEl.value = "";
+  if (obsEl) obsEl.value = "";
+  if (titleEl) titleEl.textContent = "Cadastrar Novo Cliente";
+  openModal("clientModal");
+}
+window.openNewClientModal = openNewClientModal;
