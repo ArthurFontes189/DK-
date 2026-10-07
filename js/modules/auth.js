@@ -1,5 +1,6 @@
 // ============================================================================
 // MÓDULO DE AUTENTICAÇÃO E NAVEGAÇÃO ENTRE SITE E PAINEL MARCENEIRO
+// DK Revestimentos
 // ============================================================================
 
 let isAdminLoggedIn = localStorage.getItem("marcenaria_admin_logged") === "true";
@@ -17,25 +18,32 @@ function updateAdminButton() {
 }
 
 function handleAdminAccessClick() {
-  if (isAdminLoggedIn) {
-    goToAdminPanel();
+  const adminArea = document.getElementById("adminArea");
+  if (adminArea) {
+    if (isUserAdmin()) {
+      goToAdminPanel();
+    } else {
+      openModal("loginModal");
+    }
   } else {
-    openModal("loginModal");
+    // Redireciona para o painel dedicado
+    window.location.href = "admin.html";
   }
 }
 
 function handleAdminLogin(e) {
-  e.preventDefault();
-  const user = document.getElementById("loginUser").value.trim();
-  const pass = document.getElementById("loginPass").value.trim();
+  if (e && e.preventDefault) e.preventDefault();
+  const userEl = document.getElementById("loginUser");
+  const passEl = document.getElementById("loginPass");
+  const user = userEl ? userEl.value.trim() : "";
+  const pass = passEl ? passEl.value.trim() : "";
 
   if (user === "admin" && pass === "1234") {
     isAdminLoggedIn = true;
     localStorage.setItem("marcenaria_admin_logged", "true");
     closeModal("loginModal");
     updateAdminButton();
-    showToast("Login realizado com sucesso!", "success");
-    if (typeof renderPublicCatalog === "function") renderPublicCatalog();
+    showToast("Login realizado com sucesso! Bem-vindo ao painel.", "success");
     goToAdminPanel();
   } else {
     showToast("Usuário ou senha incorretos. Padrão: admin / 1234", "error");
@@ -46,28 +54,39 @@ function adminLogout() {
   isAdminLoggedIn = false;
   localStorage.removeItem("marcenaria_admin_logged");
   updateAdminButton();
-  if (typeof renderPublicCatalog === "function") renderPublicCatalog();
   showToast("Você saiu do painel administrativo.", "info");
   goToClientSite();
 }
 
 function goToAdminPanel() {
-  document.getElementById("clientArea").style.display = "none";
-  document.getElementById("adminArea").style.display = "block";
-  fetchCloudData();
-  renderAdmin();
+  const clientArea = document.getElementById("clientArea");
+  const adminArea = document.getElementById("adminArea");
+  
+  if (clientArea) clientArea.style.display = "none";
+  if (adminArea) adminArea.style.display = "block";
+  
+  if (typeof fetchCloudData === "function") fetchCloudData();
+  if (typeof renderAdmin === "function") renderAdmin();
   window.scrollTo(0, 0);
 }
 
 function goToClientSite() {
-  document.getElementById("adminArea").style.display = "none";
-  document.getElementById("clientArea").style.display = "block";
-  renderPublicCatalog();
-  window.scrollTo(0, 0);
+  const clientArea = document.getElementById("clientArea");
+  const adminArea = document.getElementById("adminArea");
+  
+  if (adminArea) adminArea.style.display = "none";
+  if (clientArea) {
+    clientArea.style.display = "block";
+    if (typeof renderPublicCatalog === "function") renderPublicCatalog();
+    window.scrollTo(0, 0);
+  } else {
+    window.location.href = "index.html";
+  }
 }
 
 function toggleMobileMenu() {
-  document.getElementById("mobileMenu").classList.toggle("open");
+  const m = document.getElementById("mobileMenu");
+  if (m) m.classList.toggle("open");
 }
 
 function switchAdminTab(tabName, el) {
@@ -78,27 +97,35 @@ function switchAdminTab(tabName, el) {
   if (tabBtn) tabBtn.classList.add("active");
 
   if (tabName === "crm") {
-    document.getElementById("tabCRM").style.display = "block";
-    if (typeof renderLeads === "function") renderLeads(db.leads);
+    const el = document.getElementById("tabCRM");
+    if (el) el.style.display = "block";
+    if (typeof renderLeads === "function" && typeof db !== "undefined") renderLeads(db.leads || []);
   } else if (tabName === "clientes") {
-    document.getElementById("tabClientes").style.display = "block";
-    if (typeof renderClients === "function") renderClients(db.clients, db.services, db.transactions);
+    const el = document.getElementById("tabClientes");
+    if (el) el.style.display = "block";
+    if (typeof renderClients === "function" && typeof db !== "undefined") renderClients(db.clients || [], db.services || [], db.transactions || []);
   } else if (tabName === "servicos") {
-    document.getElementById("tabServicos").style.display = "block";
-    if (typeof renderServices === "function") renderServices(db.services);
+    const el = document.getElementById("tabServicos");
+    if (el) el.style.display = "block";
+    if (typeof renderServices === "function" && typeof db !== "undefined") renderServices(db.services || []);
   } else if (tabName === "funcionarios") {
-    document.getElementById("tabFuncionarios").style.display = "block";
-    if (typeof loadEmployeesFromDb === "function") loadEmployeesFromDb(); else if (typeof renderEmployees === "function") renderEmployees(db.employees);
+    const el = document.getElementById("tabFuncionarios");
+    if (el) el.style.display = "block";
+    if (typeof loadEmployeesFromDb === "function") loadEmployeesFromDb(); 
+    else if (typeof renderEmployees === "function" && typeof db !== "undefined") renderEmployees(db.employees || []);
   } else if (tabName === "financeiro") {
-    document.getElementById("tabFinanceiro").style.display = "block";
-    if (typeof renderFinanceiro === "function") renderFinanceiro(db.transactions);
+    const el = document.getElementById("tabFinanceiro");
+    if (el) el.style.display = "block";
+    if (typeof renderFinanceiro === "function" && typeof db !== "undefined") renderFinanceiro(db.transactions || []);
   } else if (tabName === "portfolioAdmin") {
-    document.getElementById("tabPortfolioAdmin").style.display = "block";
-    if (typeof renderAdminPortfolio === "function") renderAdminPortfolio(db.portfolio);
+    const el = document.getElementById("tabPortfolioAdmin");
+    if (el) el.style.display = "block";
+    if (typeof renderAdminPortfolio === "function" && typeof db !== "undefined") renderAdminPortfolio(db.portfolio || []);
   }
 }
 
 window.isAdminLoggedIn = isAdminLoggedIn;
+window.isUserAdmin = isUserAdmin;
 window.updateAdminButton = updateAdminButton;
 window.handleAdminAccessClick = handleAdminAccessClick;
 window.handleAdminLogin = handleAdminLogin;

@@ -375,6 +375,7 @@ function openProjectDetails(projectId) {
           </a>
         </div>
       `;
+      if (videoActionEl) videoActionEl.style.display = 'none';
     } else if (isVideo) {
       const vSource = parseVideoSource(project.midiaUrl);
       const stageClass = isVertical ? 'stage-vertical' : 'stage-horizontal';
@@ -382,19 +383,7 @@ function openProjectDetails(projectId) {
         ? 'position: relative; width: min(100%, 380px); height: min(54vh, 520px); min-height: 320px; aspect-ratio: 9/16; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;'
         : 'position: relative; width: 100%; height: min(48vh, 460px); min-height: 240px; aspect-ratio: 16/9; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;';
 
-      // Prioriza sempre arquivo MP4 nativo para máxima performance e compatibilidade multiplataforma
-      if (vSource.type === 'direct' || (project.midiaUrl && project.midiaUrl.endsWith('.mp4'))) {
-        mediaContainer.innerHTML = `
-          <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
-            <video src="${project.midiaUrl}" 
-                   ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
-                   controls playsinline preload="metadata"
-                   style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;">
-              Seu navegador não suporta reprodução direta deste vídeo.
-            </video>
-          </div>
-        `;
-      } else if (vSource.type === 'youtube') {
+      if (vSource.type === 'youtube') {
         mediaContainer.innerHTML = `
           <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
             <iframe src="${vSource.embedUrl}" 
@@ -411,14 +400,8 @@ function openProjectDetails(projectId) {
                    ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
                    controls playsinline preload="metadata" 
                    style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;">
+              Seu navegador não suporta reprodução direta de vídeo.
             </video>
-          </div>
-        `;
-      }
-    } else {
-        mediaContainer.innerHTML = `
-          <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
-            <video src="${project.midiaUrl}" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"></video>
           </div>
         `;
       }
@@ -442,11 +425,19 @@ function openProjectDetails(projectId) {
     }
   }
 
-  // Ação do Botão [ SOLICITAR ORÇAMENTO ]
+  // Ação do Botão de Orçamento
   if (actionBtn) {
     actionBtn.onclick = () => {
       handleProjectModalBudget(project.titulo, project.categoria);
     };
+  }
+
+  // Ação do Botão WhatsApp
+  const modalWaBtn = document.getElementById('projectModalWhatsAppBtn');
+  if (modalWaBtn) {
+    const waText = encodeURIComponent(`Olá! Vi o projeto *${project.titulo}* (${project.categoria || 'Marcenaria'}) no site da DK Revestimentos e gostaria de solicitar um orçamento.`);
+    const waPhone = (typeof MARANARIA_WHATSAPP !== 'undefined') ? MARANARIA_WHATSAPP : '5561999999999';
+    modalWaBtn.href = `https://api.whatsapp.com/send?phone=${waPhone}&text=${waText}`;
   }
 
   openModal('projectDetailModal');
