@@ -101,7 +101,12 @@ function renderLeads(leads) {
   document.getElementById("leadsTotalTxt").textContent = `${filteredLeads.length} de ${leads.length} solicitações exibidas`;
 
   if (filteredLeads.length === 0) {
-    container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); background: #fff; border-radius: var(--radius); border: 1px solid var(--border-soft);">Nenhuma solicitação encontrada no filtro "${currentLeadFilter}".</div>`;
+    container.innerHTML = `
+      <div class="admin-empty-state">
+        <div class="empty-icon">📋</div>
+        <h4>Nenhuma solicitação encontrada</h4>
+        <p>Não há solicitações de orçamento cadastradas no filtro <strong>"${currentLeadFilter}"</strong>.</p>
+      </div>`;
     return;
   }
 

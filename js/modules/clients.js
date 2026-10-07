@@ -25,7 +25,12 @@ function renderClients(clients, services, transactions) {
   container.innerHTML = "";
 
   if (clients.length === 0) {
-    container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); background: #fff; border-radius: var(--radius); border: 1px solid var(--border-soft);">Nenhum cliente registrado ainda. Os clientes são criados automaticamente ao abrir a primeira ficha de serviço.</div>`;
+    container.innerHTML = `
+      <div class="admin-empty-state">
+        <div class="empty-icon">👥</div>
+        <h4>Nenhum cliente cadastrado ainda</h4>
+        <p>Cadastre clientes no botão <strong>+ Cadastrar Novo Cliente</strong> acima ou crie uma ficha de serviço a partir de um orçamento.</p>
+      </div>`;
     return;
   }
 

@@ -1,47 +1,42 @@
-# Correção do Painel Administrativo — DK Revestimentos
+# Refatoração do Design do Painel Administrativo — DK Revestimentos
 
-## 1. Por que a tela ficava preta em `admin.html`?
+## 1. Diagnóstico do Problema Visual
+Na captura enviada, a tela de administração exibia um fundo totalmente preto/escuro (`#0e0f13`) com caixas e abas brancas soltas, gerando um contraste desarmônico e desconexo com a identidade de marcenaria fina e revestimentos arquitetônicos de alto padrão.
 
-Na versão anterior, ao acessar `https://arthurfontes189.github.io/DK-/admin.html`, a tela ficava inteiramente preta por três motivos combinados:
+## 2. Melhorias Implementadas
 
-1. **Ocultação padrão por CSS:** A classe `.admin-container` possui a regra `display: none;` definida no CSS, e o `<body>` possui `background: #0e0f13;` (fundo preto). O painel dependia de um script JavaScript (`admin_app.js`) para abrir um modal flutuante (`loginModal`).
-2. **Erro de sintaxe no script anterior:** No arquivo `js/modules/portfolio.js`, havia um bloco duplicado que interrompia a execução do JavaScript antes de o navegador carregar o script `admin_app.js`. Sem o script rodando, o modal de login nunca recebia a ordem de abrir (`.modal-overlay.active`), e o painel continuava com `display: none;`, resultando em uma tela 100% preta.
-3. **Referência a elemento inexistente:** O script de autenticação tentava manipular o elemento `#clientArea` (que só existe no `index.html`), gerando um erro de execução que impedia o painel de aparecer após a submissão da senha.
+1. **Fundo Executivo Claro (`#f8fafc`)**:
+   - Substituição do fundo preto por um tom limpo de ardósia clara / off-white no `body`, `.admin-container` e `#adminLoginView`.
+   - Textos e títulos padronizados em ardósia profunda (`#0f172a`) e legendas em cinza neutro (`#64748b`).
+
+2. **Nova Barra de Topo Executiva (`.admin-header-bar`)**:
+   - Cartão branco estruturado (`#ffffff`) com borda suave (`#e2e8f0`) e cantos arredondados (`16px`).
+   - Ícone da marcenaria em gradiente nobre de carvalho e freijó.
+   - Indicador de sincronização em pílula verde esmeralda suave (`#ecfdf5`).
+   - Botões de ação executivos (`🔄 Sincronizar`, `👁️ Ver Site`, `🚪 Sair`).
+
+3. **Abas de Navegação Segmentadas (`.admin-tabs-nav`)**:
+   - Estilo *segmented control* moderno sobre base branca com borda suave.
+   - Aba selecionada no tom de madeira nobre/terracota (`#8a4f26`) com sombra de profundidade.
+   - Abas inativas com excelente legibilidade e microinterações de hover.
+
+4. **Filtros por Status (`.lead-status-filters` / `.filter-btn`)**:
+   - Pílulas refinadas com contraste balanceado para status de solicitações (Todos, Pendentes, Em Negociação, Fechados, Não Fechou).
+
+5. **Cards de Alta Legibilidade e Estados Vazios (`.admin-empty-state`)**:
+   - Padronização dos cartões de Leads, Clientes, Obras, Funcionários, Caixa e Portfólio.
+   - Estados vazios com ícone temático centralizado, título nítido e mensagem explicativa.
 
 ---
 
-## 2. Como o problema foi resolvido?
+## 3. Instruções de Atualização no GitHub
 
-1. **Tela de Login In-Page Dedicada (`admin.html`):**
-   - Eliminamos a dependência de modais flutuantes para o login no arquivo `admin.html`.
-   - Agora, ao acessar `admin.html`, o formulário de login (com logotipo, campos de usuário e senha) é renderizado diretamente no centro da página (`#adminLoginView`).
-   - Mesmo que a conexão esteja lenta ou bloqueadores de anúncio estejam ativos, **a tela nunca mais fica preta**.
-
-2. **Correção de Todos os Scripts JavaScript:**
-   - O arquivo `js/modules/portfolio.js` foi corrigido e validado.
-   - O arquivo `js/modules/auth.js` agora possui verificações defensivas que suportam tanto o `index.html` quanto o `admin.html`.
-   - O arquivo `js/admin_app.js` verifica o estado do documento (`document.readyState`) e inicializa a interface com tratamento de erros.
-
-3. **Fluxo de Navegação Integrado:**
-   - No `index.html`, o ícone de cadeado na barra superior e os links no menu mobile e no rodapé apontam diretamente para `admin.html`.
-   - No `admin.html`, o botão `← Voltar ao Site Público` e o botão `👁️ Site` retornam diretamente para o `index.html`.
-
----
-
-## 3. Instruções de Deploy no GitHub Pages
-
-Para atualizar o seu site no GitHub Pages (`https://arthurfontes189.github.io/DK-/`):
-
-1. Extraia os arquivos do pacote `dk_revestimentos_site_atualizado.zip` na pasta do seu repositório local do GitHub.
-2. No terminal da pasta do projeto, execute os comandos:
+1. Baixe o pacote **`dk_revestimentos_site_atualizado.zip`**.
+2. Extraia os arquivos e substitua o conteúdo do seu repositório local.
+3. No terminal, suba as alterações:
    ```bash
    git add .
-   git commit -m "fix: painel administrativo in-page e correcao de scripts"
+   git commit -m "refactor: redesign executivo claro do painel administrativo"
    git push origin main
    ```
-3. Aguarde cerca de 1 a 2 minutos para que o GitHub Pages reconstrua a página.
-4. Abra `https://arthurfontes189.github.io/DK-/admin.html`.
-5. Digite:
-   - **Usuário:** `admin`
-   - **Senha:** `1234`
-6. O painel abrirá com todas as abas e dados operacionais visíveis.
+4. Aguarde o deploy do GitHub Pages (1 a 2 minutos) e recarregue a página `admin.html`.

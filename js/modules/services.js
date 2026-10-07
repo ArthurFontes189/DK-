@@ -1186,10 +1186,11 @@ function renderServices(services) {
 
   if (filteredServices.length === 0) {
     container.innerHTML = `
-      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted); background: #fff; border-radius: var(--radius); border: 1px solid var(--border-soft);">
-        Nenhuma obra encontrada no filtro "${currentServiceFilter}".
-      </div>
-    `;
+      <div class="admin-empty-state">
+        <div class="empty-icon">🏗️</div>
+        <h4>Nenhuma obra encontrada</h4>
+        <p>Não há obras ou fichas de produção cadastradas no filtro <strong>"${currentServiceFilter}"</strong>.</p>
+      </div>`;
     return;
   }
 

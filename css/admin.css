@@ -1,300 +1,524 @@
 /* ==========================================================================
-   PAINEL DE GESTÃO DO MARCENEIRO (CRM, CLIENTES, FICHAS E CAIXA)
-   ========================================================================== */
-/* =======================================================
-       ÁREA ADMINISTRATIVA
-       ======================================================= */
-    .admin-container {
-      display: none;
-      padding: 30px 0 70px;
-    }
-    .admin-header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--dark-obsidian);
-      color: #ffffff;
-      padding: 18px 26px;
-      border-radius: var(--radius);
-      margin-bottom: 26px;
-      box-shadow: var(--shadow-premium);
-    }
-    .admin-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .admin-title-wrap h2 {
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-    .admin-title-wrap span {
-      background: var(--wood-primary);
-      padding: 3px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-    .admin-header-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .admin-tabs-nav {
-      display: flex;
-      gap: 8px;
-      background: #ffffff;
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius);
-      padding: 6px;
-      margin-bottom: 26px;
-      overflow-x: auto;
-    }
-    .admin-nav-tab {
-      flex: 1;
-      min-width: 140px;
-      padding: 11px 16px;
-      border-radius: var(--radius-sm);
-      font-size: 13.5px;
-      font-weight: 700;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s;
-    }
-    .admin-nav-tab.active {
-      background: var(--wood-primary);
-      color: #ffffff;
-    }
-    .admin-nav-tab .tab-badge {
-      background: var(--danger);
-      color: #fff;
-      font-size: 11px;
-      padding: 2px 7px;
-      border-radius: 10px;
-    }
-
-    /* Filtros de Leads por Status */
-    .lead-status-filters {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      margin-bottom: 18px;
-      padding-bottom: 4px;
-    }
-    .filter-btn {
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border-soft);
-      background: #ffffff;
-      color: var(--text-muted);
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-    .filter-btn.active {
-      background: var(--dark-obsidian);
-      color: #ffffff;
-      border-color: var(--dark-obsidian);
-    }
-
-    /* Grids Administrativos */
-    .leads-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-    .lead-card {
-      background: #ffffff;
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow-subtle);
-    }
-    .lead-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-    }
-    .lead-name { font-size: 16.5px; font-weight: 700; }
-    .lead-phone {
-      font-size: 13.5px;
-      color: var(--wood-primary);
-      font-weight: 600;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 4px;
-    }
-    .lead-meta {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-    .lead-actions {
-      display: flex;
-      gap: 8px;
-      border-top: 1px solid #f1f3f5;
-      padding-top: 14px;
-    }
-
-    /* Tabela / Cards de Clientes Cadastrados */
-    .clients-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-    .client-card {
-      background: #ffffff;
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow-subtle);
-    }
-    .client-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
-
-    /* Fichas de Serviços */
-    .services-admin-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-    .service-sheet-card {
-      background: #ffffff;
-      border: 1px solid var(--border-soft);
-      border-left: 5px solid var(--wood-primary);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow-subtle);
-    }
-    .sheet-row { margin-bottom: 12px; }
-    .sheet-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 3px; }
-    .sheet-val { font-size: 14px; font-weight: 500; }
-
-    /* Caixa */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-bottom: 26px;
-    }
-    .kpi-card {
-      background: #ffffff;
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius);
-      padding: 22px;
-      text-align: center;
-      box-shadow: var(--shadow-subtle);
-    }
-    .kpi-title { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.03em; }
-    .kpi-value { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
-    .kpi-balance { color: var(--wood-primary); }
-    .kpi-income { color: var(--success); }
-    .kpi-expense { color: var(--danger); }
-
-    .tx-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #ffffff;
-      border: 1px solid var(--border-soft);
-      padding: 16px 20px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 10px;
-      box-shadow: var(--shadow-subtle);
-    }
-
-
-    /* Botão X vermelho para exclusão de solicitações */
-    .btn-delete-lead {
-      background: #fef2f2;
-      color: #ef4444;
-      border: 1px solid #fecaca;
-      border-radius: 6px;
-      width: 26px;
-      height: 26px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      padding: 0;
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-    .btn-delete-lead:hover {
-      background: #dc2626;
-      color: #ffffff;
-      border-color: #dc2626;
-      transform: scale(1.08);
-      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
-    }
-
-/* ==========================================================================
-   ESTILOS: GERENCIAMENTO DE OBRAS, FUNCIONÁRIOS E CAIXA CENTRALIZADO DA OBRA
+   DK REVESTIMENTOS - PAINEL ADMINISTRATIVO & GESTÃO DA MARCENARIA
+   Design Executivo de Alto Padrão (Clean Architectural Light Theme)
    ========================================================================== */
 
-.employees-grid {
+/* --------------------------------------------------------------------------
+   ESTRUTURA GERAL & FUNDO DO PAINEL
+   -------------------------------------------------------------------------- */
+body.admin-body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-main, 'Plus Jakarta Sans', sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.admin-container {
+  display: block;
+  padding: 24px 0 70px;
+  background-color: #f8fafc;
+}
+
+/* --------------------------------------------------------------------------
+   BARRA SUPERIOR DO PAINEL (EXECUTIVE HEADER BAR)
+   -------------------------------------------------------------------------- */
+.admin-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 18px 26px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 8px 24px -4px rgba(15, 23, 42, 0.03);
+}
+
+.admin-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-title-wrap .brand-icon {
+  background: linear-gradient(135deg, #fdf6f0 0%, #fae8d8 100%) !important;
+  border: 1px solid #fed7aa !important;
+  color: var(--wood-primary, #8a4f26) !important;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(138, 79, 38, 0.12);
+}
+
+.admin-title-wrap h2 {
+  font-size: 19px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin: 0 0 2px 0;
+}
+
+.admin-session-badge {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-session-badge .status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-header-btn {
+  background: #ffffff !important;
+  color: #334155 !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-header-btn:hover {
+  background: #f8fafc !important;
+  color: var(--wood-primary, #8a4f26) !important;
+  border-color: #cbd5e1 !important;
+  transform: translateY(-1px);
+}
+
+.admin-btn-logout {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+  border: 1px solid #fee2e2 !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-btn-logout:hover {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  border-color: #fca5a5 !important;
+  transform: translateY(-1px);
+}
+
+/* --------------------------------------------------------------------------
+   ABAS DE NAVEGAÇÃO DO PAINEL (TABS BAR)
+   -------------------------------------------------------------------------- */
+.admin-tabs-nav {
+  display: flex;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 6px;
+  margin-bottom: 26px;
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+  scrollbar-width: none;
+}
+
+.admin-tabs-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-nav-tab {
+  flex: 1;
+  min-width: 140px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.admin-nav-tab:hover {
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.admin-nav-tab.active {
+  background: var(--wood-primary, #8a4f26);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(138, 79, 38, 0.22);
+}
+
+.admin-nav-tab .tab-badge {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 10px;
+  line-height: 1.2;
+}
+
+.admin-nav-tab.active .tab-badge {
+  background: #ffffff;
+  color: var(--wood-primary, #8a4f26);
+}
+
+/* --------------------------------------------------------------------------
+   CABEÇALHOS DAS SEÇÕES & FILTROS POR STATUS
+   -------------------------------------------------------------------------- */
+.admin-tab-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-tab-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin: 0 0 4px 0;
+}
+
+.admin-tab-subtitle {
+  font-size: 13.5px;
+  color: #64748b;
+  margin: 0;
+}
+
+.lead-status-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  padding: 4px 2px;
+  scrollbar-width: none;
+}
+
+.lead-status-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  font-family: inherit;
+}
+
+.filter-btn:hover {
+  border-color: #cbd5e1;
+  color: #0f172a;
+  background: #f8fafc;
+}
+
+.filter-btn.active {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   ESTADOS VAZIOS PADRONIZADOS (ADMIN EMPTY STATES)
+   -------------------------------------------------------------------------- */
+.admin-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 56px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px dashed #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.admin-empty-state .empty-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin: 0 auto 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.admin-empty-state h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 6px 0;
+}
+
+.admin-empty-state p {
+  font-size: 13.5px;
+  color: #64748b;
+  margin: 0 auto;
+  max-width: 460px;
+  line-height: 1.55;
+}
+
+/* --------------------------------------------------------------------------
+   CARDS E GRIDS ADMINISTRATIVOS
+   -------------------------------------------------------------------------- */
+.leads-grid,
+.clients-grid,
+.services-admin-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 18px;
 }
 
+.lead-card,
+.client-card,
+.service-sheet-card,
 .employee-card {
   background: #ffffff;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow-subtle);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px -2px rgba(15, 23, 42, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+.lead-card:hover,
+.client-card:hover,
 .employee-card:hover {
+  border-color: #cbd5e1;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06);
+}
+
+.service-sheet-card {
+  border-left: 5px solid var(--wood-primary, #8a4f26);
+}
+
+.service-sheet-card:hover {
+  border-color: #cbd5e1;
+  border-left-color: var(--wood-primary, #8a4f26);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06);
+}
+
+.lead-header,
+.client-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.lead-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.lead-phone {
+  font-size: 13.5px;
+  color: var(--wood-primary, #8a4f26);
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  transition: color 0.2s ease;
+}
+
+.lead-phone:hover {
+  color: var(--wood-dark, #3a1f0f);
+  text-decoration: underline;
+}
+
+.lead-meta {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.lead-actions {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 14px;
+}
+
+.btn-delete-lead {
+  background: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-delete-lead:hover {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+  transform: scale(1.08);
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+}
+
+.sheet-row { margin-bottom: 12px; }
+.sheet-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748b; display: block; margin-bottom: 3px; letter-spacing: 0.03em; }
+.sheet-val { font-size: 14px; font-weight: 600; color: #0f172a; }
+
+/* --------------------------------------------------------------------------
+   FLUXO DE CAIXA (KPI CARDS & EXTRATO)
+   -------------------------------------------------------------------------- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.kpi-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 4px 12px -2px rgba(15, 23, 42, 0.02);
+}
+
+.kpi-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+}
+
+.kpi-value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.kpi-balance { color: var(--wood-primary, #8a4f26); }
+.kpi-income { color: var(--success, #15803d); }
+.kpi-expense { color: var(--danger, #b91c1c); }
+
+.tx-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+  transition: border-color 0.2s ease;
+}
+
+.tx-item:hover {
+  border-color: #cbd5e1;
+}
+
+/* --------------------------------------------------------------------------
+   FUNCIONÁRIOS E DIARISTAS
+   -------------------------------------------------------------------------- */
+.employees-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
 }
 
 .btn-inspect-obra {
   width: 100%;
-  padding: 10px 16px;
+  padding: 11px 16px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: all 0.2s ease;
 }
 
 .btn-inspect-obra:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.06);
   transform: translateY(-1px);
 }
 
-/* Modal de Inspeção 360° da Obra */
+/* --------------------------------------------------------------------------
+   MODAL DE INSPEÇÃO 360° DA OBRA
+   -------------------------------------------------------------------------- */
 .obra-inspect-card {
   max-width: 960px !important;
   width: 96% !important;
-  padding: 26px !important;
+  padding: 28px !important;
+  background: #ffffff !important;
+  border-radius: 20px !important;
 }
 
 .obra-kpis-grid {
@@ -306,24 +530,25 @@
 
 .obra-kpi-card {
   background: #ffffff;
-  border: 1px solid var(--border-soft);
-  border-radius: 10px;
-  padding: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
 }
 
 .obra-kpi-card .kpi-label {
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 3px;
-  letter-spacing: 0.02em;
+  color: #64748b;
+  margin-bottom: 4px;
+  letter-spacing: 0.03em;
 }
 
 .obra-kpi-card .kpi-num {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 800;
+  color: #0f172a;
   line-height: 1.2;
 }
 
@@ -336,7 +561,7 @@
 .obra-tabs-nav {
   display: flex;
   gap: 8px;
-  border-bottom: 2px solid var(--border-soft);
+  border-bottom: 2px solid #e2e8f0;
   margin-bottom: 20px;
   overflow-x: auto;
   padding-bottom: 2px;
@@ -366,17 +591,17 @@
 }
 
 .obra-tab-btn.active {
-  color: var(--wood-primary);
-  border-bottom-color: var(--wood-primary);
+  color: var(--wood-primary, #8a4f26);
+  border-bottom-color: var(--wood-primary, #8a4f26);
   font-weight: 700;
 }
 
 .obra-workers-table-wrapper {
   overflow-x: auto;
   background: #ffffff;
-  border: 1px solid var(--border-soft);
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
 }
 
 .obra-table {
@@ -391,17 +616,18 @@
   color: #475569;
   font-weight: 700;
   text-align: left;
-  padding: 11px 14px;
-  border-bottom: 1px solid var(--border-soft);
+  padding: 12px 16px;
+  border-bottom: 1px solid #e2e8f0;
   font-size: 11.5px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
 .obra-table td {
-  padding: 12px 14px;
+  padding: 13px 16px;
   border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
+  color: #1e293b;
 }
 
 .obra-table tr:last-child td {
@@ -409,19 +635,19 @@
 }
 
 .obra-table tr:hover td {
-  background: #fafafa;
+  background: #f8fafc;
 }
 
 .obra-finance-box {
   background: #f8fafc;
-  border: 1px solid var(--border-soft);
-  border-radius: 12px;
-  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 20px;
 }
 
-/* ==========================================================================
-   PAINEL ADMINISTRATIVO: GESTÃO DO PORTFÓLIO E MÍDIAS (ALTO PADRÃO)
-   ========================================================================== */
+/* --------------------------------------------------------------------------
+   CATÁLOGO DE MÍDIAS & PORTFÓLIO NO ADMIN
+   -------------------------------------------------------------------------- */
 .admin-portfolio-header {
   display: flex;
   justify-content: space-between;
@@ -439,9 +665,10 @@
   flex-wrap: wrap;
   gap: 12px;
   background: #ffffff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--border-soft);
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02);
 }
 
 .admin-portfolio-tabs {
@@ -453,8 +680,8 @@
 .admin-pfilter-btn {
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 6px;
-  padding: 6px 12px;
+  border-radius: 8px;
+  padding: 7px 14px;
   font-size: 12.5px;
   font-weight: 600;
   color: #64748b;
@@ -465,51 +692,57 @@
 
 .admin-pfilter-btn:hover {
   background: #f1f5f9;
-  color: var(--wood-primary);
+  color: var(--wood-primary, #8a4f26);
 }
 
 .admin-pfilter-btn.active {
-  background: var(--wood-dark, #3a1f0f);
+  background: #0f172a;
   color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
 }
 
 .admin-portfolio-search-box input {
-  padding: 7px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border-soft);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
   font-size: 13px;
-  width: 260px;
+  width: 270px;
   max-width: 100%;
   font-family: inherit;
   outline: none;
+  background: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .admin-portfolio-search-box input:focus {
-  border-color: var(--wood-primary);
+  border-color: var(--wood-primary, #8a4f26);
   box-shadow: 0 0 0 3px rgba(138, 79, 38, 0.15);
 }
 
 .admin-media-card {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   background: #ffffff;
-  padding: 14px 18px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  border: 1px solid var(--border-soft);
+  padding: 16px 20px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
   transition: all 0.2s ease;
 }
 
 .admin-media-card:hover {
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-subtle);
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.05);
+  transform: translateY(-1px);
 }
 
 .media-input-tabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .media-input-tab {
@@ -518,9 +751,9 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border-soft);
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
   background: #f8fafc;
   color: #475569;
   font-weight: 600;
@@ -532,13 +765,13 @@
 
 .media-input-tab:hover {
   background: #f1f5f9;
-  color: var(--wood-primary);
+  color: var(--wood-primary, #8a4f26);
 }
 
 .media-input-tab.active {
   background: #ffffff;
-  color: var(--wood-primary);
-  border-color: var(--wood-primary);
+  color: var(--wood-primary, #8a4f26);
+  border-color: var(--wood-primary, #8a4f26);
   box-shadow: 0 2px 8px rgba(138, 79, 38, 0.12);
 }
 
@@ -548,7 +781,7 @@
   gap: 8px;
   padding: 9px 12px;
   background: #ffffff;
-  border: 1px solid var(--border-soft);
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
@@ -557,5 +790,5 @@
 }
 
 .proportion-choice:hover {
-  border-color: var(--wood-primary);
+  border-color: var(--wood-primary, #8a4f26);
 }

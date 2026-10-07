@@ -35,7 +35,12 @@ function renderFinanceiro(transactions) {
   document.getElementById("saidasTotal").textContent = "R$ " + totalOut.toLocaleString("pt-BR", {minimumFractionDigits: 2});
 
   if (transactions.length === 0) {
-    container.innerHTML = `<div style="text-align: center; padding: 30px; color: var(--text-muted); background: #fff; border-radius: var(--radius); border: 1px solid var(--border-soft);">Nenhuma movimentação registrada no caixa.</div>`;
+    container.innerHTML = `
+      <div class="admin-empty-state">
+        <div class="empty-icon">💰</div>
+        <h4>Nenhuma movimentação registrada</h4>
+        <p>Não há entradas ou saídas lançadas no fluxo de caixa no momento.</p>
+      </div>`;
     return;
   }
 
