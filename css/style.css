@@ -1,4 +1,9 @@
-/* ==========================================================================\n   DK REVESTIMENTOS - FOLHA DE ESTILOS PRINCIPAL (STANDALONE & OTIMIZADA)\n   ========================================================================== */\n\n\n/* --- variables.css --- */\n/* ==========================================================================
+/* ==========================================================================
+   DK REVESTIMENTOS - FOLHA DE ESTILOS PRINCIPAL (STANDALONE & OTIMIZADA)
+   ========================================================================== */
+
+/* --- variables.css --- */
+/* ==========================================================================
    DK REVESTIMENTOS - DESIGN TOKENS & IDENTIDADE VISUAL DE ALTO PADRÃO
    Estética de Ateliê de Marcenaria Fina & Revestimentos Arquitetônicos
    ========================================================================== */
@@ -56,7 +61,10 @@
   --shadow-elevated: 0 20px 40px -6px rgba(15, 18, 23, 0.14), 0 6px 14px -3px rgba(0, 0, 0, 0.06);
   --shadow-dark: 0 18px 45px rgba(0, 0, 0, 0.45);
 }
-\n\n/* --- base.css --- */\n/* ==========================================================================
+
+
+/* --- base.css --- */
+/* ==========================================================================
    RESET MODERNO & TIPOGRAFIA ARQUITETÔNICA (ALTO PADRÃO)
    DK Revestimentos
    ========================================================================== */
@@ -169,95 +177,122 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
   color: var(--text-muted);
   line-height: 1.65;
 }
-\n\n/* --- components.css --- */\n/* ==========================================================================
+
+
+/* --- components.css --- */
+/* ==========================================================================
    COMPONENTES DE ALTA PRECISÃO & LUXO
    DK Revestimentos
    ========================================================================== */
 
-/* Botões */
+/* Botões do Sistema (Alta Legibilidade e Contraste Blindado) */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  font-family: var(--font-main, 'Plus Jakarta Sans', sans-serif);
   font-weight: 600;
-  font-size: 14px;
-  padding: 12px 22px;
-  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm, 8px);
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
   line-height: 1.3;
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--wood-primary) 0%, #6d3a17 100%);
-  color: #ffffff;
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 14px rgba(110, 58, 23, 0.25);
+  background-color: #8a4f26 !important;
+  background-image: linear-gradient(135deg, #8a4f26 0%, #6d3a17 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #733b18 !important;
+  box-shadow: 0 4px 14px rgba(110, 58, 23, 0.28) !important;
+  font-weight: 700 !important;
 }
 .btn-primary:hover {
-  background: linear-gradient(135deg, var(--wood-hover) 0%, var(--wood-primary) 100%);
+  background-color: #9c5c30 !important;
+  background-image: linear-gradient(135deg, #9c5c30 0%, #8a4f26 100%) !important;
   transform: translateY(-1.5px);
-  box-shadow: 0 6px 18px rgba(110, 58, 23, 0.32);
-  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(110, 58, 23, 0.35) !important;
+  color: #ffffff !important;
+  border-color: #8a4f26 !important;
 }
 
 .btn-gold {
-  background: linear-gradient(135deg, var(--wood-gold) 0%, #a87e50 100%);
-  color: #ffffff;
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 14px rgba(168, 126, 80, 0.28);
+  background-color: #c59b6d !important;
+  background-image: linear-gradient(135deg, #c59b6d 0%, #a87e50 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #a87e50 !important;
+  box-shadow: 0 4px 14px rgba(168, 126, 80, 0.28) !important;
+  font-weight: 700 !important;
 }
 .btn-gold:hover {
-  background: linear-gradient(135deg, #d3ab7e 0%, var(--wood-gold) 100%);
+  background-color: #d3ab7e !important;
+  background-image: linear-gradient(135deg, #d3ab7e 0%, #c59b6d 100%) !important;
   transform: translateY(-1.5px);
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 .btn-outline {
-  background: transparent;
-  color: var(--text-main);
-  border-color: var(--border-strong);
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  font-weight: 600 !important;
 }
 .btn-outline:hover {
-  background: rgba(138, 79, 38, 0.05);
-  border-color: var(--wood-primary);
-  color: var(--wood-primary);
+  background-color: #f8fafc !important;
+  border-color: #8a4f26 !important;
+  color: #8a4f26 !important;
+  transform: translateY(-1px);
 }
 
 .btn-whatsapp {
-  background: #15803d;
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.28);
+  background-color: #15803d !important;
+  background-image: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #166534 !important;
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.28) !important;
+  font-weight: 700 !important;
 }
 .btn-whatsapp:hover {
-  background: #166534;
+  background-color: #166534 !important;
+  background-image: linear-gradient(135deg, #15803d 0%, #14532d 100%) !important;
   transform: translateY(-1.5px);
-  box-shadow: 0 6px 18px rgba(21, 128, 61, 0.35);
-  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(21, 128, 61, 0.35) !important;
+  color: #ffffff !important;
 }
 
 .btn-danger {
-  background: var(--danger);
-  color: #ffffff;
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: 1px solid #b91c1c !important;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25) !important;
+  font-weight: 700 !important;
 }
 .btn-danger:hover {
-  background: #991b1b;
-  color: #ffffff;
+  background-color: #b91c1c !important;
+  color: #ffffff !important;
+  border-color: #991b1b !important;
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.35) !important;
+  transform: translateY(-1px);
 }
 
 .btn-sm {
-  padding: 8px 14px;
-  font-size: 12.5px;
-  border-radius: 6px;
+  padding: 8px 14px !important;
+  font-size: 12.5px !important;
+  border-radius: 8px !important;
 }
 
 .btn-lg {
-  padding: 14px 28px;
-  font-size: 15px;
-  border-radius: var(--radius);
+  padding: 13px 26px !important;
+  font-size: 15px !important;
+  border-radius: 10px !important;
 }
 
 /* Badges e Tags */
@@ -553,7 +588,10 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
   color: #ffffff;
   transform: translateY(-1.5px);
 }
-\n\n/* --- site.css --- */\n/* ==========================================================================
+
+
+/* --- site.css --- */
+/* ==========================================================================
    DK REVESTIMENTOS - DIREÇÃO DE ARTE & IDENTIDADE PREMIUM
    Estética de Ateliê de Marcenaria Sob Medida & Arquitetura de Interiores
    ========================================================================== */
@@ -2175,7 +2213,10 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
   border-color: var(--wood-dark, #3a1f0f);
   box-shadow: 0 2px 8px rgba(58, 31, 15, 0.2);
 }
-\n\n/* --- admin.css --- */\n/* ==========================================================================
+
+
+/* --- admin.css --- */
+/* ==========================================================================
    DK REVESTIMENTOS - PAINEL ADMINISTRATIVO & GESTÃO DA MARCENARIA
    Design Executivo de Alto Padrão (Clean Architectural Light Theme)
    ========================================================================== */
@@ -2969,7 +3010,144 @@ body.admin-body {
 .proportion-choice:hover {
   border-color: var(--wood-primary, #8a4f26);
 }
-\n\n/* --- responsive.css --- */\n/* ==========================================================================
+
+
+/* --------------------------------------------------------------------------
+   SISTEMA DE BOTÕES ADMINISTRATIVOS BLINDADOS (ZERO BLOCOS INVISÍVEIS)
+   -------------------------------------------------------------------------- */
+.admin-container .btn,
+.admin-login-card .btn,
+.modal-content .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-main, 'Plus Jakarta Sans', sans-serif);
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  line-height: 1.3;
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.admin-container .btn-primary,
+.admin-login-card .btn-primary,
+.modal-content .btn-primary {
+  background-color: #8a4f26 !important;
+  background-image: linear-gradient(135deg, #8a4f26 0%, #6d3a17 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #733b18 !important;
+  box-shadow: 0 4px 14px rgba(110, 58, 23, 0.28) !important;
+  font-weight: 700 !important;
+}
+
+.admin-container .btn-primary:hover,
+.admin-login-card .btn-primary:hover,
+.modal-content .btn-primary:hover {
+  background-color: #9c5c30 !important;
+  background-image: linear-gradient(135deg, #9c5c30 0%, #8a4f26 100%) !important;
+  color: #ffffff !important;
+  border-color: #8a4f26 !important;
+  box-shadow: 0 6px 18px rgba(110, 58, 23, 0.35) !important;
+  transform: translateY(-1.5px);
+}
+
+.admin-container .btn-outline,
+.modal-content .btn-outline {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  font-weight: 600 !important;
+}
+
+.admin-container .btn-outline:hover,
+.modal-content .btn-outline:hover {
+  background-color: #f8fafc !important;
+  color: #8a4f26 !important;
+  border-color: #8a4f26 !important;
+  transform: translateY(-1px);
+}
+
+.admin-container .btn-danger,
+.modal-content .btn-danger {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border: 1px solid #b91c1c !important;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25) !important;
+  font-weight: 700 !important;
+}
+
+.admin-container .btn-danger:hover,
+.modal-content .btn-danger:hover {
+  background-color: #b91c1c !important;
+  color: #ffffff !important;
+  border-color: #991b1b !important;
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+.admin-container .btn-whatsapp {
+  background-color: #15803d !important;
+  background-image: linear-gradient(135deg, #16a34a 0%, #15803d 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #166534 !important;
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.28) !important;
+  font-weight: 700 !important;
+}
+
+.admin-container .btn-whatsapp:hover {
+  background-color: #166534 !important;
+  transform: translateY(-1.5px);
+  color: #ffffff !important;
+}
+
+.admin-container .btn-sm,
+.modal-content .btn-sm {
+  padding: 8px 14px !important;
+  font-size: 12.5px !important;
+  border-radius: 8px !important;
+}
+
+.admin-container .btn-inspect-obra {
+  width: 100% !important;
+  padding: 12px 18px !important;
+  font-weight: 700 !important;
+  font-size: 13.5px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border-radius: 10px !important;
+  background-color: #8a4f26 !important;
+  background-image: linear-gradient(135deg, #8a4f26 0%, #6d3a17 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #733b18 !important;
+  box-shadow: 0 4px 14px rgba(110, 58, 23, 0.28) !important;
+  transition: all 0.2s ease !important;
+}
+
+.admin-container .btn-inspect-obra span {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.admin-container .btn-inspect-obra:hover {
+  background-color: #9c5c30 !important;
+  background-image: linear-gradient(135deg, #9c5c30 0%, #8a4f26 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(110, 58, 23, 0.35) !important;
+}
+
+
+/* --- responsive.css --- */
+/* ==========================================================================
    DK REVESTIMENTOS - ADAPTAÇÃO RESPONSIVA MODERNA & REFINADA (TABLET & MOBILE)
    Eliminação de qualquer transbordo horizontal (overflow-x) e bordas brancas
    ========================================================================== */
@@ -3736,4 +3914,4 @@ body.admin-body {
     font-size: 22px;
   }
 }
-\n
+
