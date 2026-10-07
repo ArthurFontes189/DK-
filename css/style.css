@@ -225,16 +225,17 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
 
 .btn-gold {
   background-color: #c59b6d !important;
-  background-image: linear-gradient(135deg, #c59b6d 0%, #a87e50 100%) !important;
+  background-image: linear-gradient(135deg, #d4a775 0%, #a87e50 100%) !important;
   color: #ffffff !important;
   border: 1px solid #a87e50 !important;
-  box-shadow: 0 4px 14px rgba(168, 126, 80, 0.28) !important;
+  box-shadow: 0 4px 18px rgba(168, 126, 80, 0.35) !important;
   font-weight: 700 !important;
 }
 .btn-gold:hover {
   background-color: #d3ab7e !important;
-  background-image: linear-gradient(135deg, #d3ab7e 0%, #c59b6d 100%) !important;
-  transform: translateY(-1.5px);
+  background-image: linear-gradient(135deg, #e0b889 0%, #c59b6d 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 22px rgba(168, 126, 80, 0.45) !important;
   color: #ffffff !important;
 }
 
@@ -578,15 +579,18 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
 
 /* Botão Claro para Áreas Escuras com Glassmorphism */
 .btn-outline-light {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-weight: 600 !important;
 }
 .btn-outline-light:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.40);
-  color: #ffffff;
-  transform: translateY(-1.5px);
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
 }
 
 
@@ -600,10 +604,11 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
    1. NAVBAR SUPERIOR (VIDRO FOSCO TRANSLÚCIDO & TIPOGRAFIA ARQUITETÔNICA)
    -------------------------------------------------------------------------- */
 .top-navbar {
-  background: rgba(14, 15, 19, 0.92);
+  background-color: #0e0f13 !important;
+  background: rgba(14, 15, 19, 0.96) !important;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid var(--border-dark);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   position: sticky;
   top: 0;
   z-index: 900;
@@ -647,9 +652,9 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
 }
 
 .brand-text h1 {
-  font-size: 19px;
-  font-weight: 800;
-  color: #ffffff;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
   line-height: 1.15;
   letter-spacing: -0.03em;
   margin: 0;
@@ -657,9 +662,9 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
 }
 
 .brand-text span {
-  font-size: 10px;
-  color: var(--wood-gold);
-  font-weight: 600;
+  font-size: 10px !important;
+  color: #c59b6d !important;
+  font-weight: 700 !important;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   display: block;
@@ -678,7 +683,7 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
 .nav-link {
   font-size: 13.5px;
   font-weight: 600;
-  color: #cbd5e1;
+  color: #e2e8f0 !important;
   text-decoration: none;
   position: relative;
   padding: 8px 0;
@@ -778,9 +783,15 @@ p, h1, h2, h3, h4, h5, h6, span, a, label, li {
   display: flex;
 }
 .mobile-menu .nav-link {
-  font-size: 15.5px;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #e2e8f0 !important;
+  text-decoration: none;
+  position: relative;
+  padding: 8px 0;
+  transition: color 0.2s ease;
+  letter-spacing: 0.015em;
+  white-space: nowrap;
 }
 
 /* --------------------------------------------------------------------------

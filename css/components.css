@@ -43,16 +43,17 @@
 
 .btn-gold {
   background-color: #c59b6d !important;
-  background-image: linear-gradient(135deg, #c59b6d 0%, #a87e50 100%) !important;
+  background-image: linear-gradient(135deg, #d4a775 0%, #a87e50 100%) !important;
   color: #ffffff !important;
   border: 1px solid #a87e50 !important;
-  box-shadow: 0 4px 14px rgba(168, 126, 80, 0.28) !important;
+  box-shadow: 0 4px 18px rgba(168, 126, 80, 0.35) !important;
   font-weight: 700 !important;
 }
 .btn-gold:hover {
   background-color: #d3ab7e !important;
-  background-image: linear-gradient(135deg, #d3ab7e 0%, #c59b6d 100%) !important;
-  transform: translateY(-1.5px);
+  background-image: linear-gradient(135deg, #e0b889 0%, #c59b6d 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 22px rgba(168, 126, 80, 0.45) !important;
   color: #ffffff !important;
 }
 
@@ -396,13 +397,16 @@
 
 /* Botão Claro para Áreas Escuras com Glassmorphism */
 .btn-outline-light {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-weight: 600 !important;
 }
 .btn-outline-light:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.40);
-  color: #ffffff;
-  transform: translateY(-1.5px);
+  background-color: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
 }
