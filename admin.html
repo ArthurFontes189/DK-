@@ -9,15 +9,126 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261006_v2">
+  <link rel="stylesheet" href="css/style.css?v=20261006_v3">
+  
+  <style>
+    /* Estilos da Tela de Login In-Page */
+    .admin-login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at top, #1a1c23 0%, #0e0f13 100%);
+      box-sizing: border-box;
+    }
+    .admin-login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 38px 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .admin-login-brand {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .admin-login-brand .brand-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      margin-bottom: 14px;
+    }
+    .admin-login-brand h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      margin: 0 0 4px 0;
+    }
+    .admin-login-brand span {
+      font-size: 11.5px;
+      color: var(--wood-primary);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .login-hint {
+      font-size: 11.5px;
+      color: #64748b;
+      margin: 10px 0 20px;
+      text-align: left;
+    }
+    .back-to-site-link {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .back-to-site-link:hover {
+      color: var(--wood-primary);
+    }
+  </style>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body style="background: #0e0f13; min-height: 100vh;">
+<body style="background: #0e0f13; min-height: 100vh; margin: 0; color: #ffffff;">
 
   <!-- Toast Container -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <!-- Área Administrativa -->
+  <!-- 1. TELA DE LOGIN IN-PAGE (VISÍVEL POR PADRÃO SE NÃO ESTIVER AUTENTICADO) -->
+  <div id="adminLoginView" class="admin-login-screen">
+    <div class="admin-login-card">
+      <div class="admin-login-brand">
+        <div class="brand-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="185 165 435 430" width="100%" height="100%"><defs><linearGradient id="woodMainIcon" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8a4820" /><stop offset="50%" stop-color="#733b18" /><stop offset="100%" stop-color="#5a2b0e" /></linearGradient><linearGradient id="hammerSteelIcon" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#733b18" /><stop offset="100%" stop-color="#4e240a" /></linearGradient></defs><!-- CHAMINÉ / ESTRUTURA LATERAL ESQUERDA --><rect x="250" y="240" width="48" height="90" fill="url(#woodMainIcon)" /><!-- VIGA DO TELHADO ESQUERDO --><path d="M190 380 L395 200 L430 235 L225 415 Z" fill="url(#woodMainIcon)" /><path d="M210 395 L395 230 L410 245 L225 410 Z" fill="#4a2209" opacity="0.3" /><!-- ENTALHE / CAIBROS INTERNOS DO TELHADO --><path d="M300 350 L395 265 L460 325 L445 340 L395 295 L320 365 Z" fill="url(#woodMainIcon)" /><polygon points="330,345 340,335 345,345" fill="#3a1b08" /><polygon points="350,325 360,315 365,325" fill="#3a1b08" /><polygon points="370,305 380,295 385,305" fill="#3a1b08" /><!-- CABO DO MARTELO (LADO DIREITO DO TELHADO) --><path d="M375 380 L560 215 L595 250 L410 415 Z" fill="url(#woodMainIcon)" /><!-- CABEÇA DO MARTELO --><path d="M530 220 L585 170 L605 190 L575 220 L615 250 L595 270 L555 240 Z" fill="url(#hammerSteelIcon)" /><path d="M545 195 C510 195 460 215 440 230 C475 230 515 220 535 210 Z" fill="url(#hammerSteelIcon)" /><path d="M485 310 L595 415 L570 435 L460 330 Z" fill="url(#woodMainIcon)" /><!-- LETRA 'D' --><g><path d="M225 350 H300 C360 350 395 390 395 470 C395 550 360 590 300 590 H225 Z" fill="url(#woodMainIcon)" /><path d="M272 400 H295 C330 400 348 425 348 470 C348 515 330 540 295 540 H272 Z" fill="#ffffff" /><path d="M238 365 C242 410 238 460 244 575" stroke="#4a2209" stroke-width="3" fill="none" opacity="0.6" /><path d="M255 360 C250 430 258 500 252 580" stroke="#4a2209" stroke-width="2.5" fill="none" opacity="0.6" /><path d="M365 420 C380 450 380 490 365 520" stroke="#4a2209" stroke-width="3.5" fill="none" opacity="0.5" /><path d="M375 440 C388 465 388 475 375 500" stroke="#4a2209" stroke-width="2.5" fill="none" opacity="0.5" /><path d="M310 365 C340 370 365 385 370 405" stroke="#4a2209" stroke-width="2.5" fill="none" opacity="0.5" /><path d="M310 575 C340 570 365 555 370 535" stroke="#4a2209" stroke-width="2.5" fill="none" opacity="0.5" /></g><!-- LETRA 'K' --><g><path d="M415 350 H465 V590 H415 Z" fill="url(#woodMainIcon)" /><path d="M430 365 C435 420 430 500 435 575" stroke="#4a2209" stroke-width="3" fill="none" opacity="0.6" /><path d="M448 360 C444 440 450 510 446 580" stroke="#4a2209" stroke-width="2.5" fill="none" opacity="0.6" /><path d="M465 440 L555 350 H615 L500 465 Z" fill="url(#woodMainIcon)" /><path d="M485 435 L575 350" stroke="#4a2209" stroke-width="3" fill="none" opacity="0.5" /><path d="M500 450 L595 365" stroke="#4a2209" stroke-width="2.5" fill="none" opacity="0.5" /><path d="M475 445 L590 590 H525 L445 490 Z" fill="url(#woodMainIcon)" /><path d="M525 500 L590 590 H540 L495 535 Z" fill="#4a2209" opacity="0.25" /><path d="M470 470 L565 580" stroke="#4a2209" stroke-width="3.5" fill="none" opacity="0.5" /><path d="M460 485 L540 580" stroke="#4a2209" stroke-width="2" fill="none" opacity="0.5" /></g></svg>
+        </div>
+        <h2>DK Revestimentos</h2>
+        <span>Painel de Gestão da Marcenaria</span>
+      </div>
+
+      <p style="font-size: 13.5px; color: #64748b; margin-bottom: 22px; text-align: center;">
+        Entre com suas credenciais de administrador para acessar os orçamentos, clientes, obras e o financeiro.
+      </p>
+
+      <form id="adminPageLoginForm" onsubmit="handleAdminLogin(event)">
+        <div class="form-group" style="text-align: left;">
+          <label for="loginUser" class="form-label">Usuário</label>
+          <input type="text" id="loginUser" class="form-control" value="admin" required autocomplete="username">
+        </div>
+        <div class="form-group" style="text-align: left;">
+          <label for="loginPass" class="form-label">Senha</label>
+          <input type="password" id="loginPass" class="form-control" placeholder="Senha (padrão: 1234)" required autocomplete="current-password">
+        </div>
+        <div class="login-hint">
+          * Acesso padrão: Usuário <strong>admin</strong> | Senha <strong>1234</strong>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 13px; font-size: 14.5px; font-weight: 700;">
+          Entrar no Painel
+        </button>
+      </form>
+
+      <a href="index.html" class="back-to-site-link">← Voltar ao Site Público</a>
+    </div>
+  </div>
+
+  <!-- 2. ÁREA ADMINISTRATIVA COMPLETA (EXIBIDA QUANDO AUTENTICADO) -->
   <section id="adminArea" class="admin-container">
     <div class="container">
       
@@ -293,33 +404,7 @@
     </div>
   </section>
 
-  <!-- Modais Administrativos -->
-  <div class="modal-overlay" id="loginModal">
-    <div class="modal-content" style="max-width: 400px; text-align: center;">
-      <div class="modal-header" style="justify-content: center; position: relative;">
-        <h4 class="modal-title">Acesso Administrativo</h4>
-        <button class="close-modal" style="position: absolute; right: 0;" onclick="closeModal('loginModal')">&times;</button>
-      </div>
-      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 20px;">
-        Digite suas credenciais para gerenciar clientes, fichas e o caixa da marcenaria.
-      </p>
-      <form onsubmit="handleAdminLogin(event)">
-        <div class="form-group" style="text-align: left;">
-          <label for="loginUser">Usuário</label>
-          <input type="text" id="loginUser" class="form-control" value="admin" required>
-        </div>
-        <div class="form-group" style="text-align: left;">
-          <label for="loginPass">Senha</label>
-          <input type="password" id="loginPass" class="form-control" placeholder="Senha (padrão: 1234)" required>
-        </div>
-        <div style="font-size: 11.5px; color: #94a3b8; margin-bottom: 18px; text-align: left;">
-          * Senha padrão de acesso: <strong>1234</strong>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar no Painel</button>
-      </form>
-    </div>
-  </div>
-
+  <!-- 3. MODAIS OPERACIONAIS DO SISTEMA ADMINISTRATIVO -->
   <!-- MODAL: CADASTRAR / EDITAR CLIENTE -->
   <div class="modal-overlay" id="clientModal">
     <div class="modal-content" style="max-width: 500px;">
@@ -927,19 +1012,38 @@
   <!-- ============================================== -->
   
 
-  <!-- Scripts Administrativos -->
-  <script src="js/config.js?v=20261006_v2"></script>
-  <script src="js/services/storage.js?v=20261006_v2"></script>
-  <script src="js/services/api.js?v=20261006_v2"></script>
-  <script src="js/ui/toast.js?v=20261006_v2"></script>
-  <script src="js/ui/modals.js?v=20261006_v2"></script>
-  <script src="js/modules/auth.js?v=20261006_v2"></script>
-  <script src="js/modules/leads.js?v=20261006_v2"></script>
-  <script src="js/modules/clients.js?v=20261006_v2"></script>
-  <script src="js/modules/employees.js?v=20261006_v2"></script>
-  <script src="js/modules/services.js?v=20261006_v2"></script>
-  <script src="js/modules/finance.js?v=20261006_v2"></script>
-  <script src="js/modules/portfolio.js?v=20261006_v2"></script>
-  <script src="js/admin_app.js?v=20261006_v2"></script>
+  
+
+  <!-- 4. SCRIPTS DO SISTEMA ADMINISTRATIVO -->
+  <script src="js/config.js?v=20261006_v3"></script>
+  <script src="js/services/storage.js?v=20261006_v3"></script>
+  <script src="js/services/api.js?v=20261006_v3"></script>
+  <script src="js/ui/toast.js?v=20261006_v3"></script>
+  <script src="js/ui/modals.js?v=20261006_v3"></script>
+  <script src="js/modules/auth.js?v=20261006_v3"></script>
+  <script src="js/modules/leads.js?v=20261006_v3"></script>
+  <script src="js/modules/clients.js?v=20261006_v3"></script>
+  <script src="js/modules/employees.js?v=20261006_v3"></script>
+  <script src="js/modules/services.js?v=20261006_v3"></script>
+  <script src="js/modules/finance.js?v=20261006_v3"></script>
+  <script src="js/modules/portfolio.js?v=20261006_v3"></script>
+  <script src="js/admin_app.js?v=20261006_v3"></script>
+
+  <script>
+    // Inicialização Imediata In-line (Garante que nunca fique tela preta)
+    (function checkAuthStateDirectly() {
+      var isLogged = localStorage.getItem("marcenaria_admin_logged") === "true";
+      var loginView = document.getElementById("adminLoginView");
+      var adminArea = document.getElementById("adminArea");
+
+      if (isLogged) {
+        if (loginView) loginView.style.display = "none";
+        if (adminArea) adminArea.style.display = "block";
+      } else {
+        if (loginView) loginView.style.display = "flex";
+        if (adminArea) adminArea.style.display = "none";
+      }
+    })();
+  </script>
 </body>
 </html>

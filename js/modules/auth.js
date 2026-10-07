@@ -26,7 +26,7 @@ function handleAdminAccessClick() {
       openModal("loginModal");
     }
   } else {
-    // Redireciona para o painel dedicado
+    // Redireciona para o painel dedicado admin.html
     window.location.href = "admin.html";
   }
 }
@@ -41,7 +41,18 @@ function handleAdminLogin(e) {
   if (user === "admin" && pass === "1234") {
     isAdminLoggedIn = true;
     localStorage.setItem("marcenaria_admin_logged", "true");
-    closeModal("loginModal");
+    
+    // Fecha modal flutuante se estiver ativo
+    if (typeof closeModal === "function") {
+      closeModal("loginModal");
+    }
+    
+    // Alterna a visualização in-page se estiver em admin.html
+    const loginView = document.getElementById("adminLoginView");
+    const adminArea = document.getElementById("adminArea");
+    if (loginView) loginView.style.display = "none";
+    if (adminArea) adminArea.style.display = "block";
+
     updateAdminButton();
     showToast("Login realizado com sucesso! Bem-vindo ao painel.", "success");
     goToAdminPanel();
@@ -55,13 +66,24 @@ function adminLogout() {
   localStorage.removeItem("marcenaria_admin_logged");
   updateAdminButton();
   showToast("Você saiu do painel administrativo.", "info");
-  goToClientSite();
+
+  const loginView = document.getElementById("adminLoginView");
+  const adminArea = document.getElementById("adminArea");
+  if (loginView && adminArea) {
+    adminArea.style.display = "none";
+    loginView.style.display = "flex";
+    window.scrollTo(0, 0);
+  } else {
+    goToClientSite();
+  }
 }
 
 function goToAdminPanel() {
   const clientArea = document.getElementById("clientArea");
   const adminArea = document.getElementById("adminArea");
+  const loginView = document.getElementById("adminLoginView");
   
+  if (loginView) loginView.style.display = "none";
   if (clientArea) clientArea.style.display = "none";
   if (adminArea) adminArea.style.display = "block";
   
