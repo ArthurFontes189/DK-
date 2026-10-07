@@ -207,11 +207,19 @@ function loadCachedDB() {
 
     const cachedPortfolio = JSON.parse(localStorage.getItem("marcenaria_portfolio") || "null");
     
-    // Sempre prioriza os títulos corretos e todas as 16 mídias canônicas
     if (cachedPortfolio && Array.isArray(cachedPortfolio) && cachedPortfolio.length > 0) {
       const defaultIds = new Set(DEFAULT_REAL_PORTFOLIO.map(p => String(p.id)));
+      // Itens novos cadastrados pelo usuário no painel de administração (ficam no topo!)
       const customUserItems = cachedPortfolio.filter(p => !defaultIds.has(String(p.id)));
-      db.portfolio = [...DEFAULT_REAL_PORTFOLIO, ...customUserItems];
+      
+      // Mescla atualizações dos itens padrão caso o usuário tenha editado algum
+      const updatedDefaults = DEFAULT_REAL_PORTFOLIO.map(def => {
+        const userVersion = cachedPortfolio.find(p => String(p.id) === String(def.id));
+        return userVersion ? { ...def, ...userVersion } : def;
+      });
+
+      // Novos projetos cadastrados vêm no topo para visibilidade imediata no site público
+      db.portfolio = [...customUserItems, ...updatedDefaults];
     } else {
       db.portfolio = [...DEFAULT_REAL_PORTFOLIO];
     }

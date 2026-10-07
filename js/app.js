@@ -6,17 +6,25 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("🪵 DK Revestimentos - Site Público Inicializado");
   
-  // Carrega catálogo e dados públicos em cache
+  // 1. Carrega imediatamente o catálogo e dados locais em cache (renderização instantânea offline-first)
   if (typeof loadCachedDB === "function") {
     loadCachedDB();
   }
   
-  // Renderiza a galeria de trabalhos reais
+  // 2. Renderiza a galeria de trabalhos reais com dados locais disponíveis
   if (typeof renderPublicCatalog === "function") {
     renderPublicCatalog();
   }
-});
 
+  // 3. Conecta ao Supabase para buscar novos vídeos e fotos cadastrados no admin em tempo real
+  if (typeof initSupabase === "function") {
+    try {
+      initSupabase();
+    } catch (e) {
+      console.warn("initSupabase offline/error:", e);
+    }
+  }
+});
 
 function toggleMobileMenu() {
   const m = document.getElementById("mobileMenu");
