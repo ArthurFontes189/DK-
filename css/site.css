@@ -524,14 +524,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 38px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 4px 6px;
-  scrollbar-width: none;
-}
-.portfolio-category-bar-wrap::-webkit-scrollbar {
-  display: none;
+  margin-bottom: 34px;
 }
 
 .portfolio-category-bar {
@@ -617,7 +610,6 @@
 
 .project-card {
   background: #ffffff;
-  cursor: pointer;
   border: 1px solid var(--border-soft, #e2e8f0);
   border-radius: 14px;
   overflow: hidden;
@@ -1627,38 +1619,4 @@
   color: #ffffff;
   border-color: var(--wood-dark, #3a1f0f);
   box-shadow: 0 2px 8px rgba(58, 31, 15, 0.2);
-}
-
-
-/* Indicador visual discreto de PLAY para mídias de vídeo */
-.card-play-indicator {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(14, 15, 19, 0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  z-index: 3;
-  pointer-events: none;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, border-color 0.25s ease;
-}
-
-.project-card:hover .card-play-indicator,
-.featured-card:hover .card-play-indicator {
-  transform: scale(1.12);
-  background: var(--wood-primary, #8a4f26);
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-.card-video-indicator {
-  display: none !important;
 }

@@ -33,10 +33,15 @@ function updateSyncIndicator(isConnected) {
     el.style.color = "#4ade80";
     el.style.background = "rgba(34, 197, 94, 0.15)";
     el.style.borderColor = "rgba(34, 197, 94, 0.3)";
+    el.title = "Conectado ao Supabase (PostgreSQL na nuvem)";
     el.innerHTML = '<span style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block;"></span> Banco Sincronizado';
   } else {
-    // Oculta o indicador de modo offline para manter a barra limpa e discreta
-    el.style.display = "none";
+    el.style.display = "inline-flex";
+    el.style.color = "#f59e0b";
+    el.style.background = "rgba(245, 158, 11, 0.15)";
+    el.style.borderColor = "rgba(245, 158, 11, 0.3)";
+    el.title = "Operando com banco de dados local (localStorage). Clique em 🔄 para tentar reconectar à nuvem.";
+    el.innerHTML = '<span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span> Modo Offline';
   }
 }
 
@@ -74,30 +79,40 @@ async function fetchCloudData(showFeedback = false) {
       sbClient.from("employees").select("*").order("id", { ascending: false }).catch(err => ({ data: [] }))
     ]);
 
-    if (pRes.data) {
-      const cloudItems = pRes.data.map(item => ({
-        id: item.id,
-        tipoMidia: item.tipo_midia,
-        proporcao: item.proporcao || 'horizontal',
-        gdriveId: item.gdrive_id || '',
-        gdriveLink: item.gdrive_link || '',
-        titulo: item.titulo,
-        categoria: item.categoria,
-        descricao: item.descricao,
-        midiaUrl: item.midia_url,
-        posterUrl: item.poster_url,
-        tipoRegistro: item.tipo_registro || ''
-      }));
-
-      const cloudGdriveIds = new Set(cloudItems.map(p => p.gdriveId).filter(Boolean));
-      const cloudTitles = new Set(cloudItems.map(p => p.titulo));
+    if (pRes.data && pRes.data.length > 0) {
       const seeds = (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' ? DEFAULT_REAL_PORTFOLIO : []);
-      
+      const seedMap = new Map();
+      seeds.forEach(s => seedMap.set(String(s.id), s));
+
+      const cloudItems = pRes.data.map(item => {
+        const localMatch = seedMap.get(String(item.id));
+        return {
+          id: item.id,
+          tipoMidia: item.tipo_midia || (localMatch ? localMatch.tipoMidia : 'foto'),
+          proporcao: item.proporcao || (localMatch ? localMatch.proporcao : 'horizontal'),
+          titulo: item.titulo,
+          categoria: item.categoria,
+          subtitulo: item.subtitulo || (localMatch ? localMatch.subtitulo : ''),
+          descricao: item.descricao || (localMatch ? localMatch.descricao : ''),
+          // Preserva sempre o arquivo local MP4 quando existir localmente
+          midiaUrl: (localMatch && localMatch.midiaUrl.endsWith('.mp4')) ? localMatch.midiaUrl : (item.midia_url || (localMatch ? localMatch.midiaUrl : '')),
+          posterUrl: (localMatch && localMatch.posterUrl) ? localMatch.posterUrl : (item.poster_url || ''),
+          destaque: item.destaque || (localMatch ? localMatch.destaque : False)
+        };
+      });
+
+      // Deduplica estritamente por ID e por Título Normalizado
+      const seenIds = new Set(cloudItems.map(p => String(p.id)));
+      const seenTitles = new Set(cloudItems.map(p => (p.titulo || '').toLowerCase().trim()));
+
       const missingSeeds = seeds.filter(s => 
-        (!s.gdriveId || !cloudGdriveIds.has(s.gdriveId)) && !cloudTitles.has(s.titulo)
+        !seenIds.has(String(s.id)) && !seenTitles.has((s.titulo || '').toLowerCase().trim())
       );
 
       db.portfolio = [...cloudItems, ...missingSeeds];
+      saveCacheDB("portfolio", db.portfolio);
+    } else {
+      db.portfolio = [...(typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' ? DEFAULT_REAL_PORTFOLIO : [])];
       saveCacheDB("portfolio", db.portfolio);
     }
 

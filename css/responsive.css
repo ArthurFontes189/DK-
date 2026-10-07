@@ -250,26 +250,26 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     width: 100%;
-    padding: 6px 12px 14px 12px;
+    padding: 4px 2px 12px 2px;
     margin-bottom: 26px;
     justify-content: flex-start;
-    scrollbar-width: none;
-  }
-  .portfolio-category-bar-wrap::-webkit-scrollbar {
-    display: none;
   }
   .portfolio-category-bar {
     flex-wrap: nowrap;
     justify-content: flex-start;
-    padding: 5px;
+    padding: 4px;
     gap: 6px;
     border-radius: 30px;
   }
   .portfolio-cat-btn {
-    padding: 8px 16px;
-    font-size: 12px;
+    padding: 7px 13px;
+    font-size: 11.5px;
+    gap: 5px;
     white-space: nowrap;
-    flex-shrink: 0;
+  }
+  .cat-count-pill {
+    font-size: 10px;
+    padding: 1px 5px;
   }
 
   /* Grade de Projetos no Tablet / Celular */

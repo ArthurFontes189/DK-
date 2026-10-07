@@ -23,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- CSS Standalone Otimizado -->
-  <link rel="stylesheet" href="css/style.css?v=20261006_premium_v1">
+  <link rel="stylesheet" href="css/style.css?v=20261006_video_fix_v7">
 </head>
 <body>
 
@@ -72,13 +72,11 @@
 
       <!-- Ações da Navbar -->
       <div class="nav-actions">
-        <a href="#contato" class="nav-wa-btn" title="Solicitar Orçamento">
+        <a href="#contato" class="nav-wa-btn" title="Falar com Especialista">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
-          <span>Solicitar Orçamento</span>
+          <span>Falar com um Especialista</span>
         </a>
-        <button type="button" class="nav-admin-link" id="adminAccessBtn" onclick="handleAdminAccessClick()" title="Acesso Administrativo" aria-label="Acesso Administrativo">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        </button>
+        
         <button type="button" class="menu-toggle" onclick="toggleMobileMenu()" aria-label="Abrir Menu">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
@@ -94,7 +92,7 @@
       <a href="#como-trabalhamos" class="nav-link" onclick="toggleMobileMenu()">Como Trabalhamos</a>
       <a href="#contato" class="nav-link" onclick="toggleMobileMenu()">Contato</a>
       <hr style="border: 0; border-top: 1px solid var(--border-dark);">
-      <a href="javascript:void(0)" onclick="toggleMobileMenu(); handleAdminAccessClick();" style="font-size: 11.5px; color: #64748b; text-align: center; display: block; padding: 6px 0;">
+      <a href="admin.html" onclick="toggleMobileMenu();" style="font-size: 11.5px; color: #64748b; text-align: center; display: block; padding: 6px 0;">
         Acesso Administrativo
       </a>
     </div>
@@ -120,11 +118,10 @@
         </p>
         <div class="hero-editorial-actions">
           <a href="#projetos" class="btn btn-gold btn-lg">
-            <span>Ver Projetos</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <span>Conhecer nossos projetos</span>
           </a>
           <a href="#contato" class="btn btn-outline-light btn-lg">
-            <span>Solicitar Orçamento</span>
+            <span>Falar com um especialista</span>
           </a>
         </div>
 
@@ -207,14 +204,10 @@
             <p class="portfolio-final-cta-desc">
               Da marcenaria sob medida às soluções em madeira para áreas externas, desenvolvemos projetos personalizados para cada espaço.
             </p>
-            <div class="portfolio-final-cta-actions" style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <div class="portfolio-final-cta-actions">
               <a href="#contato" class="btn btn-primary" onclick="prefillBudget('Projeto Personalizado', 'Marcenaria & Revestimentos')">
-                <span>Solicitar Orçamento</span>
+                <span>Falar com a DK Revestimentos</span>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </a>
-              <a href="https://api.whatsapp.com/send?phone=5561999999999&text=Ol%C3%A1!%20Gostaria%20de%20conversar%20com%20a%20DK%20Revestimentos%20sobre%20um%20projeto%20personalizado." target="_blank" class="btn btn-whatsapp">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
-                <span>Falar pelo WhatsApp</span>
               </a>
             </div>
           </div>
@@ -237,32 +230,32 @@
         </div>
 
         <div class="solutions-grid">
-          <div class="solution-card" onclick="filterAndScrollPortfolio('MADEIRA & REVESTIMENTOS')">
+          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
             <div class="solution-number">01</div>
             <h3>Painéis & Revestimentos</h3>
             <p>Painéis ripados, revestimentos decorativos, portas mimetizadas e soluções integradas à arquitetura.</p>
-            <span class="solution-link">Ver projetos relacionados →</span>
+            <span class="solution-link">Conhecer solução →</span>
           </div>
 
-          <div class="solution-card" onclick="filterAndScrollPortfolio('MARCENARIA')">
+          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
             <div class="solution-number">02</div>
             <h3>Marcenaria Sob Medida</h3>
             <p>Mobiliário desenvolvido para aproveitar o espaço com precisão e criar ambientes únicos.</p>
-            <span class="solution-link">Ver projetos relacionados →</span>
+            <span class="solution-link">Conhecer solução →</span>
           </div>
 
-          <div class="solution-card" onclick="filterAndScrollPortfolio('MÓVEIS SOB MEDIDA')">
+          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
             <div class="solution-number">03</div>
             <h3>Cozinhas, Closets & Suítes</h3>
             <p>Projetos personalizados com atenção especial à organização, funcionalidade e acabamento.</p>
-            <span class="solution-link">Ver projetos relacionados →</span>
+            <span class="solution-link">Conhecer solução →</span>
           </div>
 
-          <div class="solution-card" onclick="filterAndScrollPortfolio('ÁREAS EXTERNAS')">
+          <div class="solution-card" onclick="document.getElementById('projetos').scrollIntoView({ behavior: 'smooth' });">
             <div class="solution-number">04</div>
             <h3>Ambientes Externos</h3>
             <p>Decks, pergolados e soluções em madeira para áreas externas residenciais e corporativas.</p>
-            <span class="solution-link">Ver projetos relacionados →</span>
+            <span class="solution-link">Conhecer solução →</span>
           </div>
         </div>
       </div>
@@ -412,7 +405,7 @@
 
               <button type="submit" class="btn btn-whatsapp" style="width: 100%; margin-top: 8px; padding: 14px; font-size: 14.5px; font-weight: 700;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
-                <span>Solicitar Orçamento no WhatsApp</span>
+                <span>Quero conversar com a DK</span>
               </button>
               <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 10px; margin-bottom: 0;">Atendimento direto com nossa equipe via WhatsApp.</p>
             </form>
@@ -440,9 +433,12 @@
             <a href="#contato">Contato</a>
           </div>
         </div>
-        <div class="footer-bottom">
+                <div class="footer-bottom">
           <div>© 2026 DK Revestimentos. Todos os direitos reservados.</div>
-          <div>Brasília – DF • Atendimento em Brasília e Entorno</div>
+          <div style="display: flex; gap: 16px; align-items: center;">
+            <span>Brasília – DF • Atendimento em Brasília e Entorno</span>
+            <a href="admin.html" style="font-size: 11px; color: #475569; opacity: 0.6; text-decoration: none;">Painel Interno</a>
+          </div>
         </div>
       </div>
     </footer>
@@ -458,916 +454,13 @@
   <!-- ============================================== -->
   <!-- 3. ÁREA ADMINISTRATIVA COMPLETA -->
   <!-- ============================================== -->
-  <section id="adminArea" class="admin-container">
-    <div class="container">
-      
-      <!-- Topo do Painel -->
-      <div class="admin-header-bar">
-        <div class="admin-title-wrap">
-          <div class="brand-icon" style="background: rgba(255,255,255,0.1); color: var(--wood-gold); border: none;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
-          </div>
-          <div>
-            <h2>Painel de Gestão da Marcenaria</h2>
-            <div style="font-size: 12px; color: #94a3b8;">Sessão Ativa: Administrador</div>
-          </div>
-        </div>
-
-        <div class="admin-header-actions">
-          <span id="syncIndicator" style="display: none; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #4ade80; background: rgba(34, 197, 94, 0.15); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(34, 197, 94, 0.3);">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; display: inline-block;"></span>
-            Sincronizado
-          </span>
-          <button class="btn btn-outline btn-sm" onclick="fetchCloudData(true)" title="Recarregar dados do banco" style="color: #fff; background: transparent; border-color: rgba(255,255,255,0.25); padding: 7px 11px;">
-            🔄
-          </button>
-          <button class="btn btn-outline btn-sm" onclick="goToClientSite()" style="color: #fff; background: transparent; border-color: rgba(255,255,255,0.25);">
-            👁️ Site
-          </button>
-          <button class="btn btn-danger btn-sm" onclick="adminLogout()">
-            🚪 Sair
-          </button>
-        </div>
-      </div>
-
-      <!-- Abas de Navegação -->
-      <div class="admin-tabs-nav">
-        <button class="admin-nav-tab active" id="tabBtn-crm" onclick="switchAdminTab('crm', this)">
-          <span>📋 Solicitações</span>
-          <span class="tab-badge" id="pendingCount">0</span>
-        </button>
-        <button class="admin-nav-tab" id="tabBtn-clientes" onclick="switchAdminTab('clientes', this)">
-          <span>👥 Clientes</span>
-        </button>
-        <button class="admin-nav-tab" id="tabBtn-servicos" onclick="switchAdminTab('servicos', this)">
-          <span>🏗️ Gerenciamento de Obras</span>
-        </button>
-        <button class="admin-nav-tab" id="tabBtn-funcionarios" onclick="switchAdminTab('funcionarios', this)">
-          <span>👷 Funcionários</span>
-        </button>
-        <button class="admin-nav-tab" id="tabBtn-financeiro" onclick="switchAdminTab('financeiro', this)">
-          <span>💰 Fluxo de Caixa</span>
-        </button>
-        <button class="admin-nav-tab" id="tabBtn-portfolioAdmin" onclick="switchAdminTab('portfolioAdmin', this)">
-          <span>🖼️ Gerenciar Vídeos/Fotos</span>
-        </button>
-      </div>
-
-      <!-- PAINEL 1: CRM & SOLICITAÇÕES (COM FILTROS POR STATUS) -->
-      <div id="tabCRM" class="admin-tab-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-          <div>
-            <h3 style="font-size: 18px; font-weight: 700;">Solicitações de Orçamento</h3>
-            <span style="font-size: 13px; color: var(--text-muted);" id="leadsTotalTxt">Carregando contatos...</span>
-          </div>
-
-          <!-- Filtros de Status -->
-          <div class="lead-status-filters" id="leadFiltersBar">
-            <button class="filter-btn active" onclick="filterLeads('Todos', this)">Todos</button>
-            <button class="filter-btn" onclick="filterLeads('Pendente de Contato', this)">⏳ Pendentes</button>
-            <button class="filter-btn" onclick="filterLeads('Em Negociação', this)">💬 Em Negociação</button>
-            <button class="filter-btn" onclick="filterLeads('Fechado', this)">✅ Fechados</button>
-            <button class="filter-btn" onclick="filterLeads('Perdido', this)">❌ Não Fechou</button>
-          </div>
-        </div>
-
-        <div class="leads-grid" id="leadsList"></div>
-      </div>
-
-      <!-- PAINEL 2: GESTÃO DE CLIENTES CADASTRADOS -->
-      <div id="tabClientes" class="admin-tab-content" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-          <div>
-            <h3 style="font-size: 18px; font-weight: 700;">Base de Clientes Cadastrados</h3>
-            <p style="font-size: 13px; color: var(--text-muted);">Clientes oficiais registrados para vínculo de serviços e pagamentos.</p>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="openNewClientModal()">+ Cadastrar Novo Cliente</button>
-        </div>
-
-        <div class="clients-grid" id="clientsList"></div>
-      </div>
-
-      <!-- PAINEL 3: GERENCIAMENTO DE OBRAS (PRODUÇÃO, EQUIPE & CAIXA CENTRALIZADO) -->
-      <div id="tabServicos" class="admin-tab-content" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
-          <div>
-            <h3 style="font-size: 18px; font-weight: 700;">Gerenciamento de Obras & Produção</h3>
-            <span style="font-size: 13px; color: var(--text-muted);" id="servicesTotalTxt">Carregando obras...</span>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="openNewServiceModal()">+ Nova Obra / Ficha de Produção</button>
-        </div>
-
-        <!-- Filtros de Status dos Serviços -->
-        <div class="lead-status-filters" id="serviceFiltersBar" style="margin-bottom: 20px;">
-          <button class="filter-btn active" onclick="filterServices('Todos', this)">Todos</button>
-          <button class="filter-btn" onclick="filterServices('A Iniciar', this)">⏳ A Iniciar</button>
-          <button class="filter-btn" onclick="filterServices('Em Produção / Oficina', this)">🔨 Em Produção</button>
-          <button class="filter-btn" onclick="filterServices('Em Montagem / Obra', this)">🚚 Em Montagem</button>
-          <button class="filter-btn" onclick="filterServices('Concluído', this)">✅ Concluídos</button>
-        </div>
-
-        <div class="services-admin-grid" id="servicesList"></div>
-      </div>
-
-      <!-- PAINEL 4: GESTÃO DE FUNCIONÁRIOS, COLABORADORES E DIARISTAS -->
-      <div id="tabFuncionarios" class="admin-tab-content" style="display: none;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-          <div>
-            <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0;">Equipe & Gestão de Funcionários</h3>
-            <span style="font-size: 13.5px; color: var(--text-muted);" id="employeesTotalTxt">Carregando equipe...</span>
-          </div>
-          <button type="button" class="btn btn-primary" id="btnToggleEmployeeForm" onclick="toggleEmployeeForm()" style="font-weight: 700; padding: 11px 22px; font-size: 14px; box-shadow: 0 4px 14px rgba(180, 83, 9, 0.28); display: inline-flex; align-items: center; gap: 8px;">
-            <span>➕ Adicionar Funcionário</span>
-          </button>
-        </div>
-
-        <!-- CARD FORMULÁRIO DE CADASTRO (OCULTO POR PADRÃO, ABRE NO CLIQUE DO BOTÃO) -->
-        <div class="employee-create-card" id="employeeDirectCard" style="display: none; background: #ffffff; border: 1px solid var(--border-soft); border-left: 5px solid var(--wood-primary); border-radius: var(--radius); padding: 24px; margin-bottom: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); animation: slideDownForm 0.25s ease;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-soft); padding-bottom: 12px;">
-            <div>
-              <h4 style="font-size: 17px; font-weight: 700; color: #0f172a; margin: 0;">➕ Cadastrar Novo Funcionário / Diarista</h4>
-              <p style="font-size: 13px; color: var(--text-muted); margin: 3px 0 0 0;">Preencha os dados, valor da diária e a chave PIX para adicionar à equipe.</p>
-            </div>
-            <button type="button" class="btn btn-outline btn-sm" onclick="toggleEmployeeForm(false)" style="font-size: 12px; padding: 5px 12px;">✕ Fechar</button>
-          </div>
-
-          <form id="directEmployeeForm" onsubmit="handleDirectEmployeeSubmit(event)">
-            <div class="form-row">
-              <div class="form-group" style="flex: 1.4;">
-                <label class="form-label" style="font-weight: 700;">Nome Completo do Funcionário *</label>
-                <input type="text" class="form-control" id="directEmpNome" required placeholder="Ex: Carlos Eduardo de Oliveira">
-              </div>
-              <div class="form-group" style="flex: 1.1;">
-                <label class="form-label" style="font-weight: 700;">Cargo / Especialidade *</label>
-                <input type="text" list="cargosListDirect" class="form-control" id="directEmpCargo" required placeholder="Ex: Marceneiro Líder">
-                <datalist id="cargosListDirect">
-                  <option value="Marceneiro Líder">
-                  <option value="Marceneiro de Bancada">
-                  <option value="Montador de Móveis">
-                  <option value="Ajudante Geral">
-                  <option value="Pintor / Laqueador">
-                  <option value="Gesseiro">
-                  <option value="Eletricista">
-                  <option value="Serralheiro">
-                  <option value="Acabador">
-                </datalist>
-              </div>
-              <div class="form-group" style="flex: 1;">
-                <label class="form-label" style="font-weight: 700;">Valor da Diária Padrão (R$) *</label>
-                <input type="number" step="0.01" class="form-control" id="directEmpDiaria" required placeholder="Ex: 220.00">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group" style="flex: 1;">
-                <label class="form-label" style="font-weight: 700;">Telefone / WhatsApp *</label>
-                <input type="tel" class="form-control" id="directEmpTelefone" required placeholder="(61) 99999-9999">
-              </div>
-              <div class="form-group" style="flex: 1.4;">
-                <label class="form-label" style="font-weight: 700; color: #b45309;">🔑 Chave PIX (para pagamento de diárias) *</label>
-                <input type="text" class="form-control" id="directEmpPix" required placeholder="CPF, Celular, E-mail ou Chave Aleatória" style="border-color: #fde68a;">
-              </div>
-              <div class="form-group" style="flex: 0.8;">
-                <label class="form-label" style="font-weight: 700;">Status</label>
-                <select class="form-control" id="directEmpStatus">
-                  <option value="Ativo" selected>Ativo</option>
-                  <option value="Inativo">Inativo</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group" style="background: #fbf9f6; border: 1px dashed var(--border-soft); border-radius: 8px; padding: 12px 16px; margin: 12px 0 20px 0;">
-              <label class="form-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span>📄 Anexo do Contrato de Trabalho / Prestação de Serviço</span>
-                <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">PDF ou Foto da folha assinada</span>
-              </label>
-              <input type="file" id="directEmpContratoFile" class="form-control" accept="image/*,.pdf" style="padding: 6px; background: #fff;">
-            </div>
-
-            <div style="display: flex; justify-content: flex-end; gap: 10px;">
-              <button type="button" class="btn btn-outline" onclick="toggleEmployeeForm(false)">Cancelar</button>
-              <button type="submit" class="btn btn-primary" style="padding: 12px 28px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 14px rgba(180, 83, 9, 0.3);">
-                ✓ Salvar Funcionário no Sistema
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Filtros e Listagem da Equipe -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
-          <h4 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0;">Colaboradores Cadastrados</h4>
-          <div class="lead-status-filters" id="employeeFiltersBar">
-            <button type="button" class="filter-btn active" onclick="filterEmployees('Todos', this)">Todos</button>
-            <button type="button" class="filter-btn" onclick="filterEmployees('Ativo', this)">Ativos</button>
-            <button type="button" class="filter-btn" onclick="filterEmployees('Inativo', this)">Inativos</button>
-          </div>
-        </div>
-
-        <div class="employees-grid" id="employeesList"></div>
-      </div>
-
-      <!-- PAINEL 4: FLUXO DE CAIXA -->
-      <div id="tabFinanceiro" class="admin-tab-content" style="display: none;">
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="kpi-title">Saldo Atual em Caixa</div>
-            <div class="kpi-value kpi-balance" id="saldoTotal">R$ 0,00</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-title">Total Recebido (Entradas)</div>
-            <div class="kpi-value kpi-income" id="entradasTotal">R$ 0,00</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-title">Total de Despesas (Saídas)</div>
-            <div class="kpi-value kpi-expense" id="saidasTotal">R$ 0,00</div>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 12px; margin-bottom: 22px;">
-          <button class="btn btn-primary btn-sm" onclick="openNewTxModal('Entrada')">+ Registrar Recebimento de Cliente</button>
-          <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: #fecaca;" onclick="openNewTxModal('Saída')">- Registrar Despesa / Compra</button>
-        </div>
-
-        <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 14px;">Extrato de Movimentações</h4>
-        <div id="transactionsList"></div>
-      </div>
-
-      <!-- PAINEL 5: GERENCIAR PORTFÓLIO -->
-      <div id="tabPortfolioAdmin" class="admin-tab-content" style="display: none;">
-        <div class="admin-portfolio-header">
-          <div>
-            <h3 style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;">
-              <span>Catálogo de Mídias & Portfólio</span>
-              <span class="badge badge-neutral" id="adminMediaCountBadge" style="font-size: 11px;">16 projetos</span>
-            </h3>
-            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">
-              Gerencie vídeos e fotos do site. Adicione mídias por link (Google Drive / YouTube / Web) ou upload direto do aparelho.
-            </p>
-          </div>
-          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <button type="button" class="btn btn-outline btn-sm" onclick="syncGoogleDriveFolderMedia()" title="Restaurar mídias originais da pasta do Google Drive" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-              <span>🔄 Sincronizar Drive</span>
-            </button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="openPortfolioEditorModal()" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(138, 79, 38, 0.28);">
-              <span>➕ Nova Mídia</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Barra de Filtros e Busca no Admin -->
-        <div class="admin-portfolio-toolbar">
-          <div class="admin-portfolio-tabs">
-            <button type="button" class="admin-pfilter-btn active" onclick="setAdminPortfolioFilter('all', this)">Todos</button>
-            <button type="button" class="admin-pfilter-btn" onclick="setAdminPortfolioFilter('video', this)">🎥 Vídeos</button>
-            <button type="button" class="admin-pfilter-btn" onclick="setAdminPortfolioFilter('foto', this)">📷 Fotos</button>
-          </div>
-          <div class="admin-portfolio-search-box">
-            <input type="text" id="adminPortfolioSearchInput" placeholder="Buscar por título ou categoria..." oninput="handleAdminPortfolioSearch(this.value)">
-          </div>
-        </div>
-
-        <!-- Lista de Mídias Cadastradas -->
-        <div id="adminPortfolioList"></div>
-      </div>
-
-    </div>
-  </section>
+  
 
   <!-- ============================================== -->
   <!-- MODAIS DO SISTEMA -->
   <!-- ============================================== -->
 
     <!-- MODAL: LOGIN ADMIN -->
-  <div class="modal-overlay" id="loginModal">
-    <div class="modal-content" style="max-width: 400px; text-align: center;">
-      <div class="modal-header" style="justify-content: center; position: relative;">
-        <h4 class="modal-title">Acesso Administrativo</h4>
-        <button class="close-modal" style="position: absolute; right: 0;" onclick="closeModal('loginModal')">&times;</button>
-      </div>
-      <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 20px;">
-        Digite suas credenciais para gerenciar clientes, fichas e o caixa da marcenaria.
-      </p>
-      <form onsubmit="handleAdminLogin(event)">
-        <div class="form-group" style="text-align: left;">
-          <label for="loginUser">Usuário</label>
-          <input type="text" id="loginUser" class="form-control" value="admin" required>
-        </div>
-        <div class="form-group" style="text-align: left;">
-          <label for="loginPass">Senha</label>
-          <input type="password" id="loginPass" class="form-control" placeholder="Senha (padrão: 1234)" required>
-        </div>
-        <div style="font-size: 11.5px; color: #94a3b8; margin-bottom: 18px; text-align: left;">
-          * Senha padrão de acesso: <strong>1234</strong>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar no Painel</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: CADASTRAR / EDITAR CLIENTE -->
-  <div class="modal-overlay" id="clientModal">
-    <div class="modal-content" style="max-width: 500px;">
-      <div class="modal-header">
-        <h4 class="modal-title" id="clientModalTitle">Cadastrar Novo Cliente</h4>
-        <button class="close-modal" onclick="closeModal('clientModal')">&times;</button>
-      </div>
-      <form id="clientForm" onsubmit="handleSaveClient(event)">
-        <input type="hidden" id="cliId">
-
-        <div class="form-group">
-          <label for="cliNome">Nome Completo do Cliente *</label>
-          <input type="text" id="cliNome" class="form-control" required placeholder="Ex: Marcelo Guimarães">
-        </div>
-
-        <div class="form-group">
-          <label for="cliTelefone">Telefone / WhatsApp *</label>
-          <input type="tel" id="cliTelefone" class="form-control" required placeholder="(61) 98888-7777">
-        </div>
-
-        <div class="form-group">
-          <label for="cliEndereco">Endereço da Obra / Bairro</label>
-          <input type="text" id="cliEndereco" class="form-control" placeholder="Ex: SHIS QI 15, Lago Sul">
-        </div>
-
-        <div class="form-group">
-          <label for="cliObs">Observações / Preferências</label>
-          <textarea id="cliObs" class="form-control" style="min-height: 70px;" placeholder="Ex: Cliente prefere atendimento à tarde; deck para piscina com deck molhado."></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Salvar Cadastro do Cliente</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: FICHA DE SERVIÇO (CADASTRA CLIENTE AUTOMÁTICO NA 1ª FICHA + CPF) -->
-  <div class="modal-overlay" id="serviceModal">
-    <div class="modal-content" style="max-width: 620px;">
-      <div class="modal-header">
-        <h4 class="modal-title" id="serviceModalTitle">Ficha do Serviço e Cadastro</h4>
-        <button class="close-modal" onclick="closeModal('serviceModal')">&times;</button>
-      </div>
-      <form id="serviceForm" onsubmit="handleSaveService(event)">
-        <input type="hidden" id="srvId">
-        <input type="hidden" id="srvLeadId">
-
-        <!-- BLOCO DO CLIENTE COM CPF -->
-        <div style="background: #fbf9f6; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
-          <div style="font-weight: 700; font-size: 13.5px; margin-bottom: 8px; color: var(--wood-primary); display: flex; align-items: center; justify-content: space-between;">
-            <span>👤 Identificação do Cliente</span>
-            <span style="font-size: 11px; font-weight: 500; color: var(--text-muted);">Registra cliente automaticamente</span>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 10px;">
-            <label for="srvClienteSelect">Este cliente já possui cadastro?</label>
-            <select id="srvClienteSelect" class="form-control" onchange="handleSelectClientInService(this.value)">
-              <option value="">+ Não, é um Novo Cliente (cadastrar com esta ficha)</option>
-            </select>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px;">
-            <div class="form-group" style="margin-bottom: 10px;">
-              <label for="srvCliente">Nome do Cliente *</label>
-              <input type="text" id="srvCliente" class="form-control" required placeholder="Ex: Carlos Nogueira">
-            </div>
-            <div class="form-group" style="margin-bottom: 10px;">
-              <label for="srvCpf">CPF (Padrão de Validação) *</label>
-              <input type="text" id="srvCpf" class="form-control" placeholder="000.000.000-00" oninput="this.value = maskCPF(this.value)">
-            </div>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 10px;">
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="srvTelefone">Telefone / WhatsApp *</label>
-              <input type="tel" id="srvTelefone" class="form-control" required placeholder="(61) 99999-9999">
-            </div>
-            <div class="form-group" style="margin-bottom: 0;">
-              <label for="srvEndereco">Endereço da Obra / Bairro</label>
-              <input type="text" id="srvEndereco" class="form-control" placeholder="Ex: Lago Sul, SHIS QI 15">
-            </div>
-          </div>
-        </div>
-
-        <!-- BLOCO DO SERVIÇO -->
-        <div class="form-group">
-          <label for="srvDescricao">Descrição do Serviço Acordado *</label>
-          <textarea id="srvDescricao" class="form-control" required style="min-height: 70px;" placeholder="Ex: Deck suspenso em Cumaru 5x3m com estrutura em vigas tratadas."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="srvMateriais">Materiais e Acabamentos Combinados *</label>
-          <input type="text" id="srvMateriais" class="form-control" required placeholder="Ex: Madeira Cumaru Rajado, Stain castanho fosco, parafusos inox">
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div class="form-group">
-            <label for="srvValorTotal">Valor Fechado (R$) *</label>
-            <input type="number" step="0.01" id="srvValorTotal" class="form-control" required placeholder="8500.00">
-          </div>
-          <div class="form-group">
-            <label for="srvValorEntrada">Entrada Paga (R$)</label>
-            <input type="number" step="0.01" id="srvValorEntrada" class="form-control" placeholder="4250.00">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="srvFormaPag">Forma de Pagamento Combinada</label>
-          <input type="text" id="srvFormaPag" class="form-control" placeholder="Ex: 50% Pix na assinatura + 50% na conclusão">
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div class="form-group">
-            <label for="srvResponsavel">Marceneiro Responsável</label>
-            <input type="text" id="srvResponsavel" class="form-control" placeholder="Ex: André Marceneiro">
-          </div>
-          <div class="form-group">
-            <label for="srvDataEntrega">Previsão de Conclusão</label>
-            <input type="date" id="srvDataEntrega" class="form-control">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="srvStatus">Status da Obra</label>
-          <select id="srvStatus" class="form-control">
-            <option value="A Iniciar">A Iniciar</option>
-            <option value="Em Produção / Oficina">Em Produção / Oficina</option>
-            <option value="Em Montagem / Obra">Em Montagem / Obra</option>
-            <option value="Concluído">Concluído</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">
-          Salvar Ficha & Registrar Cliente
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL: NOVA MOVIMENTAÇÃO DE CAIXA (COM VÍNCULO DE CLIENTE) -->
-  <div class="modal-overlay" id="txModal">
-    <div class="modal-content" style="max-width: 500px;">
-      <div class="modal-header">
-        <h4 class="modal-title" id="txModalTitle">Registrar Movimentação</h4>
-        <button class="close-modal" onclick="closeModal('txModal')">&times;</button>
-      </div>
-      <form id="txForm" onsubmit="handleSaveTx(event)">
-        <input type="hidden" id="txTipo">
-
-        <div class="form-group" id="txClientGroup">
-          <label for="txClienteId">Vincular ao Cliente (Opcional):</label>
-          <select id="txClienteId" class="form-control">
-            <option value="">-- Sem vínculo específico (Avulso) --</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="txDescricao">Descrição do Lançamento *</label>
-          <input type="text" id="txDescricao" class="form-control" required placeholder="Ex: Entrada 50% Deck piscina / Compra de vigas">
-        </div>
-
-        <div class="form-group">
-          <label for="txValor">Valor (R$) *</label>
-          <input type="number" step="0.01" id="txValor" class="form-control" required placeholder="0.00">
-        </div>
-
-        <div class="form-group">
-          <label for="txCategoria">Categoria</label>
-          <select id="txCategoria" class="form-control">
-            <option value="Recebimento de Cliente">Recebimento de Cliente</option>
-            <option value="Madeiras & Insumos">Madeiras & Insumos</option>
-            <option value="Vernizes, Lixas & Parafusos">Vernizes, Lixas & Parafusos</option>
-            <option value="Frete & Transporte">Frete & Transporte</option>
-            <option value="Manutenção & Ferramentas">Manutenção & Ferramentas</option>
-            <option value="Custos Oficina">Custos Oficina / Despesas</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="txData">Data do Lançamento</label>
-          <input type="date" id="txData" class="form-control">
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px; width: 100%;">Lançar no Caixa</button>
-      </form>
-    </div>
-  </div>
-
-    <!-- ============================================================== -->
-  <!-- MODAL UNIFICADO: CRIAR & EDITAR MÍDIA (VÍDEO / FOTO / LINK / UPLOAD) -->
-  <!-- ============================================================== -->
-  <div class="modal-overlay" id="portfolioEditorModal">
-    <div class="modal-content" style="max-width: 620px; border-radius: 16px;">
-      <div class="modal-header" style="border-bottom: 1px solid var(--border-soft); padding-bottom: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-          <span style="font-size: 11px; font-weight: 700; color: var(--wood-primary); text-transform: uppercase; letter-spacing: 0.05em;" id="editorModalSub">Painel do Marceneiro</span>
-          <h4 class="modal-title" id="editorModalTitle" style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 2px 0 0 0;">Adicionar Nova Mídia</h4>
-        </div>
-        <button type="button" class="close-modal" onclick="closeModal('portfolioEditorModal')">&times;</button>
-      </div>
-
-      <form id="portfolioEditorForm" onsubmit="handleSavePortfolioMedia(event)">
-        <input type="hidden" id="editorProjectId" value="">
-
-        <!-- Título -->
-        <div class="form-group" style="margin-bottom: 14px;">
-          <label for="editorProjectTitulo" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
-            Título do Projeto *
-          </label>
-          <input type="text" id="editorProjectTitulo" class="form-control" placeholder="Ex: Cozinha Gourmet Planejada em Freijó" required style="font-size: 14px;">
-        </div>
-
-        <!-- Categoria e Proporção -->
-        <div class="form-row" style="margin-bottom: 14px;">
-          <div class="form-group" style="flex: 1.1;">
-            <label for="editorProjectCategoria" style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
-              Categoria do Ambiente *
-            </label>
-            <select id="editorProjectCategoria" class="form-control" style="font-size: 13.5px;">
-              <option value="MARCENARIA">MARCENARIA</option>
-              <option value="MÓVEIS SOB MEDIDA">MÓVEIS SOB MEDIDA</option>
-              <option value="ÁREAS EXTERNAS">ÁREAS EXTERNAS</option>
-              <option value="MADEIRA & REVESTIMENTOS">MADEIRA & REVESTIMENTOS</option>
-              <option value="PROJETOS ESPECIAIS">PROJETOS ESPECIAIS</option>
-            </select>
-          </div>
-
-          <div class="form-group" style="flex: 1.2;">
-            <label style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 6px; display: block;">
-              Proporção da Mídia *
-            </label>
-            <div style="display: flex; gap: 8px;">
-              <label class="proportion-choice" id="choiceProportionVertical" style="flex: 1;">
-                <input type="radio" name="editorProporcao" value="vertical" id="editorPropVertical" checked onchange="updateEditorProportion(this.value)">
-                <span>📱 Vertical (9:16)</span>
-              </label>
-              <label class="proportion-choice" id="choiceProportionHorizontal" style="flex: 1;">
-                <input type="radio" name="editorProporcao" value="horizontal" id="editorPropHorizontal" onchange="updateEditorProportion(this.value)">
-                <span>🖥️ Horizontal</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- SELETOR DE ORIGEM: LINK OU UPLOAD -->
-        <div style="margin-bottom: 14px;">
-          <label style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 8px; display: block;">
-            Origem da Mídia *
-          </label>
-          <div class="media-input-tabs">
-            <button type="button" class="media-input-tab active" id="tabSourceLink" onclick="switchEditorSourceTab('link')">
-              <span>🔗 Link (Google Drive, YouTube, Web)</span>
-            </button>
-            <button type="button" class="media-input-tab" id="tabSourceUpload" onclick="switchEditorSourceTab('upload')">
-              <span>📤 Upload do Aparelho (Vídeo / Foto)</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- PAINEL 1: POR LINK -->
-        <div id="panelSourceLink" class="media-input-panel" style="display: block; background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
-          <div class="form-group" style="margin-bottom: 8px;">
-            <label for="editorMidiaUrl" style="font-size: 12.5px; font-weight: 600; color: #334155; margin-bottom: 4px; display: block;">
-              Cole o link da mídia:
-            </label>
-            <input type="url" id="editorMidiaUrl" class="form-control" 
-                   placeholder="Ex: https://drive.google.com/file/d/... ou https://youtu.be/... ou https://.../video.mp4" 
-                   oninput="handleEditorUrlInput(this.value)">
-          </div>
-          <div id="editorUrlDetectionBadge" style="display: none; font-size: 12px; padding: 6px 10px; border-radius: 6px; margin-top: 6px;"></div>
-          <p style="font-size: 11.5px; color: var(--text-muted); margin: 6px 0 0 0;">
-            💡 <em>Links do Google Drive e YouTube são convertidos e transmitidos automaticamente.</em>
-          </p>
-        </div>
-
-        <!-- PAINEL 2: POR UPLOAD -->
-        <div id="panelSourceUpload" class="media-input-panel" style="display: none; background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
-          <div class="dropzone" id="editorDropzone" onclick="document.getElementById('editorFileInput').click()" style="border: 2px dashed #cbd5e1; border-radius: 8px; padding: 24px 16px; text-align: center; cursor: pointer; background: #ffffff;">
-            <div style="font-size: 28px; margin-bottom: 6px;">📁</div>
-            <p style="font-weight: 700; color: #0f172a; margin-bottom: 4px; font-size: 13.5px;">Clique ou arraste um arquivo de vídeo ou foto</p>
-            <p style="font-size: 11.5px; color: var(--text-muted); margin: 0;">Suporta MP4, MOV, WEBM, JPG, PNG, WEBP</p>
-          </div>
-          <input type="file" id="editorFileInput" accept="video/*,image/*" style="display: none;" onchange="handleEditorFileSelect(this)">
-          <div id="editorFileSelectedInfo" style="display: none; margin-top: 8px; font-size: 12.5px; color: #15803d; font-weight: 600;"></div>
-        </div>
-
-        <!-- FOTO DE CAPA / POSTER (OPCIONAL) -->
-        <div class="form-group" style="margin-bottom: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <label for="editorPosterUrl" style="font-size: 12.5px; font-weight: 600; color: #334155; margin: 0;">
-              Foto de Capa / Poster (Opcional):
-            </label>
-            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('editorPosterFileInput').click()" style="font-size: 11px; padding: 2px 8px;">
-              📁 Enviar Capa do Aparelho
-            </button>
-            <input type="file" id="editorPosterFileInput" accept="image/*" style="display: none;" onchange="handleEditorPosterFileSelect(this)">
-          </div>
-          <input type="text" id="editorPosterUrl" class="form-control" placeholder="URL da foto de capa (opcional para vídeos)" oninput="updateEditorLivePreview()">
-        </div>
-
-        <!-- PRÉVIA EM TEMPO REAL -->
-        <div id="editorLivePreviewContainer" style="display: none; margin-bottom: 16px; padding: 12px; background: #0b0c10; border-radius: 10px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: #fff; font-size: 12px;">
-            <strong>Prévia da Mídia:</strong>
-            <span id="editorPreviewTypeTag" style="opacity: 0.8;"></span>
-          </div>
-          <div id="editorLivePreviewSlot" style="display: flex; justify-content: center; align-items: center;"></div>
-        </div>
-
-        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px;">
-          <button type="button" class="btn btn-outline" onclick="closeModal('portfolioEditorModal')">Cancelar</button>
-          <button type="submit" id="btnSubmitPortfolioEditor" class="btn btn-primary" style="font-weight: 700;">
-            Salvar Mídia
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- MODAL: CADASTRAR / EDITAR FUNCIONÁRIO         -->
-  <!-- ============================================== -->
-  <div class="modal-overlay" id="employeeModal">
-    <div class="modal-content" style="max-width: 520px;">
-      <div class="modal-header">
-        <h4 class="modal-title" id="employeeModalTitle">Cadastrar Novo Funcionário</h4>
-        <button type="button" class="close-modal" onclick="closeModal('employeeModal')">&times;</button>
-      </div>
-      <form id="employeeForm" onsubmit="handleEmployeeSubmit(event)">
-        <input type="hidden" id="empId">
-        <input type="hidden" id="empExistingContratoData">
-        <input type="hidden" id="empExistingContratoNome">
-
-        <div class="form-group">
-          <label class="form-label">Nome Completo *</label>
-          <input type="text" class="form-control" id="empNome" required placeholder="Ex: Carlos Eduardo da Silva">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group" style="flex: 1.2;">
-            <label class="form-label">Cargo / Especialidade *</label>
-            <input type="text" list="cargosList" class="form-control" id="empCargo" required placeholder="Ex: Marceneiro Líder">
-            <datalist id="cargosList">
-              <option value="Marceneiro Líder">
-              <option value="Marceneiro de Bancada">
-              <option value="Montador de Móveis">
-              <option value="Ajudante Geral">
-              <option value="Pintor / Laqueador">
-              <option value="Gesseiro">
-              <option value="Eletricista">
-              <option value="Serralheiro">
-              <option value="Acabador">
-            </datalist>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label">Valor Padrão da Diária (R$) *</label>
-            <input type="number" step="0.01" class="form-control" id="empDiaria" required placeholder="Ex: 220.00">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Telefone / WhatsApp *</label>
-            <input type="tel" class="form-control" id="empTelefone" required placeholder="(61) 99999-9999">
-          </div>
-          <div class="form-group">
-            <label class="form-label">🔑 Chave PIX (para pagamento de diárias) *</label>
-            <input type="text" class="form-control" id="empPix" required placeholder="CPF, Celular, E-mail ou Aleatória">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Status do Colaborador</label>
-          <select class="form-control" id="empStatus">
-            <option value="Ativo" selected>Ativo (disponível para escalas)</option>
-            <option value="Inativo">Inativo / Afastado</option>
-          </select>
-        </div>
-
-        <div class="form-group" style="background: #f8fafc; border: 1px dashed var(--border-soft); border-radius: 8px; padding: 14px;">
-          <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
-            <span>📄 Anexo do Contrato de Trabalho / Prestação</span>
-            <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">PDF ou Foto</span>
-          </label>
-          <input type="file" id="empContratoFile" class="form-control" accept="image/*,.pdf" style="padding: 6px;">
-          <div id="empContratoPreview" style="margin-top: 8px;"></div>
-        </div>
-
-        <div style="display: flex; gap: 10px; margin-top: 24px;">
-          <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('employeeModal')">Cancelar</button>
-          <button type="submit" class="btn btn-primary" style="flex: 1.5;">Salvar Funcionário</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- MODAL: HUB DE INSPEÇÃO 360° DA OBRA           -->
-  <!-- ============================================== -->
-  <div class="modal-overlay" id="obraInspectModal">
-    <div class="modal-content obra-inspect-card">
-      <div class="modal-header" style="align-items: flex-start; margin-bottom: 8px;">
-        <div style="flex: 1;">
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <h3 class="modal-title" id="inspectObraTitle" style="font-size: 20px; font-weight: 800; color: #0f172a; margin: 0;">Obra #SRV</h3>
-            <select class="form-control" id="inspectObraStatusSelect" style="width: auto; padding: 4px 10px; font-size: 12px; font-weight: 700; height: auto;">
-              <option value="A Iniciar">⏳ A Iniciar</option>
-              <option value="Em Produção / Oficina">🔨 Em Produção</option>
-              <option value="Em Montagem / Obra">🚚 Em Montagem</option>
-              <option value="Concluído">✅ Concluído</option>
-            </select>
-          </div>
-          <div id="inspectObraSub" style="font-size: 13px; color: #64748b; margin-top: 4px;"></div>
-        </div>
-        <button type="button" class="close-modal" onclick="closeModal('obraInspectModal')">&times;</button>
-      </div>
-
-      <!-- Barra de KPIs Financeiros em Tempo Real da Obra -->
-      <div class="obra-kpis-grid" id="inspectObraKpis"></div>
-
-      <!-- Abas Internas da Obra -->
-      <div class="obra-tabs-nav">
-        <button type="button" class="obra-tab-btn active" onclick="switchObraTab('equipe', this)">
-          <span>👷 Equipe & Diárias da Obra</span>
-        </button>
-        <button type="button" class="obra-tab-btn" onclick="switchObraTab('caixa', this)">
-          <span>💰 Caixa Centralizado da Obra</span>
-        </button>
-        <button type="button" class="obra-tab-btn" onclick="switchObraTab('detalhes', this)">
-          <span>📋 Detalhes & Projeto</span>
-        </button>
-      </div>
-
-      <!-- Conteúdo Dinâmico da Aba Selecionada -->
-      <div id="inspectObraTabContent"></div>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- MODAL: ALOCAR FUNCIONÁRIO NA OBRA ESPECÍFICA  -->
-  <!-- ============================================== -->
-  <div class="modal-overlay" id="workerModal">
-    <div class="modal-content" style="max-width: 500px;">
-      <div class="modal-header">
-        <h4 class="modal-title" id="workerModalTitle">Alocar Colaborador na Obra</h4>
-        <button type="button" class="close-modal" onclick="closeModal('workerModal')">&times;</button>
-      </div>
-      <form id="workerForm" onsubmit="handleSaveWorker(event)">
-        <input type="hidden" id="workerSrvId">
-        <input type="hidden" id="workerId">
-        <input type="hidden" id="workerExistingContratoData">
-        <input type="hidden" id="workerExistingContratoNome">
-
-        <div class="form-group">
-          <label class="form-label">Selecionar da Base de Funcionários:</label>
-          <select class="form-control" id="workerEmployeeSelect" onchange="handleWorkerSelectChange(this.value)">
-            <option value="">-- Selecione da Base (ou digite abaixo) --</option>
-          </select>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group" style="flex: 1.2;">
-            <label class="form-label">Nome do Colaborador *</label>
-            <input type="text" class="form-control" id="workerNome" required placeholder="Nome do profissional">
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label">Função nesta Obra *</label>
-            <input type="text" class="form-control" id="workerCargo" required placeholder="Ex: Montador">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Valor da Diária (R$) *</label>
-            <input type="number" step="0.01" class="form-control" id="workerDiaria" required placeholder="Ex: 200.00">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Quantidade de Dias *</label>
-            <input type="number" step="0.5" min="0.5" class="form-control" id="workerDias" required value="1" placeholder="Ex: 3">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Status do Pagamento da Diária</label>
-          <select class="form-control" id="workerStatusPagamento">
-            <option value="Pendente" selected>⏳ Pendente de Pagamento</option>
-            <option value="Pago">✓ Quitado / Pago</option>
-          </select>
-        </div>
-
-        <div class="form-group" style="background: #f8fafc; border: 1px dashed var(--border-soft); border-radius: 8px; padding: 12px;">
-          <label class="form-label" style="display: flex; justify-content: space-between;">
-            <span>Contrato de Trabalho desta Obra</span>
-            <span style="font-size: 11px; color: var(--text-muted);">PDF ou Foto</span>
-          </label>
-          <input type="file" id="workerContratoFile" class="form-control" accept="image/*,.pdf" style="padding: 6px;">
-          <div id="workerContratoPreview" style="margin-top: 6px;"></div>
-        </div>
-
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-          <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('workerModal')">Cancelar</button>
-          <button type="submit" class="btn btn-primary" style="flex: 1.5;">Salvar Alocação</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- MODAL: LANÇAR GASTO DE INSUMO NA OBRA         -->
-  <!-- ============================================== -->
-  <div class="modal-overlay" id="expenseModal">
-    <div class="modal-content" style="max-width: 480px;">
-      <div class="modal-header">
-        <h4 class="modal-title" id="expenseModalTitle">Lançar Compra de Insumo na Obra</h4>
-        <button type="button" class="close-modal" onclick="closeModal('expenseModal')">&times;</button>
-      </div>
-      <form id="expenseForm" onsubmit="handleSaveExpense(event)">
-        <input type="hidden" id="expenseSrvId">
-
-        <div class="form-group">
-          <label class="form-label">Descrição do Insumo / Material *</label>
-          <input type="text" class="form-control" id="expenseDescricao" required placeholder="Ex: 3 Chapas MDF Louro Freijó 18mm">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group" style="flex: 1.2;">
-            <label class="form-label">Categoria do Material *</label>
-            <select class="form-control" id="expenseCategoria">
-              <option value="Madeiras e MDF" selected>Madeiras e MDF</option>
-              <option value="Ferragens">Ferragens (Corrediças/Dobradiças)</option>
-              <option value="Tintas e Vernizes">Tintas, Vernizes e Seladoras</option>
-              <option value="Fitas de Borda e Colas">Fitas de Borda e Colas</option>
-              <option value="Frete e Transporte">Frete e Transporte</option>
-              <option value="Acessórios e Elétrica">Acessórios, Puxadores e LED</option>
-              <option value="Outros Insumos">Outros Insumos</option>
-            </select>
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label class="form-label">Valor (R$) *</label>
-            <input type="number" step="0.01" class="form-control" id="expenseValor" required placeholder="0.00">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Fornecedor / Loja</label>
-            <input type="text" class="form-control" id="expenseFornecedor" placeholder="Ex: Gasômetro / Leo Madeiras">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Data da Compra</label>
-            <input type="text" class="form-control" id="expenseData" placeholder="DD/MM/AAAA">
-          </div>
-        </div>
-
-        <div class="form-group" style="background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 8px; padding: 10px 14px; margin-top: 8px;">
-          <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #334155; cursor: pointer; margin: 0;">
-            <input type="checkbox" id="expenseLancarCaixaGeral" checked style="width: 16px; height: 16px; accent-color: var(--wood-primary);">
-            <span>Lançar também como saída no Caixa Geral da marcenaria</span>
-          </label>
-        </div>
-
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-          <button type="button" class="btn btn-outline" style="flex: 1;" onclick="closeModal('expenseModal')">Cancelar</button>
-          <button type="submit" class="btn btn-primary" style="flex: 1.5;">Adicionar Gasto à Obra</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-
-  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
-
-  <!-- ============================================== -->
-  <!-- JAVASCRIPT: LÓGICA E DADOS LOCAIS -->
-  <!-- ============================================== -->
-  <!-- ====================================================================== -->
-  <!-- ARQUITETURA MODULAR JAVASCRIPT (ENTERPRISE CLEAN ARCHITECTURE)         -->
-  <!-- ====================================================================== -->
-  
-  <!-- 1. Configurações Globais & Credenciais Supabase -->
-  <script src="js/config.js?v=20261006_premium_v1"></script>
-
-  <!-- 2. Serviços de Persistência e Rede -->
-  <script src="js/services/storage.js?v=20261006_premium_v1"></script>
-  <script src="js/services/api.js?v=20261006_premium_v1"></script>
-
-  <!-- 3. Componentes de Interface do Usuário (UI) -->
-  <script src="js/ui/toast.js?v=20261006_premium_v1"></script>
-  <script src="js/ui/modals.js?v=20261006_premium_v1"></script>
-
-  <!-- 4. Módulos de Regras de Negócio e Domínio -->
-  <script src="js/modules/auth.js?v=20261006_premium_v1"></script>
-  <script src="js/modules/leads.js?v=20261006_premium_v1"></script>
-  <script src="js/modules/clients.js?v=20261006_premium_v1"></script>
-  <script src="js/modules/employees.js?v=20261006_premium_v1"></script>
-  <script src="js/modules/services.js?v=20261006_premium_v1"></script>
-  <script src="js/modules/finance.js?v=20261006_premium_v1"></script>
-  <script src="js/modules/portfolio.js?v=20261006_premium_v1"></script>
-
-  <!-- 5. Bootstrap e Orquestrador da Aplicação -->
-  <script src="js/app.js?v=20261006_premium_v1"></script>
-
-  <!-- ============================================== -->
-  <!-- MODAL: LIGHTBOX / INSPEÇÃO DO PROJETO         -->
-  <!-- ============================================== -->
   <div class="modal-overlay" id="projectDetailModal">
     <div class="modal-content project-modal-card">
       <button type="button" class="project-modal-floating-close" onclick="closeModal('projectDetailModal')" aria-label="Fechar" title="Fechar modal">&times;</button>
@@ -1388,18 +481,12 @@
         <div class="modal-interest-box">
           <div class="modal-interest-title">GOSTOU DESTE PROJETO?</div>
           <p class="modal-interest-desc">
-            Fale com a DK Revestimentos e desenvolva uma solução sob medida inspirada neste trabalho.
+            Fale com a DK Revestimentos e desenvolva uma solução sob medida para o seu espaço.
           </p>
-          <div class="modal-interest-actions" style="display: flex; gap: 12px; flex-wrap: wrap;">
-            <a href="#" target="_blank" class="btn btn-whatsapp" id="projectModalWhatsAppBtn" style="flex: 1.2; min-width: 200px; padding: 13px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.28-2.42 5.84a8.18 8.18 0 0 1-5.82 2.41h-.01c-1.46 0-2.9-.39-4.16-1.13l-.3-.18-3.1 1.01.83-3.02-.19-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24m4.53 11.66c-.25-.13-1.48-.73-1.71-.81-.23-.09-.4-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.26-1.49-1.4-1.74-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.09-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.19.21-.59.21-1.09.15-1.19-.06-.1-.23-.16-.48-.28z"/></svg>
-              <span>Falar pelo WhatsApp</span>
-            </a>
-            <button type="button" class="btn btn-outline" id="projectModalActionBtn" style="flex: 1; min-width: 170px; padding: 13px;">
-              <span>Solicitar Orçamento</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-          </div>
+          <button type="button" class="btn btn-primary btn-modal-budget" id="projectModalActionBtn">
+            <span>Solicitar Orçamento</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
         </div>
       </div>
     </div>
