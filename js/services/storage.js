@@ -13,8 +13,11 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/VID-20261004-WA0053.mp4",
     "posterUrl": "assets/portfolio/poster_VID-20261004-WA0053.jpg",
+    "gdriveId": "1-RgNwqu-yqW4O7axmiJ4LZcirHDD5QaS",
+    "gdriveLink": "https://drive.google.com/file/d/1-RgNwqu-yqW4O7axmiJ4LZcirHDD5QaS/view?usp=drivesdk",
     "descricao": "Projeto e execução de ambiente sob medida com marcenaria integrada e iluminação embutida.",
-    "destaque": false
+    "destaque": false,
+    "localMidiaUrl": "assets/portfolio/VID-20261004-WA0053.mp4"
   },
   {
     "id": 2,
@@ -25,8 +28,11 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/VID-20261004-WA0024.mp4",
     "posterUrl": "assets/portfolio/poster_VID-20261004-WA0024.jpg",
+    "gdriveId": "1W-Wfu-bxrmqwkW8HfAsaOHDPqRW0zjkv",
+    "gdriveLink": "https://drive.google.com/file/d/1W-Wfu-bxrmqwkW8HfAsaOHDPqRW0zjkv/view?usp=drivesdk",
     "descricao": "Revestimento ripado em madeira nobre com alinhamento milimétrico e porta de acesso mimetizada.",
-    "destaque": true
+    "destaque": true,
+    "localMidiaUrl": "assets/portfolio/VID-20261004-WA0024.mp4"
   },
   {
     "id": 3,
@@ -37,8 +43,11 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "horizontal",
     "midiaUrl": "assets/portfolio/VID-20261004-WA0021.mp4",
     "posterUrl": "assets/portfolio/poster_VID-20261004-WA0021.jpg",
+    "gdriveId": "14TPKO6E7hUDjcHqkw558chwjqZLSD5MJ",
+    "gdriveLink": "https://drive.google.com/file/d/14TPKO6E7hUDjcHqkw558chwjqZLSD5MJ/view?usp=drivesdk",
     "descricao": "Composição de armários e bancadas desenhados para máxima fluidez e funcionalidade.",
-    "destaque": false
+    "destaque": false,
+    "localMidiaUrl": "assets/portfolio/VID-20261004-WA0021.mp4"
   },
   {
     "id": 4,
@@ -49,8 +58,11 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/VID-20261004-WA0022.mp4",
     "posterUrl": "assets/portfolio/poster_VID-20261004-WA0022.jpg",
+    "gdriveId": "1dML6s-wxahq_tJtpFw0XHM8QXFewdHn_",
+    "gdriveLink": "https://drive.google.com/file/d/1dML6s-wxahq_tJtpFw0XHM8QXFewdHn_/view?usp=drivesdk",
     "descricao": "Demonstração prática dos sistemas de abertura suave, gavetões reforçados e marcenaria de precisão.",
-    "destaque": false
+    "destaque": false,
+    "localMidiaUrl": "assets/portfolio/VID-20261004-WA0022.mp4"
   },
   {
     "id": 5,
@@ -61,8 +73,25 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "horizontal",
     "midiaUrl": "assets/portfolio/VID-20261004-WA0023.mp4",
     "posterUrl": "assets/portfolio/poster_VID-20261004-WA0023.jpg",
+    "gdriveId": "1eyvDs5Q7en3ilnhku_Mt3PzDYOc0VnFe",
+    "gdriveLink": "https://drive.google.com/file/d/1eyvDs5Q7en3ilnhku_Mt3PzDYOc0VnFe/view?usp=drivesdk",
     "descricao": "Estrutura robusta e elegante em madeira tratada contra intempéries com fechamento artesanal.",
-    "destaque": true
+    "destaque": true,
+    "localMidiaUrl": "assets/portfolio/VID-20261004-WA0023.mp4"
+  },
+  {
+    "id": 6,
+    "titulo": "ÁREA EXTERNA EM MADEIRA",
+    "subtitulo": "Soluções estruturais e decorativas para áreas abertas",
+    "categoria": "ÁREAS EXTERNAS",
+    "tipoMidia": "video",
+    "proporcao": "horizontal",
+    "midiaUrl": "https://drive.google.com/file/d/1KYP9CVH94EqBlIJno7avKsTkxYf6xFCs/preview",
+    "posterUrl": "assets/portfolio/IMG-20261004-WA0006.jpg",
+    "gdriveId": "1KYP9CVH94EqBlIJno7avKsTkxYf6xFCs",
+    "gdriveLink": "https://drive.google.com/file/d/1KYP9CVH94EqBlIJno7avKsTkxYf6xFCs/view?usp=drivesdk",
+    "descricao": "Projeto e montagem de estruturas externas resistentes ao sol e chuva com estética natural.",
+    "destaque": false
   },
   {
     "id": 7,
@@ -73,6 +102,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0006.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0006.jpg",
+    "gdriveId": "1vD0o54VW9e0CoLFHr4NxvEqF5c3qmfs2",
+    "gdriveLink": "https://drive.google.com/file/d/1vD0o54VW9e0CoLFHr4NxvEqF5c3qmfs2/view?usp=drivesdk",
     "descricao": "Deck suspenso em réguas de madeira nobre com balizadores de piso integrados e acabamento acetinado.",
     "destaque": true
   },
@@ -85,6 +116,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "horizontal",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0013.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0013.jpg",
+    "gdriveId": "18koAp3WQPfUI7-XGCsTJnkNdT3ag-n8j",
+    "gdriveLink": "https://drive.google.com/file/d/18koAp3WQPfUI7-XGCsTJnkNdT3ag-n8j/view?usp=drivesdk",
     "descricao": "Mobiliário planejado para sala de estar integrando painel de TV e armários inferiores.",
     "destaque": false
   },
@@ -97,6 +130,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "horizontal",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0014.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0014.jpg",
+    "gdriveId": "1p3Sr741KCf6hhjLtQy7OwzNSg6RkbX4f",
+    "gdriveLink": "https://drive.google.com/file/d/1p3Sr741KCf6hhjLtQy7OwzNSg6RkbX4f/view?usp=drivesdk",
     "descricao": "Solução minimalista de armários sem puxadores externos, valorizando a pureza das linhas.",
     "destaque": false
   },
@@ -109,6 +144,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0015.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0015.jpg",
+    "gdriveId": "19ExhkajsWto9piV8CBPzWXUkpnop4UcN",
+    "gdriveLink": "https://drive.google.com/file/d/19ExhkajsWto9piV8CBPzWXUkpnop4UcN/view?usp=drivesdk",
     "descricao": "Armário planejado para quarto com portas deslizantes leves e divisão interna personalizada.",
     "destaque": false
   },
@@ -121,6 +158,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0016.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0016.jpg",
+    "gdriveId": "1QcLIs0It9t7nfIF7UfpcfGDHIXg7bp6u",
+    "gdriveLink": "https://drive.google.com/file/d/1QcLIs0It9t7nfIF7UfpcfGDHIXg7bp6u/view?usp=drivesdk",
     "descricao": "Módulo torre com nichos decorativos integrados e suporte para embutimento sob medida.",
     "destaque": false
   },
@@ -133,6 +172,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "horizontal",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0017.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0017.jpg",
+    "gdriveId": "1vRcS5p-vUlI8gA0JD0hHSV_MHLbN-D61",
+    "gdriveLink": "https://drive.google.com/file/d/1vRcS5p-vUlI8gA0JD0hHSV_MHLbN-D61/view?usp=drivesdk",
     "descricao": "Composição de bancada e gaveteiros térmicos com encaixe ergonômico para área gourmet.",
     "destaque": false
   },
@@ -145,6 +186,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "horizontal",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0018.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0018.jpg",
+    "gdriveId": "1lbzwv1kntpKbitrPzRBWaCNNQuMqH57m",
+    "gdriveLink": "https://drive.google.com/file/d/1lbzwv1kntpKbitrPzRBWaCNNQuMqH57m/view?usp=drivesdk",
     "descricao": "Prateleiras engastadas com estrutura interna reforçada suportando peso com leveza visual.",
     "destaque": false
   },
@@ -157,6 +200,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0019.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0019.jpg",
+    "gdriveId": "1K1hF4glYsmHyBz5YNhnNZ9SE9SsGhBN6",
+    "gdriveLink": "https://drive.google.com/file/d/1K1hF4glYsmHyBz5YNhnNZ9SE9SsGhBN6/view?usp=drivesdk",
     "descricao": "Obra autoral esculpida em madeira nobre com detalhe ripado e visor frontal em vidro.",
     "destaque": true
   },
@@ -169,6 +214,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/IMG-20261004-WA0020.jpg",
     "posterUrl": "assets/portfolio/IMG-20261004-WA0020.jpg",
+    "gdriveId": "1jpFzyrxbXQgHclrM0Zp0dCKWsmVNsrMX",
+    "gdriveLink": "https://drive.google.com/file/d/1jpFzyrxbXQgHclrM0Zp0dCKWsmVNsrMX/view?usp=drivesdk",
     "descricao": "Painel decorativo contínuo com porta oculta que se integra perfeitamente ao ambiente.",
     "destaque": false
   },
@@ -181,6 +228,8 @@ const DEFAULT_REAL_PORTFOLIO = [
     "proporcao": "vertical",
     "midiaUrl": "assets/portfolio/Digitalizado_20261004-2113.pdf",
     "posterUrl": "assets/portfolio/pdf_page1.jpg",
+    "gdriveId": "18P3cPr_-pc8WOQ2jEdeYfjGUCXMwKg2o",
+    "gdriveLink": "https://drive.google.com/file/d/18P3cPr_-pc8WOQ2jEdeYfjGUCXMwKg2o/view?usp=drivesdk",
     "descricao": "Plantas, cotas e especificações de marcenaria que garantem fidelidade total na execução.",
     "destaque": false
   }

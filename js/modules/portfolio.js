@@ -38,23 +38,25 @@ function extractYouTubeId(url) {
   return (match && match[1]) ? match[1] : null;
 }
 
+
+function fallbackToDrivePreview(videoEl, fallbackUrl) {
+  if (!fallbackUrl || !videoEl || !videoEl.parentElement) return;
+  console.warn("Vídeo local indisponível, alternando automaticamente para player do Google Drive:", fallbackUrl);
+  videoEl.parentElement.innerHTML = `
+    <iframe src="${fallbackUrl}" 
+            style="width: 100%; height: 100%; border: 0; display: block;" 
+            allow="autoplay; encrypted-media; fullscreen" 
+            allowfullscreen>
+    </iframe>
+  `;
+}
+window.fallbackToDrivePreview = fallbackToDrivePreview;
+
 function parseVideoSource(url) {
   if (!url) return { type: 'unknown', id: null, embedUrl: null, posterUrl: null, originalUrl: '' };
   url = url.trim();
 
-  // 1. Google Drive
-  const driveId = extractGoogleDriveId(url);
-  if (driveId && (url.includes('drive.google.com') || url.includes('docs.google.com') || url.length >= 28)) {
-    return {
-      type: 'gdrive',
-      id: driveId,
-      embedUrl: 'https://drive.google.com/file/d/' + driveId + '/preview',
-      posterUrl: null,
-      originalUrl: url
-    };
-  }
-
-  // 2. YouTube & YouTube Shorts
+  // 1. YouTube & YouTube Shorts
   const ytId = extractYouTubeId(url);
   if (ytId) {
     const isShorts = url.toLowerCase().includes('/shorts/');
@@ -68,12 +70,24 @@ function parseVideoSource(url) {
     };
   }
 
-  // 3. Arquivo Direto MP4/WebM
+  // 2. Arquivo Direto MP4/WebM/MOV/Blob/DataURL
   if (url.startsWith('data:video') || url.startsWith('blob:') || url.match(/\.(mp4|mov|webm|m4v)($|\?)/i)) {
     return {
       type: 'direct',
       id: null,
       embedUrl: url,
+      posterUrl: null,
+      originalUrl: url
+    };
+  }
+
+  // 3. Google Drive
+  const driveId = extractGoogleDriveId(url);
+  if (driveId && (url.includes('drive.google.com') || url.includes('docs.google.com') || url.length >= 25)) {
+    return {
+      type: 'gdrive',
+      id: driveId,
+      embedUrl: 'https://drive.google.com/file/d/' + driveId + '/preview',
       posterUrl: null,
       originalUrl: url
     };
@@ -380,8 +394,13 @@ function openProjectDetails(projectId) {
       const vSource = parseVideoSource(project.midiaUrl);
       const stageClass = isVertical ? 'stage-vertical' : 'stage-horizontal';
       const stageStyle = isVertical 
-        ? 'position: relative; width: min(100%, 380px); height: min(54vh, 520px); min-height: 320px; aspect-ratio: 9/16; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;'
-        : 'position: relative; width: 100%; height: min(48vh, 460px); min-height: 240px; aspect-ratio: 16/9; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;';
+        ? 'position: relative; width: min(100%, 380px); height: min(54vh, 520px); min-height: 320px; aspect-ratio: 9/16; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center;'
+        : 'position: relative; width: 100%; height: min(48vh, 460px); min-height: 240px; aspect-ratio: 16/9; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center;';
+
+      const poster = project.posterUrl || (vSource.type === 'youtube' ? vSource.posterUrl : '');
+      const gdriveId = project.gdriveId || extractGoogleDriveId(project.midiaUrl) || extractGoogleDriveId(project.gdriveLink || '');
+      const gdrivePreview = gdriveId ? `https://drive.google.com/file/d/${gdriveId}/preview` : '';
+      const gdriveView = project.gdriveLink || (gdriveId ? `https://drive.google.com/file/d/${gdriveId}/view?usp=sharing` : '');
 
       if (vSource.type === 'youtube') {
         mediaContainer.innerHTML = `
@@ -393,27 +412,77 @@ function openProjectDetails(projectId) {
             </iframe>
           </div>
         `;
-      } else {
+      } else if (vSource.type === 'gdrive' || (!project.midiaUrl.endsWith('.mp4') && gdrivePreview)) {
+        // Player Google Drive embutido via Iframe com permissões totais
+        const embedUrl = vSource.embedUrl || gdrivePreview;
         mediaContainer.innerHTML = `
           <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
-            <video src="${project.midiaUrl}" 
-                   ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
-                   controls playsinline preload="metadata" 
-                   style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;">
+            <iframe src="${embedUrl}" 
+                    style="width: 100%; height: 100%; border: 0; display: block;" 
+                    allow="autoplay; encrypted-media; fullscreen" 
+                    allowfullscreen>
+            </iframe>
+          </div>
+        `;
+      } else {
+        // Vídeo Direto (MP4 Local ou Remoto) com Fallback Dinâmico
+        const fallbackAttr = gdrivePreview 
+          ? `onerror="if (typeof fallbackToDrivePreview === 'function') fallbackToDrivePreview(this, '${gdrivePreview}');"`
+          : '';
+
+        mediaContainer.innerHTML = `
+          <div class="project-modal-stage ${stageClass}" id="modalVideoPlayerSlot" style="${stageStyle}">
+            <video id="modalActiveVideo" 
+                   src="${project.midiaUrl}" 
+                   ${poster ? `poster="${poster}"` : ''} 
+                   controls 
+                   playsinline 
+                   preload="auto" 
+                   style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"
+                   ${fallbackAttr}>
+              <source src="${project.midiaUrl}" type="video/mp4">
               Seu navegador não suporta reprodução direta de vídeo.
             </video>
           </div>
         `;
+
+        // Inicia a reprodução direta quando o modal abre
+        setTimeout(() => {
+          const vid = document.getElementById('modalActiveVideo');
+          if (vid) {
+            const p = vid.play();
+            if (p !== undefined) {
+              p.catch(err => {
+                console.log('Autoplay direto pausado para interação do usuário:', err);
+              });
+            }
+          }
+        }, 150);
       }
 
       if (videoActionEl) {
-        videoActionEl.style.display = 'block';
-        videoActionEl.innerHTML = `
+        videoActionEl.style.display = 'flex';
+        videoActionEl.style.alignItems = 'center';
+        videoActionEl.style.justifyContent = 'center';
+        videoActionEl.style.gap = '10px';
+        videoActionEl.style.flexWrap = 'wrap';
+
+        let actionsHtml = `
           <button type="button" class="btn btn-outline btn-sm" onclick="playActiveModalVideo()" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; font-size: 13px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>▶ REINICIAR VÍDEO</span>
+            <span>▶ REINICIAR / REPRODUZIR</span>
           </button>
         `;
+
+        if (gdriveView) {
+          actionsHtml += `
+            <a href="${gdriveView}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size: 12.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;" title="Assistir no Google Drive">
+              <span>📁 Abrir no Drive ↗</span>
+            </a>
+          `;
+        }
+
+        videoActionEl.innerHTML = actionsHtml;
       }
     } else {
       if (videoActionEl) videoActionEl.style.display = 'none';
@@ -425,10 +494,15 @@ function openProjectDetails(projectId) {
     }
   }
 
-  // Ação do Botão de Orçamento
+  // Ação do Botão de Orçamento ou Edição (se estiver no admin)
   if (actionBtn) {
     actionBtn.onclick = () => {
-      handleProjectModalBudget(project.titulo, project.categoria);
+      if (document.getElementById('adminArea') && document.getElementById('adminArea').style.display !== 'none') {
+        closeModal('projectDetailModal');
+        if (typeof openPortfolioEditorModal === 'function') openPortfolioEditorModal(project.id);
+      } else {
+        handleProjectModalBudget(project.titulo, project.categoria);
+      }
     };
   }
 
@@ -455,38 +529,18 @@ function playActiveModalVideo() {
   const isVertical = project.proporcao === 'vertical';
   const vSource = parseVideoSource(project.midiaUrl);
   const isDirectFile = vSource.type === 'direct' || (project.midiaUrl && project.midiaUrl.endsWith('.mp4'));
-  const gdriveId = project.gdriveId || extractGoogleDriveId(project.midiaUrl);
+  const gdriveId = project.gdriveId || extractGoogleDriveId(project.midiaUrl) || extractGoogleDriveId(project.gdriveLink || '');
+  const gdrivePreview = gdriveId ? `https://drive.google.com/file/d/${gdriveId}/preview` : '';
 
   const stageClass = isVertical ? 'stage-vertical' : 'stage-horizontal';
   const stageStyle = isVertical 
-    ? 'position: relative; width: min(100%, 380px); height: min(54vh, 520px); min-height: 320px; aspect-ratio: 9/16; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;'
-    : 'position: relative; width: 100%; height: min(48vh, 460px); min-height: 240px; aspect-ratio: 16/9; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px;';
+    ? 'position: relative; width: min(100%, 380px); height: min(54vh, 520px); min-height: 320px; aspect-ratio: 9/16; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center;'
+    : 'position: relative; width: 100%; height: min(48vh, 460px); min-height: 240px; aspect-ratio: 16/9; background: #000; margin: 0 auto; overflow: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center;';
 
   slot.className = `project-modal-stage ${stageClass}`;
   slot.setAttribute('style', stageStyle);
 
-  if (isDirectFile) {
-    const fallback = gdriveId ? `https://drive.google.com/file/d/${gdriveId}/preview` : '';
-    slot.innerHTML = `
-      <video src="${project.midiaUrl}" 
-             ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
-             controls autoplay playsinline 
-             style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"
-             onerror="if ('${fallback}') { this.parentElement.innerHTML = '<iframe src=\'${fallback}\' style=\'width:100%;height:100%;border:0;display:block;\' allow=\'autoplay; encrypted-media; fullscreen\' allowfullscreen></iframe>'; }">
-      </video>
-    `;
-    const vid = slot.querySelector('video');
-    if (vid) vid.play().catch(e => console.log('Autoplay prevented:', e));
-  } else if (vSource.type === 'gdrive' || gdriveId) {
-    const embedUrl = vSource.embedUrl || `https://drive.google.com/file/d/${gdriveId}/preview`;
-    slot.innerHTML = `
-      <iframe src="${embedUrl}" 
-              style="width: 100%; height: 100%; border: 0; display: block;" 
-              allow="autoplay; encrypted-media; fullscreen" 
-              allowfullscreen>
-      </iframe>
-    `;
-  } else if (vSource.type === 'youtube') {
+  if (vSource.type === 'youtube') {
     slot.innerHTML = `
       <iframe src="${vSource.embedUrl}" 
               style="width: 100%; height: 100%; border: 0; display: block;" 
@@ -494,10 +548,35 @@ function playActiveModalVideo() {
               allowfullscreen>
       </iframe>
     `;
-  } else {
+  } else if (vSource.type === 'gdrive' || (!isDirectFile && gdrivePreview)) {
+    const embedUrl = vSource.embedUrl || gdrivePreview;
     slot.innerHTML = `
-      <video src="${project.midiaUrl}" controls autoplay playsinline style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"></video>
+      <iframe src="${embedUrl}" 
+              style="width: 100%; height: 100%; border: 0; display: block;" 
+              allow="autoplay; encrypted-media; fullscreen" 
+              allowfullscreen>
+      </iframe>
     `;
+  } else if (isDirectFile) {
+    const fallbackAttr = gdrivePreview 
+      ? `onerror="if (typeof fallbackToDrivePreview === 'function') fallbackToDrivePreview(this, '${gdrivePreview}');"`
+      : '';
+    slot.innerHTML = `
+      <video id="modalActiveVideo" 
+             src="${project.midiaUrl}" 
+             ${project.posterUrl ? `poster="${project.posterUrl}"` : ''} 
+             controls autoplay playsinline preload="auto" 
+             style="width: 100%; height: 100%; object-fit: contain; background: #000; display: block;"
+             ${fallbackAttr}>
+        <source src="${project.midiaUrl}" type="video/mp4">
+        Seu navegador não suporta reprodução direta de vídeo.
+      </video>
+    `;
+    const vid = slot.querySelector('video');
+    if (vid) {
+      const p = vid.play();
+      if (p !== undefined) p.catch(e => console.log('Autoplay prevented:', e));
+    }
   }
 }
 

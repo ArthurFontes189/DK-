@@ -86,6 +86,15 @@ async function fetchCloudData(showFeedback = false) {
 
       const cloudItems = pRes.data.map(item => {
         const localMatch = seedMap.get(String(item.id));
+        const rawUrl = item.midia_url || (localMatch ? localMatch.midiaUrl : '') || '';
+        const gdriveId = item.gdrive_id || (typeof extractGoogleDriveId === 'function' ? extractGoogleDriveId(rawUrl) : null) || (localMatch ? localMatch.gdriveId : null);
+        const gdriveLink = item.gdrive_link || (gdriveId ? 'https://drive.google.com/file/d/' + gdriveId + '/view?usp=sharing' : (localMatch ? localMatch.gdriveLink : ''));
+
+        // Se houver arquivo MP4 local configurado no seed, usa ele como midiaUrl preferencial para carregamento rápido
+        let finalMidiaUrl = (localMatch && localMatch.midiaUrl && localMatch.midiaUrl.endsWith('.mp4')) 
+          ? localMatch.midiaUrl 
+          : rawUrl;
+
         return {
           id: item.id,
           tipoMidia: item.tipo_midia || (localMatch ? localMatch.tipoMidia : 'foto'),
@@ -94,9 +103,10 @@ async function fetchCloudData(showFeedback = false) {
           categoria: item.categoria,
           subtitulo: item.subtitulo || (localMatch ? localMatch.subtitulo : ''),
           descricao: item.descricao || (localMatch ? localMatch.descricao : ''),
-          // Preserva sempre o arquivo local MP4 quando existir localmente
-          midiaUrl: (localMatch && localMatch.midiaUrl.endsWith('.mp4')) ? localMatch.midiaUrl : (item.midia_url || (localMatch ? localMatch.midiaUrl : '')),
+          midiaUrl: finalMidiaUrl,
           posterUrl: (localMatch && localMatch.posterUrl) ? localMatch.posterUrl : (item.poster_url || ''),
+          gdriveId: gdriveId,
+          gdriveLink: gdriveLink,
           destaque: item.destaque || (localMatch ? localMatch.destaque : false)
         };
       });
