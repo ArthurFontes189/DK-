@@ -120,23 +120,33 @@ function isVideoMedia(item) {
 // ----------------------------------------------------------------------------
 
 function getAllPortfolioProjects() {
+  const deletedIds = new Set(JSON.parse(localStorage.getItem('marcenaria_deleted_portfolio_ids') || '[]').map(String));
+  const deletedTitles = new Set(JSON.parse(localStorage.getItem('marcenaria_deleted_portfolio_titles') || '[]').map(t => (t || '').toLowerCase().trim()));
+
+  const filterDeleted = (list) => {
+    if (!Array.isArray(list)) return [];
+    return list.filter(p => !deletedIds.has(String(p.id)) && !deletedTitles.has((p.titulo || '').toLowerCase().trim()));
+  };
+
   if (typeof db !== 'undefined' && db.portfolio && Array.isArray(db.portfolio) && db.portfolio.length > 0) {
-    return db.portfolio;
+    return filterDeleted(db.portfolio);
   }
   try {
     const cached = localStorage.getItem('marcenaria_portfolio');
     if (cached) {
       const parsed = JSON.parse(cached);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        if (typeof db !== 'undefined') db.portfolio = parsed;
-        return parsed;
+        const clean = filterDeleted(parsed);
+        if (typeof db !== 'undefined') db.portfolio = clean;
+        return clean;
       }
     }
   } catch (e) {}
 
   if (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' && Array.isArray(DEFAULT_REAL_PORTFOLIO)) {
-    if (typeof db !== 'undefined') db.portfolio = [...DEFAULT_REAL_PORTFOLIO];
-    return DEFAULT_REAL_PORTFOLIO;
+    const clean = filterDeleted(DEFAULT_REAL_PORTFOLIO);
+    if (typeof db !== 'undefined') db.portfolio = clean;
+    return clean;
   }
   return [];
 }
@@ -681,27 +691,42 @@ function renderAdminPortfolio(portfolio) {
     const row = document.createElement('div');
     row.className = 'admin-media-card';
 
-    let originLabel = 'Arquivo Local / Direto';
+    let originLabel = 'Arquivo Local';
     let originClass = 'badge-neutral';
     const urlLower = (item.midiaUrl || '').toLowerCase();
 
-    if (item.gdriveId || urlLower.includes('drive.google.com')) {
-      originLabel = 'Google Drive';
-      originClass = 'badge-primary';
-    } else if (urlLower.includes('youtube.com') || urlLower.includes('youtu.be')) {
+    if (urlLower.includes('youtube.com') || urlLower.includes('youtu.be')) {
       originLabel = urlLower.includes('/shorts/') ? 'YouTube Shorts' : 'YouTube';
       originClass = 'badge-danger';
     } else if (urlLower.startsWith('data:') || urlLower.startsWith('blob:')) {
-      originLabel = 'Upload Local (Base64)';
+      originLabel = 'Upload Local (Aparelho)';
       originClass = 'badge-success';
+    } else if (urlLower.startsWith('assets/')) {
+      originLabel = 'Arquivo Local';
+      originClass = 'badge-neutral';
+    } else if (urlLower.includes('drive.google.com')) {
+      originLabel = 'Link Externo';
+      originClass = 'badge-primary';
     }
 
-    const posterThumb = item.posterUrl || (isVideo ? parseVideoSource(item.midiaUrl).posterUrl : item.midiaUrl) || '';
+    let posterThumb = '';
+    if (item.midiaUrl && item.midiaUrl.endsWith('.pdf')) {
+      posterThumb = item.posterUrl || 'assets/portfolio/pdf_page1.jpg';
+    } else if (item.posterUrl && !item.posterUrl.endsWith('.pdf')) {
+      posterThumb = item.posterUrl;
+    } else if (isVideo) {
+      posterThumb = parseVideoSource(item.midiaUrl).posterUrl || '';
+    } else {
+      posterThumb = item.midiaUrl || '';
+    }
+    if (posterThumb.endsWith('.pdf')) {
+      posterThumb = 'assets/portfolio/pdf_page1.jpg';
+    }
 
     row.innerHTML = `
       <div style="width: 60px; height: 75px; border-radius: 8px; background: #0b0c10; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
         ${posterThumb ? `
-          <img src="${posterThumb}" style="width:100%; height:100%; object-fit: cover;">
+          <img src="${posterThumb}" alt="${item.titulo}" style="width:100%; height:100%; object-fit: cover;" onerror="this.onerror=null; this.src='assets/portfolio/pdf_page1.jpg';">
         ` : `
           <div style="color: #fff; font-size: 22px;">${isVideo ? '🎥' : '📷'}</div>
         `}
@@ -1065,6 +1090,22 @@ async function deletePortfolioItem(id) {
   );
   if (!confirmado) return;
 
+  // 1. Grava no registro permanente de exclusões (Tombstone) para nunca mais ressuscitar
+  const deletedIds = JSON.parse(localStorage.getItem('marcenaria_deleted_portfolio_ids') || '[]');
+  if (!deletedIds.includes(String(id))) {
+    deletedIds.push(String(id));
+    localStorage.setItem('marcenaria_deleted_portfolio_ids', JSON.stringify(deletedIds));
+  }
+  if (item && item.titulo) {
+    const deletedTitles = JSON.parse(localStorage.getItem('marcenaria_deleted_portfolio_titles') || '[]');
+    const normTitle = (item.titulo || '').toLowerCase().trim();
+    if (!deletedTitles.includes(normTitle)) {
+      deletedTitles.push(normTitle);
+      localStorage.setItem('marcenaria_deleted_portfolio_titles', JSON.stringify(deletedTitles));
+    }
+  }
+
+  // 2. Remove da memória e do cache local
   if (typeof db !== 'undefined') {
     db.portfolio = db.portfolio.filter(p => String(p.id) !== String(id));
     if (typeof saveCacheDB === 'function') saveCacheDB('portfolio', db.portfolio);
@@ -1074,6 +1115,7 @@ async function deletePortfolioItem(id) {
   renderAdminPortfolio();
   renderPublicCatalog();
 
+  // 3. Exclui do banco de dados na nuvem (Supabase)
   if (typeof sbClient !== 'undefined' && sbClient) {
     try {
       await sbClient.from('portfolio').delete().eq('id', id);
@@ -1083,21 +1125,25 @@ async function deletePortfolioItem(id) {
   }
 }
 
-function syncGoogleDriveFolderMedia() {
+function refreshAdminPortfolio() {
   if (typeof isUserAdmin === 'function' && !isUserAdmin()) {
-    showToast('Apenas administradores podem sincronizar o Google Drive.', 'warning');
+    showToast('Apenas administradores podem atualizar o portfólio.', 'warning');
     return;
   }
-
-  if (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' && Array.isArray(DEFAULT_REAL_PORTFOLIO)) {
-    if (typeof db !== 'undefined') {
-      db.portfolio = [...DEFAULT_REAL_PORTFOLIO];
-      if (typeof saveCacheDB === 'function') saveCacheDB('portfolio', db.portfolio);
-    }
-    showToast('Pasta do Google Drive sincronizada (16 mídias ativas).', 'success');
+  if (typeof fetchCloudData === 'function') {
+    fetchCloudData(true).then(() => {
+      showToast('Portfólio atualizado.', 'success');
+      renderAdminPortfolio();
+      renderPublicCatalog();
+    });
+  } else {
     renderAdminPortfolio();
     renderPublicCatalog();
+    showToast('Portfólio atualizado.', 'success');
   }
+}
+function syncGoogleDriveFolderMedia() {
+  refreshAdminPortfolio();
 }
 
 // ----------------------------------------------------------------------------
@@ -1130,4 +1176,5 @@ window.handleEditorPosterFileSelect = handleEditorPosterFileSelect;
 window.updateEditorLivePreview = updateEditorLivePreview;
 window.handleSavePortfolioMedia = handleSavePortfolioMedia;
 window.deletePortfolioItem = deletePortfolioItem;
+window.refreshAdminPortfolio = refreshAdminPortfolio;
 window.syncGoogleDriveFolderMedia = syncGoogleDriveFolderMedia;

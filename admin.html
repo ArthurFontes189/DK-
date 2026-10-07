@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261007_v10">
-  <link rel="stylesheet" href="css/admin.css?v=20261007_v10">
+  <link rel="stylesheet" href="css/style.css?v=20261007_v11">
+  <link rel="stylesheet" href="css/admin.css?v=20261007_v11">
   
   <style>
     /* Estilos da Tela de Login In-Page */
@@ -504,12 +504,12 @@
               <span class="badge badge-neutral" id="adminMediaCountBadge" style="font-size: 11px;">16 projetos</span>
             </h3>
             <p style="font-size: 13px; color: var(--text-muted); margin: 0;">
-              Gerencie vídeos e fotos do site. Adicione mídias por link (Google Drive / YouTube / Web) ou upload direto do aparelho.
+              Gerencie as fotos e vídeos do site. Faça upload direto do aparelho ou adicione links de vídeos (YouTube / Web).
             </p>
           </div>
           <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <button type="button" class="btn btn-outline btn-sm" onclick="syncGoogleDriveFolderMedia()" title="Restaurar mídias originais da pasta do Google Drive" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
-              <span>🔄 Sincronizar Drive</span>
+            <button type="button" class="btn btn-outline btn-sm" onclick="refreshAdminPortfolio()" title="Atualizar lista de projetos" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <span>🔄 Atualizar Lista</span>
             </button>
             <button type="button" class="btn btn-primary btn-sm" onclick="openPortfolioEditorModal()" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(138, 79, 38, 0.28);">
               <span>➕ Nova Mídia</span>
@@ -780,46 +780,46 @@
           </div>
         </div>
 
-        <!-- SELETOR DE ORIGEM: LINK OU UPLOAD -->
+        <!-- SELETOR DE ORIGEM: UPLOAD DO APARELHO OU LINK -->
         <div style="margin-bottom: 14px;">
           <label style="font-weight: 700; font-size: 13px; color: #0f172a; margin-bottom: 8px; display: block;">
             Origem da Mídia *
           </label>
           <div class="media-input-tabs">
-            <button type="button" class="media-input-tab active" id="tabSourceLink" onclick="switchEditorSourceTab('link')">
-              <span>🔗 Link (Google Drive, YouTube, Web)</span>
+            <button type="button" class="media-input-tab active" id="tabSourceUpload" onclick="switchEditorSourceTab('upload')">
+              <span>📤 Enviar Foto / Vídeo do Aparelho</span>
             </button>
-            <button type="button" class="media-input-tab" id="tabSourceUpload" onclick="switchEditorSourceTab('upload')">
-              <span>📤 Upload do Aparelho (Vídeo / Foto)</span>
+            <button type="button" class="media-input-tab" id="tabSourceLink" onclick="switchEditorSourceTab('link')">
+              <span>🎥 Link de Vídeo (YouTube / Web)</span>
             </button>
           </div>
         </div>
 
-        <!-- PAINEL 1: POR LINK -->
-        <div id="panelSourceLink" class="media-input-panel" style="display: block; background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
+        <!-- PAINEL 1: POR UPLOAD (PADRÃO PARA IMAGENS E VÍDEOS LOCAIS) -->
+        <div id="panelSourceUpload" class="media-input-panel" style="display: block; background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
+          <div class="dropzone" id="editorDropzone" onclick="document.getElementById('editorFileInput').click()" style="border: 2px dashed #cbd5e1; border-radius: 8px; padding: 24px 16px; text-align: center; cursor: pointer; background: #ffffff;">
+            <div style="font-size: 28px; margin-bottom: 6px;">📁</div>
+            <p style="font-weight: 700; color: #0f172a; margin-bottom: 4px; font-size: 13.5px;">Clique ou arraste um arquivo de foto ou vídeo</p>
+            <p style="font-size: 11.5px; color: var(--text-muted); margin: 0;">Suporta JPG, PNG, WEBP, MP4, MOV, WEBM</p>
+          </div>
+          <input type="file" id="editorFileInput" accept="image/*,video/*" style="display: none;" onchange="handleEditorFileSelect(this)">
+          <div id="editorFileSelectedInfo" style="display: none; margin-top: 8px; font-size: 12.5px; color: #15803d; font-weight: 600;"></div>
+        </div>
+
+        <!-- PAINEL 2: POR LINK -->
+        <div id="panelSourceLink" class="media-input-panel" style="display: none; background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
           <div class="form-group" style="margin-bottom: 8px;">
             <label for="editorMidiaUrl" style="font-size: 12.5px; font-weight: 600; color: #334155; margin-bottom: 4px; display: block;">
-              Cole o link da mídia:
+              Cole o link do vídeo:
             </label>
             <input type="url" id="editorMidiaUrl" class="form-control" 
-                   placeholder="Ex: https://drive.google.com/file/d/... ou https://youtu.be/... ou https://.../video.mp4" 
+                   placeholder="Ex: https://youtu.be/... ou https://.../video.mp4" 
                    oninput="handleEditorUrlInput(this.value)">
           </div>
           <div id="editorUrlDetectionBadge" style="display: none; font-size: 12px; padding: 6px 10px; border-radius: 6px; margin-top: 6px;"></div>
           <p style="font-size: 11.5px; color: var(--text-muted); margin: 6px 0 0 0;">
-            💡 <em>Links do Google Drive e YouTube são convertidos e transmitidos automaticamente.</em>
+            💡 <em>Suporta links de vídeos do YouTube ou arquivos diretos MP4.</em>
           </p>
-        </div>
-
-        <!-- PAINEL 2: POR UPLOAD -->
-        <div id="panelSourceUpload" class="media-input-panel" style="display: none; background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
-          <div class="dropzone" id="editorDropzone" onclick="document.getElementById('editorFileInput').click()" style="border: 2px dashed #cbd5e1; border-radius: 8px; padding: 24px 16px; text-align: center; cursor: pointer; background: #ffffff;">
-            <div style="font-size: 28px; margin-bottom: 6px;">📁</div>
-            <p style="font-weight: 700; color: #0f172a; margin-bottom: 4px; font-size: 13.5px;">Clique ou arraste um arquivo de vídeo ou foto</p>
-            <p style="font-size: 11.5px; color: var(--text-muted); margin: 0;">Suporta MP4, MOV, WEBM, JPG, PNG, WEBP</p>
-          </div>
-          <input type="file" id="editorFileInput" accept="video/*,image/*" style="display: none;" onchange="handleEditorFileSelect(this)">
-          <div id="editorFileSelectedInfo" style="display: none; margin-top: 8px; font-size: 12.5px; color: #15803d; font-weight: 600;"></div>
         </div>
 
         <!-- FOTO DE CAPA / POSTER (OPCIONAL) -->
@@ -1153,19 +1153,19 @@
   <!-- ============================================== -->
     <!-- 4. SCRIPTS DO SISTEMA ADMINISTRATIVO -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js?v=20261007_v10"></script>
-  <script src="js/services/storage.js?v=20261007_v10"></script>
-  <script src="js/services/api.js?v=20261007_v10"></script>
-  <script src="js/ui/toast.js?v=20261007_v10"></script>
-  <script src="js/ui/modals.js?v=20261007_v10"></script>
-  <script src="js/modules/auth.js?v=20261007_v10"></script>
-  <script src="js/modules/leads.js?v=20261007_v10"></script>
-  <script src="js/modules/clients.js?v=20261007_v10"></script>
-  <script src="js/modules/employees.js?v=20261007_v10"></script>
-  <script src="js/modules/services.js?v=20261007_v10"></script>
-  <script src="js/modules/finance.js?v=20261007_v10"></script>
-  <script src="js/modules/portfolio.js?v=20261007_v10"></script>
-  <script src="js/admin_app.js?v=20261007_v10"></script>
+  <script src="js/config.js?v=20261007_v11"></script>
+  <script src="js/services/storage.js?v=20261007_v11"></script>
+  <script src="js/services/api.js?v=20261007_v11"></script>
+  <script src="js/ui/toast.js?v=20261007_v11"></script>
+  <script src="js/ui/modals.js?v=20261007_v11"></script>
+  <script src="js/modules/auth.js?v=20261007_v11"></script>
+  <script src="js/modules/leads.js?v=20261007_v11"></script>
+  <script src="js/modules/clients.js?v=20261007_v11"></script>
+  <script src="js/modules/employees.js?v=20261007_v11"></script>
+  <script src="js/modules/services.js?v=20261007_v11"></script>
+  <script src="js/modules/finance.js?v=20261007_v11"></script>
+  <script src="js/modules/portfolio.js?v=20261007_v11"></script>
+  <script src="js/admin_app.js?v=20261007_v11"></script>
 
   <script>
     // Inicialização Imediata In-line (Garante que nunca fique tela preta)

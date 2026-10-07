@@ -80,20 +80,24 @@ async function fetchCloudData(showFeedback = false) {
     ]);
 
     if (pRes.data && pRes.data.length > 0) {
+      const deletedIds = new Set(JSON.parse(localStorage.getItem('marcenaria_deleted_portfolio_ids') || '[]').map(String));
+      const deletedTitles = new Set(JSON.parse(localStorage.getItem('marcenaria_deleted_portfolio_titles') || '[]').map(t => (t || '').toLowerCase().trim()));
+
       const seeds = (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' ? DEFAULT_REAL_PORTFOLIO : []);
       const seedMap = new Map();
       seeds.forEach(s => seedMap.set(String(s.id), s));
 
-      const cloudItems = pRes.data.map(item => {
+      let cloudItems = pRes.data.map(item => {
         const localMatch = seedMap.get(String(item.id));
         const rawUrl = item.midia_url || (localMatch ? localMatch.midiaUrl : '') || '';
-        const gdriveId = item.gdrive_id || (typeof extractGoogleDriveId === 'function' ? extractGoogleDriveId(rawUrl) : null) || (localMatch ? localMatch.gdriveId : null);
-        const gdriveLink = item.gdrive_link || (gdriveId ? 'https://drive.google.com/file/d/' + gdriveId + '/view?usp=sharing' : (localMatch ? localMatch.gdriveLink : ''));
-
-        // Se houver arquivo MP4 local configurado no seed, usa ele como midiaUrl preferencial para carregamento rápido
         let finalMidiaUrl = (localMatch && localMatch.midiaUrl && localMatch.midiaUrl.endsWith('.mp4')) 
           ? localMatch.midiaUrl 
           : rawUrl;
+
+        let finalPoster = (localMatch && localMatch.posterUrl) ? localMatch.posterUrl : (item.poster_url || '');
+        if (finalMidiaUrl.endsWith('.pdf') && (!finalPoster || finalPoster.endsWith('.pdf'))) {
+          finalPoster = 'assets/portfolio/pdf_page1.jpg';
+        }
 
         return {
           id: item.id,
@@ -104,25 +108,32 @@ async function fetchCloudData(showFeedback = false) {
           subtitulo: item.subtitulo || (localMatch ? localMatch.subtitulo : ''),
           descricao: item.descricao || (localMatch ? localMatch.descricao : ''),
           midiaUrl: finalMidiaUrl,
-          posterUrl: (localMatch && localMatch.posterUrl) ? localMatch.posterUrl : (item.poster_url || ''),
-          gdriveId: gdriveId,
-          gdriveLink: gdriveLink,
+          posterUrl: finalPoster,
           destaque: item.destaque || (localMatch ? localMatch.destaque : false)
         };
       });
 
-      // Deduplica estritamente por ID e por Título Normalizado
+      // Filtra itens excluídos pelo usuário
+      cloudItems = cloudItems.filter(p => !deletedIds.has(String(p.id)) && !deletedTitles.has((p.titulo || '').toLowerCase().trim()));
+
       const seenIds = new Set(cloudItems.map(p => String(p.id)));
       const seenTitles = new Set(cloudItems.map(p => (p.titulo || '').toLowerCase().trim()));
 
+      // Filtra sementes que NUNCA foram deletadas pelo usuário
       const missingSeeds = seeds.filter(s => 
-        !seenIds.has(String(s.id)) && !seenTitles.has((s.titulo || '').toLowerCase().trim())
+        !seenIds.has(String(s.id)) && 
+        !seenTitles.has((s.titulo || '').toLowerCase().trim()) &&
+        !deletedIds.has(String(s.id)) &&
+        !deletedTitles.has((s.titulo || '').toLowerCase().trim())
       );
 
       db.portfolio = [...cloudItems, ...missingSeeds];
       saveCacheDB("portfolio", db.portfolio);
     } else {
-      db.portfolio = [...(typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' ? DEFAULT_REAL_PORTFOLIO : [])];
+      const deletedIds = new Set(JSON.parse(localStorage.getItem('marcenaria_deleted_portfolio_ids') || '[]').map(String));
+      const deletedTitles = new Set(JSON.parse(localStorage.getItem('marcenaria_deleted_portfolio_titles') || '[]').map(t => (t || '').toLowerCase().trim()));
+      const seeds = (typeof DEFAULT_REAL_PORTFOLIO !== 'undefined' ? DEFAULT_REAL_PORTFOLIO : []);
+      db.portfolio = seeds.filter(p => !deletedIds.has(String(p.id)) && !deletedTitles.has((p.titulo || '').toLowerCase().trim()));
       saveCacheDB("portfolio", db.portfolio);
     }
 
