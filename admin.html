@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261007_v12">
-  <link rel="stylesheet" href="css/admin.css?v=20261007_v12">
+  <link rel="stylesheet" href="css/style.css?v=20261008_v13">
+  <link rel="stylesheet" href="css/admin.css?v=20261008_v13">
   
   <style>
     /* Estilos da Tela de Login In-Page */
@@ -277,11 +277,12 @@
         </div>
 
         <div class="admin-header-actions">
-          <span id="syncIndicator" style="display: none; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #047857; background: #ecfdf5; padding: 6px 14px; border-radius: 20px; border: 1px solid #a7f3d0;">
+          <span id="syncIndicator" style="display: none; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #047857; background: #ecfdf5; padding: 6px 14px; border-radius: 20px; border: 1px solid #a7f3d0; cursor: pointer;" onclick="openDbHealthModal()" title="Status da Nuvem. Clique para diagnóstico e alinhamento SQL.">
             <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-            Banco Sincronizado
+            Nuvem em Tempo Real
           </span>
-          <button type="button" class="btn btn-outline btn-sm admin-header-btn" onclick="fetchCloudData(true)" title="Recarregar dados do banco de dados">
+          <span id="lastSyncTimeText" style="font-size: 11.5px; color: #64748b; font-weight: 500; display: none;"></span>
+          <button type="button" class="btn btn-outline btn-sm admin-header-btn" onclick="fetchCloudData(true)" title="Recarregar dados do banco em tempo real">
             🔄 Sincronizar
           </button>
           <button type="button" class="btn btn-outline btn-sm admin-header-btn" onclick="goToClientSite()" title="Visualizar site público">
@@ -1146,6 +1147,60 @@
     </div>
   </div>
 
+  <!-- ============================================== -->
+  <!-- MODAL: DIAGNÓSTICO DO BANCO SUPABASE & REALTIME -->
+  <!-- ============================================== -->
+  <div class="modal-overlay" id="dbHealthModal">
+    <div class="modal-content" style="max-width: 640px; border-radius: 16px; padding: 24px;">
+      <div class="modal-header" style="border-bottom: 1px solid var(--border-soft); padding-bottom: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <span style="font-size: 11px; font-weight: 700; color: var(--wood-primary); text-transform: uppercase; letter-spacing: 0.05em;">Sincronização em Tempo Real</span>
+          <h4 class="modal-title" style="font-size: 19px; font-weight: 800; color: #0f172a; margin: 2px 0 0 0;">Status da Conexão Supabase</h4>
+        </div>
+        <button type="button" class="close-modal" onclick="closeModal('dbHealthModal')">&times;</button>
+      </div>
+
+      <div id="dbHealthAlertMsg" style="display: none; padding: 12px 14px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; color: #991b1b; font-size: 13px; font-weight: 600; margin-bottom: 16px;"></div>
+
+      <div style="font-size: 13px; color: #475569; margin-bottom: 14px; line-height: 1.5;">
+        Para garantir que o computador e o celular operem <strong>100% atualizados em tempo real</strong> sem depender de armazenamento local, todas as tabelas devem estar criadas e com o RLS liberado no Supabase.
+      </div>
+
+      <!-- Lista de Tabelas e Status -->
+      <div id="dbHealthTableList" style="margin-bottom: 20px;">
+        <!-- Preenchido dinamicamente via updateDbHealthModalUI() -->
+      </div>
+
+      <!-- Guia de Alinhamento Rápido -->
+      <div style="background: #f8fafc; border: 1px solid var(--border-soft); border-radius: 10px; padding: 16px; margin-bottom: 20px;">
+        <h5 style="font-size: 13.5px; font-weight: 700; color: #0f172a; margin: 0 0 6px 0;">Como Alinhar o Supabase para Sincronização em Tempo Real:</h5>
+        <ol style="margin: 0 0 12px 18px; padding: 0; font-size: 12.5px; color: #475569; line-height: 1.6;">
+          <li>Clique no botão abaixo para <strong>Copiar o Script SQL</strong> completo.</li>
+          <li>Abra o <strong>SQL Editor</strong> do seu projeto Supabase.</li>
+          <li>Cole o código e clique em <strong>Run</strong> (Executar).</li>
+        </ol>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary btn-sm" onclick="copySupabaseSqlSchema()" style="font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+            <span>📋 Copiar Script SQL de Alinhamento</span>
+          </button>
+          <a href="https://supabase.com/dashboard/project/rmzhabsrcsaxqnqypoje/sql/new" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+            <span>🚀 Abrir SQL Editor do Supabase ↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-soft); padding-top: 16px;">
+        <button type="button" class="btn btn-outline btn-sm" onclick="testDatabaseConnection(true)">
+          <span>🔄 Testar Conexão Novamente</span>
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="closeModal('dbHealthModal')">
+          <span>Entendido / Fechar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <!-- ============================================== -->
@@ -1153,19 +1208,19 @@
   <!-- ============================================== -->
     <!-- 4. SCRIPTS DO SISTEMA ADMINISTRATIVO -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js?v=20261007_v12"></script>
-  <script src="js/services/storage.js?v=20261007_v12"></script>
-  <script src="js/services/api.js?v=20261007_v12"></script>
-  <script src="js/ui/toast.js?v=20261007_v12"></script>
-  <script src="js/ui/modals.js?v=20261007_v12"></script>
-  <script src="js/modules/auth.js?v=20261007_v12"></script>
-  <script src="js/modules/leads.js?v=20261007_v12"></script>
-  <script src="js/modules/clients.js?v=20261007_v12"></script>
-  <script src="js/modules/employees.js?v=20261007_v12"></script>
-  <script src="js/modules/services.js?v=20261007_v12"></script>
-  <script src="js/modules/finance.js?v=20261007_v12"></script>
-  <script src="js/modules/portfolio.js?v=20261007_v12"></script>
-  <script src="js/admin_app.js?v=20261007_v12"></script>
+  <script src="js/config.js?v=20261008_v13"></script>
+  <script src="js/services/storage.js?v=20261008_v13"></script>
+  <script src="js/services/api.js?v=20261008_v13"></script>
+  <script src="js/ui/toast.js?v=20261008_v13"></script>
+  <script src="js/ui/modals.js?v=20261008_v13"></script>
+  <script src="js/modules/auth.js?v=20261008_v13"></script>
+  <script src="js/modules/leads.js?v=20261008_v13"></script>
+  <script src="js/modules/clients.js?v=20261008_v13"></script>
+  <script src="js/modules/employees.js?v=20261008_v13"></script>
+  <script src="js/modules/services.js?v=20261008_v13"></script>
+  <script src="js/modules/finance.js?v=20261008_v13"></script>
+  <script src="js/modules/portfolio.js?v=20261008_v13"></script>
+  <script src="js/admin_app.js?v=20261008_v13"></script>
 
   <script>
     // Inicialização Imediata In-line (Garante que nunca fique tela preta)

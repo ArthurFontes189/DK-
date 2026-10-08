@@ -117,6 +117,10 @@ ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS categoria TEXT;
 ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS descricao TEXT;
 ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS midia_url TEXT;
 ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS poster_url TEXT;
+ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS proporcao TEXT DEFAULT 'vertical';
+ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS subtitulo TEXT;
+ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS gdrive_id TEXT;
+ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS destaque BOOLEAN DEFAULT false;
 ALTER TABLE public.portfolio ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 
 -- ====================================================================
@@ -142,7 +146,7 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, se
 DO $$
 BEGIN
   BEGIN
-    ALTER PUBLICATION supabase_realtime ADD TABLE public.leads, public.clients, public.services, public.transactions, public.portfolio;
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.leads, public.clients, public.services, public.transactions, public.portfolio, public.employees;
   EXCEPTION
     WHEN duplicate_object THEN NULL;
     WHEN undefined_object THEN NULL;

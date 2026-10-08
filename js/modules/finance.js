@@ -152,3 +152,8 @@ async function deleteTx(txId) {
     }
   }
 }
+
+window.renderFinanceiro = renderFinanceiro;
+window.openNewTxModal = openNewTxModal;
+window.handleSaveTx = handleSaveTx;
+window.deleteTx = deleteTx;

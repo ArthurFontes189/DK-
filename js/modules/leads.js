@@ -214,3 +214,9 @@ async function deleteLead(id) {
 }
 
 window.deleteLead = deleteLead;
+
+window.renderLeads = renderLeads;
+window.filterLeads = filterLeads;
+window.updateLeadStatus = updateLeadStatus;
+window.openLeadWhatsApp = openLeadWhatsApp;
+window.handleLeadFormSubmit = handleLeadFormSubmit;

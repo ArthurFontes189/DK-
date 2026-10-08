@@ -130,8 +130,28 @@ async function handleSaveClient(e) {
   const obs = document.getElementById("cliObs").value.trim();
   const dataCad = new Date().toLocaleDateString("pt-BR");
 
+  if (!nome) {
+    showToast("O nome do cliente é obrigatório.", "warning");
+    return;
+  }
+
   let clientRecord = null;
+
   if (id) {
+    // Edição de cliente existente
+    if (sbClient) {
+      try {
+        const { error } = await safeDbUpdate("clients", { nome, telefone, endereco, obs }, "id", id);
+        if (error) {
+          alert("❌ Erro ao atualizar cliente no Supabase: " + error.message);
+          return;
+        }
+      } catch (err) {
+        alert("Falha de conexão ao atualizar cliente na nuvem: " + err.message);
+        return;
+      }
+    }
+
     const index = db.clients.findIndex(c => c.id == id);
     if (index !== -1) {
       db.clients[index].nome = nome;
@@ -140,7 +160,9 @@ async function handleSaveClient(e) {
       db.clients[index].obs = obs;
       clientRecord = db.clients[index];
     }
+    showToast("Cliente atualizado com sucesso!", "success");
   } else {
+    // Novo cliente
     const cod = generateClientCode(db.clients);
     clientRecord = {
       id: Date.now(),
@@ -151,35 +173,38 @@ async function handleSaveClient(e) {
       obs,
       dataCadastro: dataCad
     };
-    db.clients.unshift(clientRecord);
-  }
 
-  saveCacheDB("clients", db.clients);
-  closeModal("clientModal");
-  showToast("Cliente salvo com sucesso!");
-  renderAdmin();
-
-  if (sbClient && clientRecord) {
-    try {
-      if (id) {
-        const { error } = await safeDbUpdate("clients", { nome, telefone, endereco, obs }, "id", id);
-        if (error) alert("Aviso: Erro ao sincronizar cliente na nuvem: " + error.message);
-      } else {
+    if (sbClient) {
+      try {
         const { data, error } = await safeDbInsert("clients", {
-          codigo_cliente: clientRecord.codigoCliente,
+          codigo_cliente: cod,
           nome,
           telefone,
           endereco,
           obs,
           data_cadastro: dataCad
         });
-        if (error) alert("Aviso: Erro ao gravar cliente no banco: " + error.message);
-        if (data && data[0]) clientRecord.id = data[0].id;
+        if (error) {
+          alert("❌ Erro ao gravar cliente no Supabase: " + error.message + "\n\nO cliente NÃO foi gravado para evitar divergência entre computador e celular.");
+          return;
+        }
+        if (data && data[0]) {
+          clientRecord.id = data[0].id;
+        }
+      } catch (err) {
+        alert("Falha de conexão ao salvar cliente na nuvem: " + err.message);
+        return;
       }
-    } catch (e) {
-      console.error("Erro Supabase:", e);
     }
+
+    db.clients.unshift(clientRecord);
+    showToast("Cliente cadastrado e sincronizado na nuvem!", "success");
   }
+
+  saveCacheDB("clients", db.clients);
+  closeModal("clientModal");
+  renderAdmin();
+  if (typeof fetchCloudData === "function") fetchCloudData();
 }
 
 async function deleteClient(cliId) {
@@ -217,4 +242,10 @@ function openNewClientModal() {
   if (titleEl) titleEl.textContent = "Cadastrar Novo Cliente";
   openModal("clientModal");
 }
+window.openNewClientModal = openNewClientModal;
+
+window.renderClients = renderClients;
+window.editClient = editClient;
+window.handleSaveClient = handleSaveClient;
+window.deleteClient = deleteClient;
 window.openNewClientModal = openNewClientModal;

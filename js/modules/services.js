@@ -146,6 +146,11 @@ async function handleSaveService(e) {
   const valorTotal = parseFloat(document.getElementById("srvValorTotal").value) || 0;
   const valorEntrada = parseFloat(document.getElementById("srvValorEntrada").value) || 0;
 
+  if (!clienteNome) {
+    showToast("Informe o nome do cliente da obra.", "warning");
+    return;
+  }
+
   // 1. Resolver ou cadastrar cliente
   let finalCliId = selectedCliId ? parseInt(selectedCliId) : null;
   let clientRecord = null;
@@ -198,12 +203,14 @@ async function handleSaveService(e) {
             data_cadastro: cliDataHora
           });
           if (cErr) {
-            showToast("Erro ao gravar cliente no banco: " + cErr.message, "error");
+            alert("Erro ao gravar cliente no banco em nuvem: " + cErr.message + "\n\nA obra não pôde ser salva sem o cliente no banco.");
+            return;
           } else if (cData && cData[0]) {
             newCli.id = cData[0].id;
           }
         } catch (err) {
-          showToast("Falha de conexão ao criar cliente: " + err.message, "error");
+          alert("Falha de conexão com a nuvem ao criar cliente: " + err.message);
+          return;
         }
       }
 
@@ -235,12 +242,9 @@ async function handleSaveService(e) {
     // Atualização de Obra existente
     const srvIndex = db.services.findIndex(s => s.id == id);
     if (srvIndex !== -1) {
-      // Preservar workers e expenses já existentes
       const existingWorkers = db.services[srvIndex].workers || [];
       const existingExpenses = db.services[srvIndex].expenses || [];
-      db.services[srvIndex] = { ...db.services[srvIndex], ...srvData, workers: existingWorkers, expenses: existingExpenses };
-      saveCacheDB("services", db.services);
-
+      
       if (sbClient) {
         try {
           const { error: sErr } = await safeDbUpdate("services", {
@@ -258,12 +262,20 @@ async function handleSaveService(e) {
             data_entrega: srvData.dataEntrega,
             status: srvData.status
           }, "id", id);
-          if (sErr) showToast("Erro ao atualizar obra no banco: " + sErr.message, "error");
+
+          if (sErr) {
+            alert("Erro ao atualizar obra na nuvem: " + sErr.message);
+            return;
+          }
         } catch (err) {
-          console.warn(err);
+          alert("Falha de conexão ao atualizar obra: " + err.message);
+          return;
         }
       }
-      showToast("Obra atualizada com sucesso!", "success");
+
+      db.services[srvIndex] = { ...db.services[srvIndex], ...srvData, workers: existingWorkers, expenses: existingExpenses };
+      saveCacheDB("services", db.services);
+      showToast("Obra atualizada e sincronizada na nuvem!", "success");
     }
   } else {
     // Nova Obra
@@ -290,15 +302,20 @@ async function handleSaveService(e) {
           forma_pagamento: srvData.formaPag,
           responsavel: srvData.responsavel,
           data_entrega: srvData.dataEntrega,
-          status: srvData.status
+          status: srvData.status,
+          workers: [],
+          expenses: []
         });
+
         if (sErr) {
-          showToast("Erro ao gravar obra no banco: " + sErr.message, "error");
+          alert("❌ Erro ao salvar obra no banco Supabase: " + sErr.message + "\n\nA obra NÃO foi gravada para evitar divergência entre PC e celular.");
+          return;
         } else if (sData && sData[0]) {
           newService.id = sData[0].id;
         }
       } catch (err) {
-        showToast("Falha de conexão ao salvar obra: " + err.message, "error");
+        alert("Falha de conexão ao salvar obra na nuvem: " + err.message);
+        return;
       }
     }
 
@@ -341,13 +358,14 @@ async function handleSaveService(e) {
       renderLeads(db.leads);
     }
 
-    showToast("Obra registrada com sucesso!", "success");
+    showToast("Obra salva e sincronizada na nuvem com sucesso!", "success");
   }
 
   closeModal("serviceModal");
   renderServices(db.services);
   renderClients(db.clients, db.services, db.transactions);
   renderFinanceiro(db.transactions);
+  if (typeof fetchCloudData === "function") fetchCloudData();
 }
 
 async function deleteService(srvId) {
@@ -1000,6 +1018,12 @@ async function handleSaveWorker(e) {
   closeModal("workerModal");
   renderObraInspection();
   renderServices(db.services);
+
+  if (typeof sbClient !== "undefined" && sbClient) {
+    sbClient.from("services").update({ workers: srv.workers }).eq("id", srv.id).then(() => {
+      console.log("Equipe da obra sincronizada no Supabase.");
+    }).catch(e => console.error("Erro workers Supabase:", e));
+  }
 }
 
 async function deleteWorkerFromObra(srvId, workerId) {
@@ -1023,6 +1047,10 @@ O cálculo das diárias será atualizado no caixa da obra.`,
   saveCacheDB("services", db.services);
   renderObraInspection();
   renderServices(db.services);
+
+  if (typeof sbClient !== "undefined" && sbClient) {
+    sbClient.from("services").update({ workers: srv.workers }).eq("id", srv.id).then(() => {}).catch(e => console.error(e));
+  }
   showToast("Colaborador removido da obra!", "success");
 }
 
@@ -1142,6 +1170,12 @@ async function handleSaveExpense(e) {
   renderObraInspection();
   renderServices(db.services);
   showToast("Insumo registrado no caixa da obra!", "success");
+
+  if (typeof sbClient !== "undefined" && sbClient) {
+    sbClient.from("services").update({ expenses: srv.expenses }).eq("id", srv.id).then(() => {
+      console.log("Insumos da obra sincronizados no Supabase.");
+    }).catch(e => console.error("Erro expenses Supabase:", e));
+  }
 }
 
 async function deleteExpenseFromObra(srvId, expenseId) {
