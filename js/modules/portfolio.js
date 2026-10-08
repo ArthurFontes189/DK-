@@ -864,11 +864,7 @@ function handleEditorUrlInput(url) {
   const vSource = parseVideoSource(url);
   badge.style.display = 'block';
 
-  if (vSource.type === 'gdrive') {
-    badge.style.background = '#e0f2fe';
-    badge.style.color = '#0369a1';
-    badge.innerHTML = `<strong>✓ Google Drive Detectado:</strong> ID extraído (<code>${vSource.id}</code>).`;
-  } else if (vSource.type === 'youtube') {
+  if (vSource.type === 'youtube') {
     badge.style.background = '#fef2f2';
     badge.style.color = '#b91c1c';
     badge.innerHTML = `<strong>✓ YouTube Detectado:</strong> ID (<code>${vSource.id}</code>)${vSource.isShorts ? ' • Shorts' : ''}`;
@@ -876,10 +872,18 @@ function handleEditorUrlInput(url) {
       const propV = document.getElementById('editorPropVertical');
       if (propV) propV.checked = true;
     }
+  } else if (url.startsWith('assets/')) {
+    badge.style.background = '#f8fafc';
+    badge.style.color = '#475569';
+    badge.innerHTML = `<strong>✓ Arquivo Local:</strong> Mídia nativa do projeto`;
+  } else if (url.startsWith('data:') || url.startsWith('blob:')) {
+    badge.style.background = '#f0fdf4';
+    badge.style.color = '#15803d';
+    badge.innerHTML = `<strong>✓ Arquivo do Aparelho:</strong> Mídia carregada localmente`;
   } else {
     badge.style.background = '#f8fafc';
     badge.style.color = '#475569';
-    badge.innerHTML = `<strong>✓ Link Direto:</strong> Arquivo externo`;
+    badge.innerHTML = `<strong>✓ Link Direto:</strong> Arquivo externo de vídeo`;
   }
 
   updateEditorLivePreview();

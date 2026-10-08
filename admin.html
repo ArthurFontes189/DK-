@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261007_v11">
-  <link rel="stylesheet" href="css/admin.css?v=20261007_v11">
+  <link rel="stylesheet" href="css/style.css?v=20261007_v12">
+  <link rel="stylesheet" href="css/admin.css?v=20261007_v12">
   
   <style>
     /* Estilos da Tela de Login In-Page */
@@ -737,7 +737,7 @@
         <button type="button" class="close-modal" onclick="closeModal('portfolioEditorModal')">&times;</button>
       </div>
 
-      <form id="portfolioEditorForm" onsubmit="handleSavePortfolioMedia(event)">
+      <form id="portfolioEditorForm" onsubmit="handleSavePortfolioMedia(event)" novalidate>
         <input type="hidden" id="editorProjectId" value="">
 
         <!-- Título -->
@@ -812,8 +812,8 @@
             <label for="editorMidiaUrl" style="font-size: 12.5px; font-weight: 600; color: #334155; margin-bottom: 4px; display: block;">
               Cole o link do vídeo:
             </label>
-            <input type="url" id="editorMidiaUrl" class="form-control" 
-                   placeholder="Ex: https://youtu.be/... ou https://.../video.mp4" 
+            <input type="text" id="editorMidiaUrl" class="form-control" 
+                   placeholder="Ex: assets/portfolio/... ou https://youtu.be/... ou arquivo.mp4" 
                    oninput="handleEditorUrlInput(this.value)">
           </div>
           <div id="editorUrlDetectionBadge" style="display: none; font-size: 12px; padding: 6px 10px; border-radius: 6px; margin-top: 6px;"></div>
@@ -1153,19 +1153,19 @@
   <!-- ============================================== -->
     <!-- 4. SCRIPTS DO SISTEMA ADMINISTRATIVO -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/config.js?v=20261007_v11"></script>
-  <script src="js/services/storage.js?v=20261007_v11"></script>
-  <script src="js/services/api.js?v=20261007_v11"></script>
-  <script src="js/ui/toast.js?v=20261007_v11"></script>
-  <script src="js/ui/modals.js?v=20261007_v11"></script>
-  <script src="js/modules/auth.js?v=20261007_v11"></script>
-  <script src="js/modules/leads.js?v=20261007_v11"></script>
-  <script src="js/modules/clients.js?v=20261007_v11"></script>
-  <script src="js/modules/employees.js?v=20261007_v11"></script>
-  <script src="js/modules/services.js?v=20261007_v11"></script>
-  <script src="js/modules/finance.js?v=20261007_v11"></script>
-  <script src="js/modules/portfolio.js?v=20261007_v11"></script>
-  <script src="js/admin_app.js?v=20261007_v11"></script>
+  <script src="js/config.js?v=20261007_v12"></script>
+  <script src="js/services/storage.js?v=20261007_v12"></script>
+  <script src="js/services/api.js?v=20261007_v12"></script>
+  <script src="js/ui/toast.js?v=20261007_v12"></script>
+  <script src="js/ui/modals.js?v=20261007_v12"></script>
+  <script src="js/modules/auth.js?v=20261007_v12"></script>
+  <script src="js/modules/leads.js?v=20261007_v12"></script>
+  <script src="js/modules/clients.js?v=20261007_v12"></script>
+  <script src="js/modules/employees.js?v=20261007_v12"></script>
+  <script src="js/modules/services.js?v=20261007_v12"></script>
+  <script src="js/modules/finance.js?v=20261007_v12"></script>
+  <script src="js/modules/portfolio.js?v=20261007_v12"></script>
+  <script src="js/admin_app.js?v=20261007_v12"></script>
 
   <script>
     // Inicialização Imediata In-line (Garante que nunca fique tela preta)
